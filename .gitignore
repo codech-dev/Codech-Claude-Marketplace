@@ -1,0 +1,40 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node / pnpm (in case a plugin adds runtime deps later)
+node_modules/
+.npm/
+.yarn/
+
+# Python (in case scripts are added)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.pytest_cache/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local test outputs
+/tmp/
+/build/
+/dist/
+
+# Anything starting with _ at root is treated as scratch work
+/_*
+
+# Local override for testing the skill before committing
+*.local.md

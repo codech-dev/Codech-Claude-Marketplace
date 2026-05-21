@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "codech-marketplace",
+  "owner": {
+    "name": "Codech",
+    "email": "team@codech.tld",
+    "url": "https://github.com/codech"
+  },
+  "metadata": {
+    "description": "Codech internal Claude Code plugins — workflows, skills, and tools used across client engagements.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "codech-project-superpower",
+      "source": "./plugins/codech-project-superpower",
+      "description": "End-to-end project workflow: turns raw requirements (docx, pdf, meeting notes) into a styled bilingual proposal (MD + HTML + PDF), pre-development documents (FSD, SAD, TDD, SRS), and an interactive single-file React prototype. Orchestrates docx, brainstorming, and ui-ux-pro-max skills.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "keywords": [
+        "project-proposal",
+        "requirements",
+        "FSD",
+        "SAD",
+        "TDD",
+        "SRS",
+        "prototype",
+        "PDF-export",
+        "bilingual",
+        "PoC",
+        "shadcn",
+        "framer-motion"
+      ],
+      "tags": ["codech", "workflow", "skill", "consulting", "ERP"],
+      "license": "MIT",
+      "homepage": "https://github.com/codech/Codech-Claude-Marketplace/tree/main/plugins/codech-project-superpower",
+      "strict": false
+    }
+  ]
+}
