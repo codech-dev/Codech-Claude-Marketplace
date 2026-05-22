@@ -5,14 +5,14 @@
   "description": "Codech Project Superpower — full pre-development workflow: requirement docs → proposal (MD/HTML/PDF) → FSD/SAD/TDD/SRS → interactive single-file React prototype with shadcn + Framer Motion.",
   "author": {
     "name": "Codech",
-    "email": "team@codech.tld",
-    "url": "https://github.com/codech"
+    "email": "team@codech.dev",
+    "url": "https://github.com/codech-dev"
   },
   "license": "MIT",
-  "homepage": "https://github.com/codech/Codech-Claude-Marketplace",
+  "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codech/Codech-Claude-Marketplace.git",
+    "url": "https://github.com/codech-dev/Codech-Claude-Marketplace.git",
     "directory": "plugins/codech-project-superpower"
   },
   "keywords": [

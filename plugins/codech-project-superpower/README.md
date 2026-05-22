@@ -151,4 +151,4 @@ Every output the skill produces has its own quality checklist embedded in the co
 
 **Origin:** This skill was extracted from the CGG Agricultural ERP engagement (2026), where it produced the full deliverable set in a single sustained working session. It has since been generalized for any client project.
 
-**Maintained by:** Codech Engineering · [team@codech.tld](mailto:team@codech.tld)
+**Maintained by:** Codech Engineering · [team@codech.dev](mailto:team@codech.dev)

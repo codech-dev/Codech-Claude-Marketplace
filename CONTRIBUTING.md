@@ -19,7 +19,7 @@ The whole point of `gotchas.md` is to prevent future-you (or future-teammate) fr
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/codech/Codech-Claude-Marketplace.git
+git clone https://github.com/codech-dev/Codech-Claude-Marketplace.git
 cd Codech-Claude-Marketplace
 ```
 

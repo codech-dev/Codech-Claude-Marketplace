@@ -3,8 +3,8 @@
   "name": "codech-marketplace",
   "owner": {
     "name": "Codech",
-    "email": "team@codech.tld",
-    "url": "https://github.com/codech"
+    "email": "team@codech.dev",
+    "url": "https://github.com/codech-dev"
   },
   "metadata": {
     "description": "Codech internal Claude Code plugins — workflows, skills, and tools used across client engagements.",
@@ -33,7 +33,7 @@
       ],
       "tags": ["codech", "workflow", "skill", "consulting", "ERP"],
       "license": "MIT",
-      "homepage": "https://github.com/codech/Codech-Claude-Marketplace/tree/main/plugins/codech-project-superpower",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-project-superpower",
       "strict": false
     }
   ]

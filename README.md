@@ -23,10 +23,10 @@ More plugins will be added over time.
 In Claude Code (any project), run:
 
 ```
-/plugin marketplace add codech/Codech-Claude-Marketplace
+/plugin marketplace add codech-dev/Codech-Claude-Marketplace
 ```
 
-> Replace `codech` with the actual GitHub organization or username hosting this repo. If the repo is **private**, see [Private Repo Setup](#private-repo-setup) below.
+> If the repo is **private**, see [Private Repo Setup](#private-repo-setup) below.
 
 Claude Code will fetch `.claude-plugin/marketplace.json` and confirm the marketplace was added.
 
@@ -136,7 +136,7 @@ To improve the skill based on a new project:
 
 1. Clone this repo (if you haven't):
    ```bash
-   git clone https://github.com/codech/Codech-Claude-Marketplace.git
+   git clone https://github.com/codech-dev/Codech-Claude-Marketplace.git
    cd Codech-Claude-Marketplace
    ```
 2. Edit the relevant file(s) in `plugins/codech-project-superpower/skills/codech-project-superpower/`
@@ -183,5 +183,5 @@ Suggestions welcome — open an issue or PR.
 ## Contact
 
 - **Team:** Codech Engineering
-- **Email:** team@codech.tld
-- **Issues:** [GitHub Issues](https://github.com/codech/Codech-Claude-Marketplace/issues)
+- **Email:** team@codech.dev
+- **Issues:** [GitHub Issues](https://github.com/codech-dev/Codech-Claude-Marketplace/issues)
