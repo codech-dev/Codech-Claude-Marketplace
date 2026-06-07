@@ -1,15 +1,18 @@
 ---
 name: codech-project-superpower
-description: Use when starting any new client or internal software project that needs a complete pre-development deliverable set. Triggers on phrases like "generate a project proposal", "scope this project", "draft the FSD/SAD/TDD/SRS", "build a PoC prototype", "convert proposal to HTML/PDF", "analyze these requirement docs", or when a "Requirements doc" folder is present. Orchestrates docx reading, brainstorming, and ui-ux-pro-max skills to take raw requirements (docx, pdf, images, meeting notes) through proposal → pre-dev docs → interactive prototype.
+description: Use when starting any new client or internal software project that needs a complete pre-development deliverable set OR when transitioning an approved pre-dev package into production development. Triggers on phrases like "generate a project proposal", "scope this project", "draft the FSD/SAD/TDD/SRS", "build a PoC prototype", "convert proposal to HTML/PDF", "analyze these requirement docs", "we are ready to proceed development", "scaffold the monorepo", "author the master implementation plan", or when a "Requirements doc" folder OR a `docs/` folder with FSD/SAD/TDD/SRS is present. Orchestrates docx reading, brainstorming, ui-ux-pro-max, and the superpowers writing-plans/executing-plans/finishing-a-development-branch skills to take raw requirements through proposal → pre-dev docs → interactive prototype → production codebase.
 ---
 
 # Codech Project Superpower
 
 ## Overview
 
-A 4-phase workflow for going from raw requirements to a complete pre-development deliverable set in one focused engagement. Captures the Codech approach: bilingual proposals, traceable specs, single-file interactive prototypes.
+A 5-phase workflow for going from raw requirements to a complete pre-development deliverable set AND through into production development in one continuous engagement. Captures the Codech approach: bilingual proposals, traceable specs, single-file interactive prototypes, and pixel-faithful production codebases.
 
-**Core principle:** Every artifact serves the next phase. Proposal feeds FSD, FSD feeds SRS, SRS feeds the prototype's data model, prototype validates UX before any production code is written.
+**Core principle:** Every artifact serves the next phase. Proposal feeds FSD, FSD feeds SRS, SRS feeds the prototype's data model, prototype validates UX before production code, and the prototype itself becomes the **pixel-diff reference** during Phase 5 development.
+
+**Phase 1–4 = pre-development engagement** (signed off by client before any code is written).
+**Phase 5 = production development** (long-running; iterative sub-plans). Only enter Phase 5 after Phase 1–4 are accepted.
 
 ## When to Use
 
@@ -18,12 +21,14 @@ A 4-phase workflow for going from raw requirements to a complete pre-development
 - User mentions starting a new project, kicking off, scoping, or pre-sales work
 - User asks for a project proposal, FSD, SRS, SAD, TDD, or PoC prototype
 - User says "let's build a prototype before we commit to the build"
+- User says "ready to proceed development", "scaffold the codebase", "start building the system", or asks how to plan the build given an existing pre-dev package (Phase 5 entry)
 
 **Do NOT use this skill for:**
 - Bug fixes or feature additions to an existing live system (use targeted skills)
-- Production code generation (this skill stops at prototypes)
 - Internal Codech tooling or build-system changes
 - One-off design or documentation requests with no requirements docs
+
+(Phase 5 — production development — is supported when a full Phase 1–4 deliverable set already exists in the project. If the docs are missing or partial, run the missing phases first.)
 
 ## Phase Decision Tree
 
@@ -36,7 +41,10 @@ digraph phases {
   "Phase 3: Pre-dev docs" [shape=box];
   "Client wants prototype?" [shape=diamond];
   "Phase 4: PoC prototype" [shape=box];
-  "Done" [shape=doublecircle];
+  "Client signed off pre-dev?" [shape=diamond];
+  "Phase 5: Production build" [shape=box];
+  "Done (pre-dev only)" [shape=doublecircle];
+  "Done (system live)" [shape=doublecircle];
   "Ask for inputs" [shape=box];
 
   "Has requirement docs?" -> "Phase 1: Ingest" [label="yes"];
@@ -48,12 +56,15 @@ digraph phases {
   "Client approved proposal?" -> "Phase 2: Proposal" [label="revise"];
   "Phase 3: Pre-dev docs" -> "Client wants prototype?";
   "Client wants prototype?" -> "Phase 4: PoC prototype" [label="yes"];
-  "Client wants prototype?" -> "Done" [label="no"];
-  "Phase 4: PoC prototype" -> "Done";
+  "Client wants prototype?" -> "Client signed off pre-dev?" [label="no"];
+  "Phase 4: PoC prototype" -> "Client signed off pre-dev?";
+  "Client signed off pre-dev?" -> "Phase 5: Production build" [label="yes, build"];
+  "Client signed off pre-dev?" -> "Done (pre-dev only)" [label="no, handoff"];
+  "Phase 5: Production build" -> "Done (system live)";
 }
 ```
 
-**Phases are gated.** Do not advance past the proposal until the user explicitly approves. The proposal IS the scope contract.
+**Phases are gated.** Do not advance past the proposal until the user explicitly approves. The proposal IS the scope contract. Do not enter Phase 5 without an accepted FSD + SAD + TDD + SRS + Prototype.
 
 ---
 
@@ -253,6 +264,140 @@ Single-file HTML at project root: `Prototype.html`. Architecture documented in `
 
 ---
 
+## Phase 5 — Production Development
+
+Phase 5 is **long-running** (weeks to months). It is NOT one deliverable; it is a series of small, gated sub-plans authored and executed via `superpowers:writing-plans` + `superpowers:executing-plans` (or `superpowers:subagent-driven-development`). The pre-dev docs from Phases 1–4 are the **sources of truth** — never invent requirements that aren't in the FSD/SAD/TDD/SRS.
+
+### 5.1 Sources of truth
+
+| Doc | Authority for |
+|---|---|
+| FSD | Feature scope, module list, acceptance criteria |
+| SAD | System topology, ADRs, deployment shape, infra choices |
+| TDD | Module code structure, data model, key algorithms |
+| SRS | REQ IDs, validation rules, traceability matrix |
+| `Prototype.html` | **Pixel-level visual contract** — the UI MUST match it |
+
+When in doubt, the **SRS REQ IDs win** (they cite back to FSD features and are testable). When a sub-plan would deviate from any source-of-truth doc, document the deviation in the Master Plan §6.2 (deviations) — never silently drift.
+
+### 5.2 Master Implementation Plan
+
+Phase 5 starts with a single **Master Implementation Plan** at `docs/Implementation_Master_Plan.md`. This is the index and contract for all sub-plans. Structure documented in `templates/master-plan-structure.md`. Mandatory sections:
+
+1. Purpose
+2. Sources of truth (links to FSD/SAD/TDD/SRS/Prototype)
+3. Repo structure (monorepo layout: `apps/{api,web}` + `packages/{shared,ui}`)
+4. Traceability map (workstream → FSD features → SRS REQs)
+5. Workstream sequence + approval gates
+6. Sub-plan index
+  - §6.1 Delivery breakdown (what each sub-plan actually shipped)
+  - §6.2 Deviations from prototype / pre-dev docs (with rationale)
+7. Pixel-diff discipline (Playwright + threshold + cross-platform notes)
+8. Stack decisions (locked) — bcrypt 4.0.1, PG 5433 in dev, ubuntu-24.04 CI, etc.
+9. Risk register
+10. Definition of Done (per workstream)
+11. Maintenance & roadmap
+
+### 5.3 Sub-plan iteration loop
+
+Each workstream is a **separate** plan file under `docs/superpowers/plans/YYYY-MM-DD-<workstream>.md`. Recommended sequence:
+
+| # | Sub-plan | Output | Gate before next |
+|---|---|---|---|
+| 01 | Foundation / monorepo scaffold | uv + pnpm workspace, lint/test/CI green, pixel-diff harness | Local dev up; first baseline image accepted |
+| 02 | Auth / RBAC / DB baseline | Login flow + JWT + 2FA + Alembic migrations + audit log | Login screen matches prototype within threshold |
+| 03 | First domain module (master data / admin) | First real CRUD + shared `<MasterTable>` abstraction | All admin master screens match prototype |
+| 04+ | One sub-plan per remaining FSD module | Module-by-module CRUD + reports + integrations | Each module signed off |
+| N | Hardening | Performance, observability, e2e smoke | Pre-production checklist |
+| N+1 | UAT + Production cutover | Migration scripts, runbook | Client UAT sign-off |
+
+**Each sub-plan MUST:**
+- Cite FSD features + SRS REQs it implements
+- List every file it creates/modifies (no "and similar")
+- Be TDD (failing test → impl → passing test → commit)
+- Have a verification step that runs the actual test command
+- Update Master Plan §6.1 + §6.2 when complete
+
+### 5.4 Foundation sub-plan — what's non-obvious
+
+The first sub-plan establishes guardrails that every later sub-plan depends on. **Get these right or pay forever:**
+
+- **Pixel-diff harness from day one** — see `recipes/pixel-diff-harness.md`. The prototype is the visual contract; without an automated check, drift is invisible until the client demos it.
+- **Cross-platform baselines** — generate baselines on BOTH the developer's OS (e.g. Windows) and the CI runner's OS (Linux). Font rendering differs enough to fail diff thresholds. Use the official Playwright Docker image (`mcr.microsoft.com/playwright:vX.Y.Z-noble`) to generate Linux baselines from a Windows host.
+- **Pin every CI dependency loudly** — Node version in `.nvmrc` + `package.json#engines` + GitHub Actions setup. pnpm 11 needs Node 22.13+ for `node:sqlite`. Mismatch = silent CI red.
+- **Match CI runner to baseline platform** — if Linux baselines are `noble`, use `ubuntu-24.04` runners, not `ubuntu-22.04`. Font packages differ.
+- **Field-level encryption from the start** — see `recipes/field-level-encryption.md`. Retrofitting AES-GCM + SIV onto existing rows after data lands is painful.
+- **Audit table before any mutation route** — every POST/PATCH/DELETE writes an audit event in the same transaction. Add it once, enforce in code review.
+
+### 5.5 Auth sub-plan — known traps
+
+- `bcrypt==4.0.1` MUST be pinned. bcrypt 5.x removes `__about__` and breaks passlib 1.7.4 silently (passlib raises at login, not at install).
+- `email-validator>=2.3` rejects `.local` TLDs. Use `@<client>.org` or similar for test fixtures.
+- JWT base64url payloads need padding before `atob()` in the browser (`payload += "==".slice(payload.length % 4)`). Without it, expiry parsing silently fails on some tokens.
+- 2FA stage-1 token must be a **different audience** from the access token, or the client can skip the OTP step.
+- HttpOnly refresh cookie + SameSite=Lax + Path=/auth/refresh — anything looser is a CSRF risk; anything stricter breaks cross-tab refresh.
+- Lockout after 5 failed attempts, recorded in audit table (not in-memory).
+
+### 5.6 Module sub-plan template
+
+For every functional module beyond auth, the sub-plan should:
+
+1. **Backend** — see `recipes/backend-crud-module.md`
+   - `modules/<name>/{models,schemas,service,router}.py` + tests
+   - Reuse shared `_crud.py` (list_all / get_or_404 / write_event)
+   - `AppError` hierarchy, never bare `HTTPException` outside the router edge
+   - `write_audit_event()` before every `db.commit()` on a mutation
+2. **Frontend**
+   - `hooks/<module>/use<Entity>.ts` via `makeCrud<TRow,TCreate,TUpdate>()` factory
+   - Screen built from shared `<MasterTable>` + `<MasterModal>` + `<Field>` (see `_shared.tsx` pattern)
+   - Optimistic updates via TanStack Query; auth state via Zustand
+   - Pixel-diff specs for every new screen (against prototype subview)
+3. **Tests**
+   - Backend: pytest, real DB (no mocks of the DB)
+   - Frontend: vitest for unit, Playwright for visual + smoke
+4. **Audit + RBAC** — every route is permissioned, every mutation is audited
+
+### 5.7 CLAUDE.md in the codebase
+
+Phase 5 codebase MUST have a `CLAUDE.md` at the repo root (or `apps/web/CLAUDE.md` + `apps/api/CLAUDE.md` for monorepos). Contents:
+- Orientation (1 paragraph: what this codebase is, which docs to read first)
+- Commands cheat sheet (dev, lint, test, migrate, baseline-regen)
+- Locked architectural choices (cite ADR-NNN, do not relitigate)
+- Code conventions (backend module layout, frontend hooks/store pattern, visual-diff harness)
+- Gotchas table (the same ones from this skill's `gotchas.md` that apply to this codebase)
+- Git + GitHub workflow
+- "What to do for a new sub-plan" checklist
+
+This file is consumed by future Claude sessions — it prevents re-discovering the same traps each session.
+
+### 5.8 Cross-session memory
+
+Phase 5 spans many sessions. Maintain auto-memory entries:
+- `project_<name>_decisions.md` — locked architectural choices (ADRs cited)
+- `project_<name>_status.md` — current phase, pending items, last sign-off
+- `project_<name>_phaseN_progress.md` — when starting a new phase, snapshot the prior one before it goes stale
+
+Update memory whenever: client sign-off occurs, a sub-plan completes, a deviation from pre-dev docs is accepted, or a new gotcha is discovered.
+
+### 5.9 Pixel-diff discipline
+
+- Default threshold: `0.001` (0.1% of pixels may differ). Tighter is brittle; looser hides regressions.
+- Baselines committed in **two folders**: `chromium-win32/` and `chromium-linux/`. CI uses the Linux set.
+- When a real UI change ships, regenerate baselines on BOTH platforms and commit them in the same PR as the code change. PRs that change UI without baseline updates fail CI.
+- Use `getByRole("button", { name, exact: true })` not `text=` — substring matches cause flake.
+- `page.addInitScript()` closures don't capture outer scope after serialization; pass data via the second-arg payload.
+
+### 5.10 Phase 5 approval gates
+
+| Gate | Action |
+|---|---|
+| Before first sub-plan | Master Plan reviewed; sources of truth confirmed; stack locked |
+| Each sub-plan complete | Run `superpowers:finishing-a-development-branch`; tests green; pixel-diff clean; update Master Plan §6.1/§6.2 |
+| Before module sub-plans | Foundation + Auth must be merged and stable |
+| Before UAT cutover | All FSD modules done; full SRS traceability matrix complete; runbook written |
+
+---
+
 ## Cross-Cutting Concerns
 
 ### Locale awareness
@@ -289,9 +434,12 @@ This skill orchestrates the following — invoke when needed:
 | Sub-skill | Use for | Phase |
 |---|---|---|
 | `docx` | Reading and creating Word documents | 1, 2 (output) |
-| `superpowers:brainstorming` | Scoping the prototype options | 4 |
+| `superpowers:brainstorming` | Scoping the prototype options + Phase 5 sub-plan scoping | 4, 5 |
 | `ui-ux-pro-max:ui-ux-pro-max` | Design system confirmation | 4 |
-| `superpowers:writing-plans` | If client requests an implementation plan after acceptance | post |
+| `superpowers:writing-plans` | Authoring the Master Plan + every Phase 5 sub-plan | 5 |
+| `superpowers:executing-plans` | Inline execution of sub-plans (checkpoint-based) | 5 |
+| `superpowers:subagent-driven-development` | Fresh-subagent-per-task execution of sub-plans (preferred for long plans) | 5 |
+| `superpowers:finishing-a-development-branch` | Completing each sub-plan (test-verify → merge/PR → cleanup) | 5 |
 
 ---
 
@@ -318,6 +466,36 @@ At project root (do not nest in subfolders unless user requests):
         └── YYYY-MM-DD-poc-prototype-design.md
 ```
 
+### Phase 5 codebase layout (monorepo)
+
+When Phase 5 begins, the production codebase typically lives in a sibling folder (e.g. `<project>/<slug>-erp/`) and the Phase 1–4 docs are moved into `<slug>-erp/docs/` so they ship with the repo. Recommended layout:
+
+```
+<project>-<slug>/
+├── CLAUDE.md                              # Phase 5 orientation
+├── README.md
+├── docs/                                  # Phase 1–4 docs + master plan
+│   ├── Implementation_Master_Plan.md
+│   ├── Feature_Scope_Document.md
+│   ├── System_Architecture_Document.md
+│   ├── Technical_Design_Document.md
+│   ├── Software_Requirements_Specification.md
+│   ├── Prototype.html
+│   └── superpowers/plans/
+│       ├── 2026-MM-DD-foundation.md
+│       ├── 2026-MM-DD-auth-rbac-db.md
+│       └── 2026-MM-DD-<module>.md
+├── apps/
+│   ├── api/                               # FastAPI/NestJS/etc.
+│   └── web/                               # React + Vite
+├── packages/
+│   ├── shared/
+│   └── ui/
+├── tests/visual/                          # Pixel-diff specs + baselines
+├── docker-compose.dev.yml
+└── .github/workflows/ci.yml
+```
+
 ---
 
 ## Templates & Recipes
@@ -328,8 +506,12 @@ At project root (do not nest in subfolders unless user requests):
 | `templates/proposal-structure.md` | 19-section proposal structure + CSS conventions |
 | `templates/pre-dev-docs-structure.md` | FSD/SAD/TDD/SRS templates with ID schemes |
 | `templates/poc-prototype-html.md` | Single-file React prototype scaffold |
+| `templates/master-plan-structure.md` | Phase 5 Master Implementation Plan structure (11 mandatory sections) |
 | `recipes/pdf-export.md` | Chrome headless export commands |
 | `recipes/architecture-diagram.md` | Inline SVG diagram conventions |
+| `recipes/pixel-diff-harness.md` | Phase 5 — cross-platform Playwright visual regression setup |
+| `recipes/backend-crud-module.md` | Phase 5 — FastAPI module layout + shared CRUD helpers + audit discipline |
+| `recipes/field-level-encryption.md` | Phase 5 — AES-256-GCM + SIV via SQLAlchemy TypeDecorator |
 
 ---
 
@@ -346,6 +528,10 @@ At project root (do not nest in subfolders unless user requests):
 | "what documents should we prepare before development" | Phase 3 (all docs) |
 | "build a PoC prototype" / "design the UI" | Phase 4 |
 | "I want to see the screens" | Phase 4 |
+| "ready to proceed development" / "how should we plan the build" | Phase 5 (Master Plan) |
+| "scaffold the monorepo" / "set up the codebase" | Phase 5 sub-plan 01 (foundation) |
+| "add auth" / "wire up login" (with pre-dev docs present) | Phase 5 sub-plan 02 (auth) |
+| "build the X module" (with pre-dev docs present) | Phase 5 module sub-plan |
 
 ### Approval gates (DO NOT skip)
 
@@ -353,6 +539,9 @@ At project root (do not nest in subfolders unless user requests):
 2. After proposal → wait for explicit "approved" before pre-dev docs
 3. After PoC scope options → wait for client to pick A/B/C
 4. Always present visual outputs (HTML, PDF) and ask for feedback before treating them as final
+5. **Phase 5 entry** → confirm FSD + SAD + TDD + SRS + Prototype are all accepted before scaffolding any code
+6. **Phase 5 Master Plan** → user reviews + approves Master Plan before any sub-plan begins
+7. **Each Phase 5 sub-plan** → use `superpowers:finishing-a-development-branch` (tests green + pixel-diff clean + Master Plan §6.1/§6.2 updated) before starting the next sub-plan
 
 ### Common file size sanity check
 
@@ -365,6 +554,11 @@ At project root (do not nest in subfolders unless user requests):
 | `Technical_Design_Document.md` | ~1,200–1,800 lines |
 | `Software_Requirements_Specification.md` | ~1,000–1,500 lines |
 | `Prototype.html` | ~2,000–3,500 lines (single file with all components) |
+| Phase 5 `docs/Implementation_Master_Plan.md` | ~400–800 lines |
+| Phase 5 sub-plan (foundation) | ~600–1,200 lines (20–25 tasks) |
+| Phase 5 sub-plan (auth) | ~400–800 lines (12–18 tasks) |
+| Phase 5 sub-plan (single module) | ~300–600 lines (10–15 tasks) |
+| Phase 5 codebase `CLAUDE.md` | ~100–180 lines |
 
 If any output is dramatically smaller, you may have cut corners. Review against templates.
 
@@ -392,5 +586,6 @@ If any output is dramatically smaller, you may have cut corners. Review against 
 - **PDF as first-class citizen** — Chrome headless reliably preserves CSS, SVG, gradients
 - **Traceable specs** — every feature gets an ID, every REQ traces back to a feature
 - **Locale + industry adaptive** — defaults pick sensible palette/compliance without asking
+- **End-to-end coverage** — pre-development (Phases 1–4) AND production development (Phase 5) under one roof, with the prototype acting as the pixel-diff contract between them
 
-This is the Codech approach packaged for reuse. Every future engagement starts at 70% complete.
+This is the Codech approach packaged for reuse. Every future engagement starts at 70% complete and stays coherent through production cutover.
