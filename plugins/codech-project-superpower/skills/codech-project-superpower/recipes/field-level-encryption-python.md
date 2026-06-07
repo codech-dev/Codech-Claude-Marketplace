@@ -1,4 +1,26 @@
-# Recipe — Field-Level Encryption (Phase 5)
+# Recipe — Field-Level Encryption (Python / SQLAlchemy / Phase 5)
+
+## Stack scope
+
+**This recipe is a reference implementation for ONE stack:** Python + `cryptography` library + SQLAlchemy `TypeDecorator` + Postgres.
+
+The **stack-agnostic decisions** (apply these regardless of language):
+
+- **AES-256-GCM (random IV)** for general confidential fields. Authenticated, fast, random ciphertext per write.
+- **AES-256-SIV** for fields you must **look up by** (natural keys, indexed columns). Misuse-resistant deterministic encryption — same plaintext + same key → same ciphertext, so equality queries work.
+- **Keys loaded from environment** at app boot. Never in code. Never committed. Two 32-byte keys (one for GCM, one for SIV — SIV takes 64 bytes / two 256-bit halves).
+- **Encrypted columns are stored as the DB's binary type** (`bytea` / `varbinary` / `BLOB`). The encryption layer is **application-side**; the DB driver doesn't know.
+- **Never use `EncryptedStr` (random IV) on indexed/lookup columns** — equality won't match.
+- **Never use deterministic encryption on low-entropy values** (birth year, country code) — leaks via equality on small ranges.
+
+The **binding-layer decisions** below are Python-specific:
+- `SQLAlchemy.TypeDecorator` with `impl = LargeBinary`
+- `cryptography.hazmat.primitives.ciphers.aead.AESGCM` / `AESSIV`
+- Alembic migrations declare columns as `LargeBinary`
+
+For other stacks, the algorithms and key-handling rules above still apply; the binding mechanism differs (TypeORM `transformer`, Prisma middleware / field-level encryption preview, Django field, Hibernate AttributeConverter, sqlc scan hooks, etc.).
+
+---
 
 > When the SAD specifies field-level encryption (PDPO, HIPAA, GDPR sensitive fields), wire this in **from the foundation sub-plan**. Retrofitting AES-GCM/SIV onto existing rows is painful.
 

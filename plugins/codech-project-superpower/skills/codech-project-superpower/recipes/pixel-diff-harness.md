@@ -1,5 +1,22 @@
 # Recipe — Pixel-Diff Harness (Phase 5)
 
+## Stack scope
+
+**Tool-specific to Playwright**, but the **discipline is universal** for any visual-regression tool (Cypress + cypress-image-snapshot, Percy, Chromatic, Loki, BackstopJS, …).
+
+The stack-agnostic decisions worth keeping no matter which tool you choose:
+- **Cross-platform baselines** committed in two folders, one per OS used by devs and CI
+- **Match the CI runner OS to the baseline OS** — font rendering differs enough to fail
+- **Generate baselines for "the other OS"** via a container image (Microsoft Playwright Noble Docker image in this recipe; equivalents exist for other tools)
+- **Threshold ≈ 0.001** (0.1% pixel diff allowed) — tighter is brittle, looser hides regressions
+- **Pin timezone + locale** in the test runner so date/time strings render identically
+- **Wait for `document.fonts.ready` + network idle** before snapping
+- **PR that changes UI without baseline updates fails CI** — this is the contract
+
+The rest of this recipe is the Playwright implementation.
+
+---
+
 > The prototype is the visual contract. This recipe wires up an automated check that every screen still matches it. Without this, drift is invisible until the client demos the system.
 
 ## Goal

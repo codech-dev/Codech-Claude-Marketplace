@@ -326,36 +326,55 @@ The first sub-plan establishes guardrails that every later sub-plan depends on. 
 - **Cross-platform baselines** — generate baselines on BOTH the developer's OS (e.g. Windows) and the CI runner's OS (Linux). Font rendering differs enough to fail diff thresholds. Use the official Playwright Docker image (`mcr.microsoft.com/playwright:vX.Y.Z-noble`) to generate Linux baselines from a Windows host.
 - **Pin every CI dependency loudly** — Node version in `.nvmrc` + `package.json#engines` + GitHub Actions setup. pnpm 11 needs Node 22.13+ for `node:sqlite`. Mismatch = silent CI red.
 - **Match CI runner to baseline platform** — if Linux baselines are `noble`, use `ubuntu-24.04` runners, not `ubuntu-22.04`. Font packages differ.
-- **Field-level encryption from the start** — see `recipes/field-level-encryption.md`. Retrofitting AES-GCM + SIV onto existing rows after data lands is painful.
+- **Field-level encryption from the start** — if any column needs encryption, wire it in now (Python reference impl in `recipes/field-level-encryption-python.md`; the AES-GCM-for-random + AES-SIV-for-deterministic split is stack-agnostic). Retrofitting onto existing rows after data lands is painful.
 - **Audit table before any mutation route** — every POST/PATCH/DELETE writes an audit event in the same transaction. Add it once, enforce in code review.
 
-### 5.5 Auth sub-plan — known traps
+### 5.5 Auth sub-plan — universal patterns
 
-- `bcrypt==4.0.1` MUST be pinned. bcrypt 5.x removes `__about__` and breaks passlib 1.7.4 silently (passlib raises at login, not at install).
-- `email-validator>=2.3` rejects `.local` TLDs. Use `@<client>.org` or similar for test fixtures.
-- JWT base64url payloads need padding before `atob()` in the browser (`payload += "==".slice(payload.length % 4)`). Without it, expiry parsing silently fails on some tokens.
-- 2FA stage-1 token must be a **different audience** from the access token, or the client can skip the OTP step.
-- HttpOnly refresh cookie + SameSite=Lax + Path=/auth/refresh — anything looser is a CSRF risk; anything stricter breaks cross-tab refresh.
-- Lockout after 5 failed attempts, recorded in audit table (not in-memory).
+These patterns are **stack-agnostic** — apply them no matter what language/framework you choose:
 
-### 5.6 Module sub-plan template
+- **Two-token JWT pattern.** Access token (short-lived, ~15min) + refresh token. The refresh token lives in an `HttpOnly` cookie with `SameSite=Lax` and `Path=/auth/refresh` — anything looser is a CSRF risk; anything stricter breaks cross-tab refresh.
+- **2FA stage-1 token must use a different audience claim** than the access token, or the client can skip the OTP step.
+- **JWT base64url payloads need padding before any base64 decoder** (browser `atob`, etc.). Without it, expiry parsing silently fails on a subset of tokens.
+- **Lockout after N (default 5) failed attempts**, recorded in the **audit table** — never in memory, never in a cache. Survives restarts and is admin-visible.
+- **Password hashing** uses a memory-hard or well-audited algorithm (bcrypt / argon2 / scrypt). Pin the hashing library version explicitly — major-version bumps break compatibility silently more often than you'd think.
+- **Audit every auth event** in the same transaction as the state change: successful login, failed login, lockout, password reset, 2FA enable/disable.
 
-For every functional module beyond auth, the sub-plan should:
+**Reference implementation:** the gotchas list includes specific traps we hit on the CGG ERP stack (Python + passlib + bcrypt). The relevant entries are tagged "Python/FastAPI stack" in `gotchas.md` — read them only if your stack matches. For Node, Go, Rails, etc. the universal patterns above still hold; the specific library pins do not.
 
-1. **Backend** — see `recipes/backend-crud-module.md`
-   - `modules/<name>/{models,schemas,service,router}.py` + tests
-   - Reuse shared `_crud.py` (list_all / get_or_404 / write_event)
-   - `AppError` hierarchy, never bare `HTTPException` outside the router edge
-   - `write_audit_event()` before every `db.commit()` on a mutation
-2. **Frontend**
-   - `hooks/<module>/use<Entity>.ts` via `makeCrud<TRow,TCreate,TUpdate>()` factory
-   - Screen built from shared `<MasterTable>` + `<MasterModal>` + `<Field>` (see `_shared.tsx` pattern)
-   - Optimistic updates via TanStack Query; auth state via Zustand
-   - Pixel-diff specs for every new screen (against prototype subview)
+### 5.6 Module sub-plan template — universal patterns
+
+For every functional module beyond auth, the sub-plan must cover these **four pattern axes** regardless of stack:
+
+1. **Backend** — one folder per module with a clear file-per-responsibility split
+   - **Pattern:** `<module>/{data-model, request/response shapes, business logic, transport adapter}` — names vary by stack but the four roles do not. Transport (HTTP router) only does validation + dependency wiring + business-logic invocation.
+   - **Shared CRUD helper** for list/get-or-404/write-audit-event — define once, call everywhere; one fewer place to forget the audit write.
+   - **Typed error hierarchy** with HTTP status + machine-readable code. Never throw the framework's HTTP exception from deep in business logic — one handler at the transport edge translates the typed error to a response.
+   - **Audit write before transaction commit**, in the same transaction as the change. If audit is a separate transaction, audit and entity can drift.
+2. **Frontend** — one hook file per entity, screens composed from shared atoms
+   - **Pattern:** CRUD-hook factory parameterised by row/create/update types, so every entity gets `list/get/create/update/delete` in one line.
+   - **Shared table + modal + field abstractions** so each new screen is config (columns + form fields) rather than handwritten markup.
+   - **Server-state library** (e.g. TanStack Query, SWR, RTK Query) for cache/optimistic updates; **client-state library** (Zustand, Pinia, Redux) for auth/UI state. Don't conflate them.
+   - **Pixel-diff spec for every new screen** against the prototype subview — same threshold and cross-platform baseline discipline as the foundation sub-plan (§5.9).
 3. **Tests**
-   - Backend: pytest, real DB (no mocks of the DB)
-   - Frontend: vitest for unit, Playwright for visual + smoke
-4. **Audit + RBAC** — every route is permissioned, every mutation is audited
+   - **Backend:** integration-style — real DB, no mocking the DB. Mock only third-party external services.
+   - **Frontend:** unit tests for hooks/logic; visual tests for screens; smoke (real browser) for at least one happy path per module.
+4. **Audit + RBAC** — every mutation route is permissioned, every mutation writes an audit event. Enforce in code review.
+
+**Reference implementations:**
+- FastAPI + SQLModel: see `recipes/backend-crud-module-fastapi.md`
+- (Add `recipes/backend-crud-module-<your-stack>.md` for new stacks — same pattern axes, different code.)
+
+**Applying the pattern to other stacks:**
+
+| Stack | Module layout | Audit pattern | Error pattern |
+|---|---|---|---|
+| FastAPI + SQLModel | `modules/<name>/{models,schemas,service,router}.py` | `write_audit_event(db, ...)` before `db.commit()` | `AppError` + one `@app.exception_handler` |
+| NestJS + Prisma | `<name>/{<name>.entity.ts, <name>.dto.ts, <name>.service.ts, <name>.controller.ts}` | Prisma `$transaction` containing the audit write + the mutation | Custom `HttpException` subclass + filter |
+| Rails + ActiveRecord | `app/models/<name>.rb`, `app/services/<name>/`, `app/controllers/<name>_controller.rb` | `ActiveRecord::Base.transaction { ...; AuditEvent.create!(...) }` | `ApplicationError` + `rescue_from` |
+| Go + sqlc | `internal/<name>/{store.go, service.go, handler.go}` + `<name>.sql` | Single `Tx` value passed through service + audit insert | Typed sentinel errors + middleware translator |
+
+The discipline (file-per-responsibility, audit-in-same-tx, typed errors, shared CRUD helper, frontend factory + shared atoms) is the contract. The filenames and library names are interchangeable.
 
 ### 5.7 CLAUDE.md in the codebase
 
@@ -509,9 +528,9 @@ When Phase 5 begins, the production codebase typically lives in a sibling folder
 | `templates/master-plan-structure.md` | Phase 5 Master Implementation Plan structure (11 mandatory sections) |
 | `recipes/pdf-export.md` | Chrome headless export commands |
 | `recipes/architecture-diagram.md` | Inline SVG diagram conventions |
-| `recipes/pixel-diff-harness.md` | Phase 5 — cross-platform Playwright visual regression setup |
-| `recipes/backend-crud-module.md` | Phase 5 — FastAPI module layout + shared CRUD helpers + audit discipline |
-| `recipes/field-level-encryption.md` | Phase 5 — AES-256-GCM + SIV via SQLAlchemy TypeDecorator |
+| `recipes/pixel-diff-harness.md` | Phase 5 — cross-platform Playwright visual regression setup (stack-agnostic; assumes Playwright) |
+| `recipes/backend-crud-module-fastapi.md` | Phase 5 — **reference impl** of the CRUD pattern for FastAPI + SQLModel + Alembic. See SKILL §5.6 for the universal pattern. |
+| `recipes/field-level-encryption-python.md` | Phase 5 — **reference impl** of AES-256-GCM + AES-256-SIV via SQLAlchemy `TypeDecorator`. For other stacks, the algorithm choice is the same; the binding layer differs. |
 
 ---
 

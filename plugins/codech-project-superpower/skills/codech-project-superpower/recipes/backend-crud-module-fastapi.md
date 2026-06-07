@@ -1,5 +1,15 @@
 # Recipe — Backend CRUD Module (FastAPI / Phase 5)
 
+## Stack scope
+
+**This recipe is a reference implementation for ONE stack:** FastAPI + SQLModel + Alembic + Postgres + pytest. **Do NOT apply file paths or library names verbatim if your stack differs.**
+
+The **universal pattern** lives in `SKILL.md §5.6 — Module sub-plan template`. The four axes (file-per-responsibility module layout, shared CRUD helper, typed error hierarchy, audit-write-in-same-transaction) are the contract; this recipe shows one way to satisfy them.
+
+For other stacks, add a sibling recipe (e.g. `backend-crud-module-nestjs.md`, `backend-crud-module-rails.md`, `backend-crud-module-go.md`) implementing the same four axes. The SKILL.md §5.6 table sketches the file-layout equivalents.
+
+---
+
 > One module = one folder. Same layout everywhere. Shared `_crud.py` for the repetitive list/get/audit work. AppError hierarchy keeps the router thin.
 
 ## Folder layout
