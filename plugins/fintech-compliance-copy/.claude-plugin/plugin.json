@@ -1,0 +1,22 @@
+{
+  "name": "fintech-compliance-copy",
+  "description": "Design, build, and keep regulator-safe a crypto / digital-asset / payment / fintech marketing website. Two modes: (1) build a new payment-platform site to a proven institutional design standard (dark-tech, trust-signal-heavy, not AI-generated) with compliance baked in; (2) apply a lawyer/compliance review to an existing site — remove live trading/FX/price displays, mark unlaunched services (virtual accounts, IBAN, cards, settlement rails) as not currently available, add no-advice / no-banking / not-an-endorsement disclaimers, insert legal-approved wording verbatim. Triggers: design a payment platform / crypto exchange / fintech site, apply the legal review, AUSTRAC/ASIC/AFSL/FCA/MAS/MiCA website review, de-risk the copy.",
+  "version": "1.0.0",
+  "author": {
+    "name": "codech-dev"
+  },
+  "license": "MIT",
+  "keywords": [
+    "fintech",
+    "compliance",
+    "crypto",
+    "payments",
+    "digital-asset",
+    "AUSTRAC",
+    "AFSL",
+    "design-system",
+    "landing-page",
+    "regulatory"
+  ],
+  "skills": ["./skills/fintech-compliance-copy"]
+}

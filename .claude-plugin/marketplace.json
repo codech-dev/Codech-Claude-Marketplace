@@ -35,6 +35,29 @@
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-project-superpower",
       "strict": false
+    },
+    {
+      "name": "fintech-compliance-copy",
+      "source": "./plugins/fintech-compliance-copy",
+      "description": "Design, build, and keep regulator-safe a crypto / digital-asset / payment / fintech marketing website. Build a new payment-platform site to a proven institutional design standard with compliance baked in, or apply a lawyer/compliance review to an existing one — remove live trading/FX/price displays, mark unlaunched services (virtual accounts, IBAN, cards, settlement rails) as not currently available, add no-advice / no-banking / not-an-endorsement disclaimers, insert legal-approved wording verbatim.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "keywords": [
+        "fintech",
+        "compliance",
+        "crypto",
+        "payments",
+        "digital-asset",
+        "AUSTRAC",
+        "AFSL",
+        "design-system",
+        "landing-page",
+        "regulatory"
+      ],
+      "tags": ["codech", "skill", "fintech", "compliance", "design"],
+      "license": "MIT",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/fintech-compliance-copy",
+      "strict": false
     }
   ]
 }
