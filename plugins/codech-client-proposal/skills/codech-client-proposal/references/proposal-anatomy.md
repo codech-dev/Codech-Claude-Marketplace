@@ -12,6 +12,7 @@ Worked example: `examples/jy-global-reference.md`.
 |---|---|---|---|
 | 01 | Utility bar (top strip) | **Required** | Always — holds the centred confidentiality pill |
 | 02 | Sticky section nav | Recommended | Whenever the proposal has 4+ scrolling sections |
+| 02b | Desktop-recommended banner | **Required** | Always — mobile-only strip; load-bearing whenever mockups image-swap on mobile |
 | 03 | Hero | **Required** | Always — eyebrow + headline + lead paragraph + at-a-glance pills |
 | 04 | What we're building (overview) | Recommended | When you're delivering multiple modules / features |
 | 05 | Module / feature deep dives | **Required** | One per major deliverable |
@@ -48,6 +49,29 @@ Worked example: `examples/jy-global-reference.md`.
 `sticky top-[72px] z-30 bg-white/85 backdrop-blur-md border-b border-line/60`. Holds icon-prefixed section links. Active link tracked via scroll position in JS (see `references/visual-idioms.md` §scroll-active).
 
 Link items follow the section order: Overview, then one per major section. Use Phosphor icons matching the section's content (`ph-house` for Overview, `ph-chat-circle-dots` for chat workspace, `ph-stack` for tech stack, `ph-list-checks` for scope, `ph-calendar` for timeline, `ph-currency-circle-dollar` for pricing).
+
+---
+
+## §02b Desktop-recommended banner (mobile only)
+
+A navy strip, **hidden on desktop and shown only on mobile**, set the visitor's expectation: the proposal is built for a wide screen, and on a phone the app mockups appear as tap-to-enlarge preview images rather than live interfaces. Default-on for every proposal — it's the honest companion to the mobile image-swap (§lightbox), and it pre-empts "why does this look squished on my phone?".
+
+Place it **immediately after the sticky nav, before the hero** so it's the first thing a mobile reader sees.
+
+```html
+<div class="desktop-tip items-center gap-2.5 bg-navy text-white px-4 py-2.5 text-[12px] leading-snug">
+  <i class="ph-fill ph-desktop text-cyan text-[16px] shrink-0"></i>
+  <span class="flex-1 font-semibold">For the best experience, view this proposal on a desktop.
+    <span class="text-white/65 font-normal">On mobile, the app screens are shown as preview images — tap any to enlarge.</span></span>
+</div>
+```
+
+```css
+.desktop-tip { display: none; }
+@media (max-width: 820px) { .desktop-tip { display: flex; } }
+```
+
+Use the **same 820px breakpoint** as the mockup image-swap (see `references/visual-idioms.md` §lightbox) so the banner and the image-swap engage together. The `ph-desktop` icon + `text-cyan` accent are the locked motif; the muted second clause (`text-white/65 font-normal`) explains the image-swap behaviour.
 
 ---
 
@@ -192,6 +216,7 @@ A subtle centred sign-off below the closing card:
 Before declaring a proposal done:
 
 - [ ] Utility bar shows centred confidentiality pill with client name
+- [ ] Desktop-recommended banner present (mobile-only, `.desktop-tip`, 820px breakpoint)
 - [ ] Hero uses extrabold display headline with cyan period accents
 - [ ] At-a-glance pill row links to all major sections
 - [ ] Each module section has a `.prototype-mockup`-classed mockup (for mobile lightbox)
