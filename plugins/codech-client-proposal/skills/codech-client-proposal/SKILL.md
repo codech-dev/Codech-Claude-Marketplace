@@ -11,7 +11,7 @@ A reusable workflow for turning a Codech engagement into a deployed, client-shar
 
 **Core principle:** The visual idioms (eyebrow pills, featured dark cards, browser-chrome mockups, anim-up reveals, mobile lightbox, desktop-recommended banner, optional bilingual toggle) are reusable across clients; the design tokens (color, font, voice) are per-client; the closing section ("Prepared by Codech Solutions") is always Codech-branded.
 
-**Worked reference:** The JY Global AI Portal proposal — see `examples/jy-global-reference.md`.
+**Worked references:** The JY Global AI Portal proposal (`examples/jy-global-reference.md`) — the four-module baseline. The OTSO AI Hub proposal (`examples/otso-ai-hub-reference.md`) — bilingual, two-module, and the worked example for the desktop banner / EN ⇄ 中文 toggle / 820px lightbox idioms.
 
 ## When to Use
 
@@ -57,7 +57,8 @@ Each step has a corresponding reference document:
 | Screenshot pipeline (Playwright runner) | `scripts/capture-screenshots.mjs` |
 | Cloudflare deploy wrapper | `scripts/deploy.sh` |
 | Optional Basic Auth password middleware | `scripts/add-password.sh` |
-| Worked example | `examples/jy-global-reference.md` |
+| Worked example — 4-module baseline | `examples/jy-global-reference.md` |
+| Worked example — bilingual, 2-module, new idioms | `examples/otso-ai-hub-reference.md` |
 
 ## Locked Idioms (don't re-theme per client)
 
