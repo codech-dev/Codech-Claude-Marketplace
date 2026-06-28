@@ -6,6 +6,45 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## codech-client-proposal
+
+### [1.0.0] — 2026-06-28
+
+Initial release. Extracted from the JY Global AI Portal proposal engagement (Q2 2026).
+
+**Added:**
+- 6-step workflow: Discover → Gather → Build → Capture → Deploy → Handoff
+- `SKILL.md` entry point with trigger-focused description and references map
+- `references/proposal-anatomy.md` — 11-section canonical catalogue with required/optional markers
+- `references/visual-idioms.md` — copy-paste markup for eyebrow pills, featured dark cards, browser-chrome mockups, anim-up gates, mobile lightbox, sticky nav active state, stat banner, responsive grid rule
+- `references/using-design-system.md` — how to plug per-client tokens into the Tailwind config; locked Codech elements list
+- `references/voice-and-copy.md` — short clauses, no puffery rules, banned words list, voice presets, forbidden phrasings table
+- `references/screenshot-pipeline.md` — Playwright capture method with MCP variant
+- `references/cloudflare-deploy.md` — wrangler workflow with optional Basic Auth middleware
+- `references/composing-skills.md` — delegation rules with codech-mockup-design and codech-project-superpower
+- `scripts/capture-screenshots.mjs` — Playwright runner that tags mockups, forces settled state, element-screenshots each
+- `scripts/deploy.sh` — wrangler wrapper that prepares `_deploy/` folder and deploys
+- `scripts/add-password.sh` — Pages Functions Basic Auth middleware setup (prompts user for password)
+- `assets/codech-logo.png` — locked Codech identity
+- `assets/codech-closing-section.html` — locked closing card with logo + contact card + WhatsApp CTA
+- `assets/proposal-skeleton.html` — empty scaffold with all canonical sections stubbed
+- `examples/jy-global-reference.md` — worked example with iteration history
+
+**Locked Codech idioms across all client design systems:**
+- Closing section (Codech logo + contact card + WhatsApp green CTA)
+- Confidentiality pill in utility bar
+- Mobile lightbox tap-to-zoom UX
+- End-of-proposal sign-off marker
+
+**Integration:**
+- Composes with `codech-mockup-design` (delegates design-system creation)
+- Composes with `codech-project-superpower` (consumes its prototype HTML output)
+
+**Tested on:**
+- JY Global AI Portal — Cayman Islands compliance advisory firm — live at https://jy-global-proposal-ai-portal.pages.dev
+
+---
+
 ## codech-project-superpower
 
 ### [1.0.0] — 2026-05-21

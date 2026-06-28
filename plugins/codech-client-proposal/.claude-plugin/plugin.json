@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "codech-client-proposal",
+  "version": "1.0.0",
+  "description": "Codech Client Proposal — packages a Codech engagement into a deployed, client-shareable HTML proposal. Applies a per-client design system to the canonical proposal anatomy (utility bar, hero, modules, architecture, scope, pricing, closing), optionally captures prototype screenshots via Playwright, and deploys to Cloudflare Pages with a *.pages.dev URL.",
+  "author": {
+    "name": "Codech",
+    "email": "team@codech.dev",
+    "url": "https://github.com/codech-dev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codech-dev/Codech-Claude-Marketplace.git",
+    "directory": "plugins/codech-client-proposal"
+  },
+  "keywords": [
+    "client-proposal",
+    "html-proposal",
+    "cloudflare-pages",
+    "design-system",
+    "playwright-screenshots",
+    "single-page-proposal",
+    "tailwind",
+    "wrangler",
+    "deploy",
+    "codech"
+  ]
+}

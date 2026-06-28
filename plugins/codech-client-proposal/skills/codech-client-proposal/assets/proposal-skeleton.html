@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>[CLIENT NAME] · [PROPOSAL NAME]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // EDIT THIS BLOCK: swap colour tokens for the client's design system.
+  // Keep letterSpacing.eyebrow and maxWidth.container — those are Codech idioms.
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'navy':       '#0B1F35',
+          'navy-deep':  '#061525',
+          'navy-soft':  '#15324F',
+          'navy-wash':  '#F0F4F8',
+          'cyan':       '#15B5C7',
+          'cyan-soft':  '#2DC4D5',
+          'cyan-deep':  '#0E9DAE',
+          'ink':         '#0F172A',
+          'ink-soft':    '#1E293B',
+          'muted':       '#475569',
+          'muted-light': '#64748B',
+          'line':      '#E2E8F0',
+          'line-soft': '#EDF1F5',
+        },
+        fontFamily: {
+          sans: ['Manrope', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        letterSpacing: { eyebrow: '0.18em' },
+        maxWidth: { container: '1280px' },
+      },
+    },
+  };
+</script>
+<style>
+  /* --- Locked idioms --- */
+  body { font-family: 'Manrope', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .ease-spring { transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1); }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .card-shadow    { box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 8px 30px -12px rgba(11,31,53,0.08); }
+  .card-shadow-lg { box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 20px 50px -20px rgba(11,31,53,0.18); }
+  .nav-shadow     { box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
+  .browser-chrome { background: #F0F4F8; border-bottom: 1px solid #E2E8F0; }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .section-nav-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 12.5px; font-weight: 600;
+    color: #475569;
+    transition: all 150ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .section-nav-link:hover { color: #0F172A; background: #F0F4F8; }
+  .section-nav-link.active { color: #FFFFFF; background: #0B1F35; }
+
+  /* --- Anim-up (default-visible, JS-gated, 3s safety net) --- */
+  html.anim-on .anim-up {
+    opacity: 0; transform: translateY(28px);
+    transition: 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.anim-on .anim-up.is-visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    html.anim-on .anim-up { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  /* --- Mobile prototype image lightbox --- */
+  .prototype-mockup-image { display: none; }
+  @media (max-width: 768px) {
+    .prototype-mockup { display: none; }
+    .prototype-mockup-image {
+      display: block; width: 100%; height: auto;
+      border-radius: 16px; box-shadow: 0 12px 32px rgba(11,31,53,0.12);
+      cursor: zoom-in; -webkit-tap-highlight-color: rgba(21,181,199,0.18);
+    }
+  }
+  #image-lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(6,21,37,0.94); z-index: 1000;
+    overflow: auto; padding: 60px 12px 24px;
+    cursor: zoom-out;
+  }
+  #image-lightbox.active { display: flex; align-items: center; justify-content: center; }
+  #image-lightbox.zoomed { align-items: flex-start; }
+  #image-lightbox img {
+    width: 100%; max-width: 1100px; height: auto;
+    border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    cursor: zoom-in; transition: width 0.2s ease, max-width 0.2s ease;
+  }
+  #image-lightbox.zoomed img {
+    width: auto; max-width: none; cursor: zoom-out; margin: 0 auto;
+  }
+  #image-lightbox-close {
+    position: fixed; top: 14px; right: 14px; z-index: 1001;
+    background: #FFFFFF; border: 0;
+    width: 42px; height: 42px; border-radius: 999px;
+    cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center; color: #0B1F35;
+  }
+  #image-lightbox-hint {
+    position: fixed; top: 22px; left: 50%; transform: translateX(-50%);
+    z-index: 1001; color: rgba(255,255,255,0.7);
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ============ UTILITY BAR ============ -->
+<div class="hidden md:block bg-navy-deep text-white/85 text-[13px]">
+  <div class="max-w-container mx-auto px-6 py-2.5 flex items-center justify-center">
+    <div class="inline-flex items-center gap-2 text-white/75">
+      <i class="ph ph-shield-check text-cyan text-[15px]"></i>
+      <span>Confidential · [PROPOSAL NAME] for [CLIENT NAME]</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STICKY SECTION NAV ============ -->
+<div class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-line/60">
+  <div class="max-w-container mx-auto px-6 h-12 flex items-center justify-between gap-4 overflow-x-auto">
+    <div class="flex items-center gap-1 flex-shrink-0">
+      <a href="#hero" class="section-nav-link"><i class="ph ph-house text-[14px]"></i>Overview</a>
+      <!-- Add a section-nav-link per major section below -->
+      <a href="#scope" class="section-nav-link"><i class="ph ph-list-checks text-[14px]"></i>Project Scope</a>
+      <a href="#pricing" class="section-nav-link"><i class="ph ph-currency-circle-dollar text-[14px]"></i>Pricing</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="bg-white py-24 lg:py-32">
+  <div class="max-w-[860px] mx-auto px-6 text-center anim-up">
+
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-navy-wash
+                text-[11px] uppercase tracking-eyebrow font-semibold text-navy mb-6">
+      <span class="w-1.5 h-1.5 rounded-full bg-cyan"></span>
+      [PROPOSAL NAME] · Proposal
+    </div>
+
+    <h1 class="font-extrabold text-[44px] sm:text-[58px] lg:text-[72px] leading-[1.03]
+               tracking-[-0.028em] text-ink text-balance">
+      [HEADLINE LINE 1]<br>
+      [HEADLINE LINE 2]<span class="text-cyan-deep">.</span>
+    </h1>
+
+    <p class="mt-8 text-[17px] lg:text-[18px] leading-[1.65] text-muted text-pretty
+              max-w-[720px] mx-auto">
+      [Lead paragraph — 1–2 sentences. State what's being delivered and the value to the client.]
+    </p>
+
+    <!-- At-a-glance pill row -->
+    <div class="mt-10 inline-flex items-center gap-4 px-5 py-3 rounded-full bg-white
+                ring-1 ring-navy/8 card-shadow text-[12.5px] text-muted">
+      <!-- Add one anchor per major deliverable -->
+      <a href="#deliverable-1" class="inline-flex items-center gap-1.5 hover:text-cyan-deep ease-spring transition-colors">
+        <i class="ph-fill ph-package text-cyan-deep text-[14px]"></i>
+        <strong class="text-ink hover:text-cyan-deep">[Deliverable 1]</strong>
+      </a>
+      <span class="text-muted-light">·</span>
+      <a href="#deliverable-2" class="inline-flex items-center gap-1.5 hover:text-cyan-deep ease-spring transition-colors">
+        <i class="ph-fill ph-package text-cyan-deep text-[14px]"></i>
+        <strong class="text-ink hover:text-cyan-deep">[Deliverable 2]</strong>
+      </a>
+    </div>
+
+    <div class="mt-12 text-[11px] uppercase tracking-eyebrow font-bold text-muted-light">
+      Scroll to read the proposal
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ WHAT WE'RE BUILDING (overview) ============ -->
+<!-- Optional. Include when delivering 3+ modules. See proposal-anatomy.md §04 -->
+
+<!-- ============ DELIVERABLE / MODULE SECTIONS ============ -->
+<!--
+  One section per major deliverable.
+
+  Structure (per references/proposal-anatomy.md §05):
+    eyebrow pill → display H2 with cyan period → lead paragraph
+    → mockup wrapped in .prototype-mockup browser-chrome
+    → illustrative-prototype disclaimer
+
+  Use bg-white for light sections, bg-navy text-white for one featured "centerpiece"
+  section to break the page rhythm.
+-->
+<section id="deliverable-1" class="py-24 lg:py-28 bg-white">
+  <div class="max-w-container mx-auto px-6">
+    <!-- Section header (2-col: H2 + lead) -->
+    <div class="grid lg:grid-cols-12 gap-10 mb-12">
+      <div class="lg:col-span-7 anim-up">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-navy-wash
+                    text-[11px] uppercase tracking-eyebrow font-semibold text-navy mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-navy"></span>
+          Deliverable 01 · [Name]
+        </div>
+        <h2 class="font-extrabold text-[36px] lg:text-[52px] leading-[1.05]
+                   tracking-[-0.025em] text-ink text-balance">
+          [Display headline]<span class="text-cyan-deep">.</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5 flex lg:items-end anim-up">
+        <p class="text-[15px] lg:text-[16px] leading-[1.65] text-muted text-pretty">
+          [Lead paragraph explaining what this deliverable is and its value.]
+        </p>
+      </div>
+    </div>
+
+    <!-- Mockup (replace with real prototype HTML, or remove if no mockup) -->
+    <div class="bg-white rounded-2xl card-shadow-lg overflow-hidden ring-1 ring-navy/8 anim-up
+                prototype-mockup">
+      <div class="browser-chrome flex items-center gap-2 px-4 py-3">
+        <div class="flex gap-1.5">
+          <div class="w-3 h-3 rounded-full bg-[#FF5F57]"></div>
+          <div class="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+          <div class="w-3 h-3 rounded-full bg-[#28C840]"></div>
+        </div>
+        <div class="flex-1 mx-4 px-3 py-1.5 rounded-md bg-white border border-line
+                    text-[12px] text-muted-light flex items-center gap-2">
+          <i class="ph ph-lock-key text-[11px]"></i>
+          <span class="font-mono">[client-domain].com / [section]</span>
+        </div>
+      </div>
+      <!-- INSERT PROTOTYPE HTML HERE -->
+      <div class="p-12 text-center text-muted">
+        [Drop the prototype HTML here. Or remove this entire mockup block if not applicable.]
+      </div>
+    </div>
+
+    <p class="mt-4 text-[11px] italic text-muted-light text-center">
+      <i class="ph ph-info text-cyan-deep text-[11px] mr-1 align-text-bottom"></i>
+      Illustrative prototype — shown for reference only. Final UI will be confirmed during Phase 02.
+    </p>
+  </div>
+</section>
+
+<!-- Add more deliverable sections by duplicating the block above -->
+
+<!-- ============ ARCHITECTURE (optional — for technical proposals) ============ -->
+<!-- See references/proposal-anatomy.md §06 -->
+
+<!-- ============ TECHNOLOGY STACK (optional — for technical proposals) ============ -->
+<!-- See references/proposal-anatomy.md §07 -->
+
+<!-- ============ SCOPE OF WORK ============ -->
+<!-- See references/proposal-anatomy.md §08 — pick Variant A (by function) or B (by module) -->
+<section id="scope" class="py-24 lg:py-28 bg-white">
+  <div class="max-w-container mx-auto px-6">
+    <div class="mb-12 anim-up">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-navy-wash
+                  text-[11px] uppercase tracking-eyebrow font-semibold text-navy mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-deep"></span>
+        Scope of work
+      </div>
+      <h2 class="font-extrabold text-[36px] lg:text-[52px] leading-[1.05]
+                 tracking-[-0.025em] text-ink text-balance max-w-[860px]">
+        [Scope section headline]<span class="text-cyan-deep">.</span>
+      </h2>
+      <p class="mt-6 max-w-[720px] text-[15px] leading-[1.65] text-muted text-pretty">
+        [Scope intro paragraph.]
+      </p>
+    </div>
+
+    <!-- Scope content here — function-pillars or module-cards -->
+
+    <!-- "Not in this milestone" panel — REQUIRED -->
+    <div class="bg-navy-wash border border-navy/8 rounded-2xl p-8 anim-up mt-10">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
+                      bg-white border border-line
+                      text-[10px] uppercase tracking-eyebrow font-bold text-navy mb-3">
+            <i class="ph ph-x-circle text-navy text-[13px]"></i>
+            Not in [Milestone 1]
+          </div>
+          <h3 class="font-extrabold text-[20px] text-ink tracking-tight leading-[1.2]">
+            Honest boundaries<span class="text-cyan-deep">.</span>
+          </h3>
+          <p class="mt-3 text-[12.5px] text-muted leading-[1.55]">
+            [Why these items are deferred.]
+          </p>
+        </div>
+        <div class="lg:col-span-8">
+          <!-- Group deferred items by reason. See voice-and-copy.md §scope-language -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<!-- See references/proposal-anatomy.md §09 — pick Phase-based or Module-based -->
+<section id="pricing" class="py-24 lg:py-28 bg-navy-wash/40 border-y border-line">
+  <div class="max-w-container mx-auto px-6">
+    <!-- Pricing content here -->
+  </div>
+</section>
+
+<!-- ============ PREPARED BY CODECH ============ -->
+<!-- LOCKED. Paste the contents of assets/codech-closing-section.html here verbatim. -->
+
+<script>
+  // ===== Anim-up reveal observer with 3s safety net =====
+  document.documentElement.classList.add('anim-on');
+  const targets = document.querySelectorAll('.anim-up');
+  targets.forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight * 0.85) el.classList.add('is-visible');
+  });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -80px 0px' }
+  );
+  targets.forEach((el) => { if (!el.classList.contains('is-visible')) observer.observe(el); });
+  setTimeout(() => targets.forEach((el) => el.classList.add('is-visible')), 3000);
+
+  // ===== Sticky nav active state on scroll =====
+  // EDIT THIS: list every section id in DOM order
+  const sections = ['hero', 'deliverable-1', 'scope', 'pricing'];
+  const links = document.querySelectorAll('.section-nav-link');
+  const setActive = () => {
+    const scrollY = window.scrollY + 200;
+    let active = sections[0];
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) active = id;
+    });
+    links.forEach((a) => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+    });
+  };
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  // ===== Mobile prototype mockup image swap + lightbox =====
+  (function() {
+    // EDIT THIS: one entry per .prototype-mockup in DOM order
+    const mockupImages = [
+      // { src: 'screenshots/deliverable-1.png', alt: 'Deliverable 1 prototype' },
+    ];
+
+    document.querySelectorAll('.prototype-mockup').forEach((mockup, i) => {
+      if (!mockupImages[i]) return;
+      const img = document.createElement('img');
+      img.src = mockupImages[i].src;
+      img.alt = mockupImages[i].alt;
+      img.className = 'prototype-mockup-image';
+      img.loading = 'lazy';
+      mockup.parentNode.insertBefore(img, mockup.nextSibling);
+      img.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLightbox(img.src, img.alt);
+      });
+    });
+
+    function openLightbox(src, alt) {
+      let lb = document.getElementById('image-lightbox');
+      if (!lb) {
+        lb = document.createElement('div');
+        lb.id = 'image-lightbox';
+        lb.innerHTML = '<div id="image-lightbox-hint">Tap image to zoom · Tap outside to close</div>'
+          + '<button id="image-lightbox-close" aria-label="Close"><i class="ph-bold ph-x" style="font-size:18px;"></i></button>'
+          + '<img alt="">';
+        document.body.appendChild(lb);
+        const lbImgEl = lb.querySelector('img');
+        const lbHint = lb.querySelector('#image-lightbox-hint');
+        lbImgEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          lb.classList.toggle('zoomed');
+          lbHint.textContent = lb.classList.contains('zoomed')
+            ? 'Tap image to fit · Tap outside to close'
+            : 'Tap image to zoom · Tap outside to close';
+          lb.scrollTop = 0; lb.scrollLeft = 0;
+        });
+        lb.addEventListener('click', (e) => {
+          if (e.target === lb || e.target.closest('#image-lightbox-close')) closeLightbox();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeLightbox();
+        });
+      }
+      const lbImg = lb.querySelector('img');
+      lbImg.src = src; lbImg.alt = alt;
+      lb.classList.remove('zoomed');
+      lb.querySelector('#image-lightbox-hint').textContent = 'Tap image to zoom · Tap outside to close';
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      lb.scrollTop = 0;
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById('image-lightbox');
+      if (lb) { lb.classList.remove('active'); lb.classList.remove('zoomed'); }
+      document.body.style.overflow = '';
+    }
+  })();
+</script>
+</body>
+</html>

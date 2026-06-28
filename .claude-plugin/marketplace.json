@@ -58,6 +58,28 @@
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/fintech-compliance-copy",
       "strict": false
+    },
+    {
+      "name": "codech-client-proposal",
+      "source": "./plugins/codech-client-proposal",
+      "description": "Packages a Codech engagement into a deployed, client-shareable HTML proposal. Applies a per-client design system to the canonical proposal anatomy (utility bar, hero, modules, architecture, scope, pricing, closing), captures prototype screenshots via Playwright, deploys to Cloudflare Pages with a *.pages.dev URL. The delivery layer that follows codech-project-superpower and codech-mockup-design.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "keywords": [
+        "client-proposal",
+        "html-proposal",
+        "cloudflare-pages",
+        "design-system",
+        "playwright-screenshots",
+        "single-page-proposal",
+        "tailwind",
+        "wrangler",
+        "deploy"
+      ],
+      "tags": ["codech", "workflow", "skill", "delivery", "deploy"],
+      "license": "MIT",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-client-proposal",
+      "strict": false
     }
   ]
 }
