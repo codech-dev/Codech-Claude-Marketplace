@@ -123,140 +123,77 @@ On dark sections use `text-white/50` + `text-cyan` for the icon instead.
 
 ## §lightbox Mobile prototype lightbox
 
-On mobile (`max-width: 768px`), live HTML mockups are replaced with PNG screenshots; tapping the image opens a fullscreen lightbox with fit-to-screen default and tap-to-toggle native size.
+On mobile, live HTML mockups are replaced with PNG screenshots; tapping the image opens a fullscreen lightbox. This is the **current pattern** (refined on the OTSO build, replacing an earlier 768px / JS-array approach):
+
+- **Breakpoint is `820px`**, not 768px — catches landscape phones and small tablets where the live mockup still squishes.
+- Each screenshot is its own **`<figure class="prototype-mockup-image">`** placed directly after its `.prototype-mockup`, with an inline `onclick="pmZoom(this.src)"` and a `<figcaption>`. No JS array to keep in DOM order — the image lives next to the mockup it mirrors, so the two never drift apart.
+- The lightbox is a single shared `#pmlb` element created on first tap.
+
+**Pair each mockup with its image** (image hidden on desktop, mockup hidden on mobile):
+
+```html
+<div class="...prototype-mockup">…live browser-chrome mockup…</div>
+<figure class="prototype-mockup-image">
+  <img src="screenshots/mk-home.png" alt="Home — prototype preview" loading="lazy" onclick="pmZoom(this.src)">
+  <figcaption>Prototype preview — tap to enlarge</figcaption>
+</figure>
+```
 
 **CSS** (paste into the page's `<style>` block):
 
 ```css
-.prototype-mockup-image { display: none; }
-
-@media (max-width: 768px) {
-  .prototype-mockup { display: none; }
-  .prototype-mockup-image {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(11,31,53,0.12);
-    cursor: zoom-in;
-    -webkit-tap-highlight-color: rgba(21,181,199,0.18);
-  }
+.desktop-tip { display: none; }
+figure.prototype-mockup-image { display: none; margin: 0; }
+figure.prototype-mockup-image img {
+  width: 100%; height: auto; border-radius: 14px;
+  border: 1px solid #E2E8F0; box-shadow: 0 12px 32px rgba(11,31,53,0.12);
+  cursor: zoom-in; -webkit-tap-highlight-color: rgba(45,127,249,0.18);
+}
+figure.prototype-mockup-image figcaption {
+  margin-top: 10px; text-align: center; font-size: 11.5px; font-weight: 600; color: #64748B;
 }
 
-#image-lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(6,21,37,0.94);
-  z-index: 1000;
-  overflow: auto;
-  padding: 60px 12px 24px;
-  cursor: zoom-out;
+@media (max-width: 820px) {
+  .prototype-mockup { display: none !important; }
+  figure.prototype-mockup-image { display: block; }
+  .desktop-tip { display: flex; }   /* §02b banner engages at the same breakpoint */
 }
-#image-lightbox.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#image-lightbox.zoomed { align-items: flex-start; }
-#image-lightbox img {
-  width: 100%;
-  max-width: 1100px;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-  cursor: zoom-in;
-  transition: width 0.2s ease, max-width 0.2s ease;
-}
-#image-lightbox.zoomed img {
-  width: auto;
-  max-width: none;
-  cursor: zoom-out;
-  margin: 0 auto;
-}
-#image-lightbox-close {
-  position: fixed; top: 14px; right: 14px; z-index: 1001;
-  background: #FFFFFF; border: 0;
-  width: 42px; height: 42px; border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-  display: flex; align-items: center; justify-content: center;
-  color: #0B1F35;
-}
-#image-lightbox-hint {
-  position: fixed; top: 22px; left: 50%; transform: translateX(-50%);
-  z-index: 1001;
-  color: rgba(255,255,255,0.7);
-  font-size: 11.5px; font-weight: 600;
-  letter-spacing: 0.05em; text-transform: uppercase;
-}
+
+/* lightbox */
+#pmlb { display: none; position: fixed; inset: 0; background: rgba(6,21,37,0.94);
+  z-index: 1000; overflow: auto; padding: 52px 12px 24px; cursor: zoom-out;
+  -webkit-overflow-scrolling: touch; }
+#pmlb.open { display: block; }
+#pmlb img { display: block; width: 100%; max-width: 920px; margin: 0 auto;
+  border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+#pmlb-close { position: fixed; top: 14px; right: 14px; width: 42px; height: 42px;
+  border-radius: 999px; background: #fff; border: 0; display: flex; align-items: center;
+  justify-content: center; color: #0B1F35; box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  cursor: pointer; z-index: 1001; }
 ```
 
-**JS** (paste at the end of the page's bottom `<script>` block):
+**JS** (paste into the page's bottom `<script>` block):
 
 ```javascript
-(function() {
-  const mockupImages = [
-    { src: 'screenshots/module-01-workspace.png', alt: 'Module 01 prototype' },
-    // ... one entry per .prototype-mockup, in DOM order
-  ];
-
-  document.querySelectorAll('.prototype-mockup').forEach((mockup, i) => {
-    if (!mockupImages[i]) return;
-    const img = document.createElement('img');
-    img.src = mockupImages[i].src;
-    img.alt = mockupImages[i].alt;
-    img.className = 'prototype-mockup-image';
-    img.loading = 'lazy';
-    mockup.parentNode.insertBefore(img, mockup.nextSibling);
-    img.addEventListener('click', (e) => {
-      e.preventDefault();
-      openLightbox(img.src, img.alt);
+window.pmZoom = function (src) {
+  let lb = document.getElementById('pmlb');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'pmlb';
+    lb.innerHTML = '<button id="pmlb-close" aria-label="Close"><i class="ph-bold ph-x" style="font-size:18px"></i></button><img alt="Prototype preview">';
+    document.body.appendChild(lb);
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb || e.target.closest('#pmlb-close')) { lb.classList.remove('open'); document.body.style.overflow = ''; }
     });
-  });
-
-  function openLightbox(src, alt) {
-    let lb = document.getElementById('image-lightbox');
-    if (!lb) {
-      lb = document.createElement('div');
-      lb.id = 'image-lightbox';
-      lb.innerHTML = '<div id="image-lightbox-hint">Tap image to zoom · Tap outside to close</div>'
-        + '<button id="image-lightbox-close" aria-label="Close"><i class="ph-bold ph-x" style="font-size:18px;"></i></button>'
-        + '<img alt="">';
-      document.body.appendChild(lb);
-      const lbImgEl = lb.querySelector('img');
-      const lbHint = lb.querySelector('#image-lightbox-hint');
-      lbImgEl.addEventListener('click', (e) => {
-        e.stopPropagation();
-        lb.classList.toggle('zoomed');
-        lbHint.textContent = lb.classList.contains('zoomed')
-          ? 'Tap image to fit · Tap outside to close'
-          : 'Tap image to zoom · Tap outside to close';
-        lb.scrollTop = 0; lb.scrollLeft = 0;
-      });
-      lb.addEventListener('click', (e) => {
-        if (e.target === lb || e.target.closest('#image-lightbox-close')) closeLightbox();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeLightbox();
-      });
-    }
-    const lbImg = lb.querySelector('img');
-    lbImg.src = src; lbImg.alt = alt;
-    lb.classList.remove('zoomed');
-    lb.querySelector('#image-lightbox-hint').textContent = 'Tap image to zoom · Tap outside to close';
-    lb.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    lb.scrollTop = 0;
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; } });
   }
-
-  function closeLightbox() {
-    const lb = document.getElementById('image-lightbox');
-    if (lb) { lb.classList.remove('active'); lb.classList.remove('zoomed'); }
-    document.body.style.overflow = '';
-  }
-})();
+  lb.querySelector('img').src = src;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
 ```
+
+This lightbox fits the image to screen (tap outside / × / Esc to close). If you need tap-to-toggle native-size zoom for very tall screenshots, add a `zoomed` class toggle on the `#pmlb img` click — but fit-to-screen is the right default for proposal mockups.
 
 **Don't** try to render the HTML mockup at scale on mobile — it always squishes. The image swap is the proven pattern.
 

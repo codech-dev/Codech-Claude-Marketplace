@@ -9,7 +9,7 @@ description: Use when building a Codech client proposal as a single-page HTML de
 
 A reusable workflow for turning a Codech engagement into a deployed, client-shareable HTML proposal. The skill applies a **per-client design system** to a **canonical proposal anatomy** with **locked Codech identity** in the closing section, optionally captures prototype mockup screenshots, and deploys to **Cloudflare Pages**.
 
-**Core principle:** The visual idioms (eyebrow pills, featured dark cards, browser-chrome mockups, anim-up reveals, mobile lightbox) are reusable across clients; the design tokens (color, font, voice) are per-client; the closing section ("Prepared by Codech Solutions") is always Codech-branded.
+**Core principle:** The visual idioms (eyebrow pills, featured dark cards, browser-chrome mockups, anim-up reveals, mobile lightbox, desktop-recommended banner, optional bilingual toggle) are reusable across clients; the design tokens (color, font, voice) are per-client; the closing section ("Prepared by Codech Solutions") is always Codech-branded.
 
 **Worked reference:** The JY Global AI Portal proposal — see `examples/jy-global-reference.md`.
 
@@ -43,6 +43,7 @@ Each step has a corresponding reference document:
 | Build proposal sections | `references/proposal-anatomy.md` |
 | Apply reusable visual patterns | `references/visual-idioms.md` |
 | Map a design system into the proposal | `references/using-design-system.md` |
+| Add a bilingual (EN ⇄ second-language) toggle | `references/multilanguage.md` |
 | Capture prototype screenshots | `references/screenshot-pipeline.md` + `scripts/capture-screenshots.mjs` |
 | Deploy to Cloudflare Pages | `references/cloudflare-deploy.md` + `scripts/deploy.sh` |
 
@@ -64,7 +65,8 @@ These elements use Codech identity regardless of client design system:
 
 1. **Closing section** — Always uses Codech logo + contact card (website, email, phone, WhatsApp). Markup: `assets/codech-closing-section.html`.
 2. **Confidentiality pill** in top utility bar — centred, navy chip with shield icon: `Confidential · [Proposal name] for [Client]`.
-3. **Mobile lightbox** UX — fit-to-screen default, tap image to toggle native zoom, tap outside / Esc / × to close. Pattern in `references/visual-idioms.md` §lightbox.
+3. **Mobile lightbox** UX — fit-to-screen default, tap outside / Esc / × to close. Pattern in `references/visual-idioms.md` §lightbox.
+4. **Desktop-recommended banner** — mobile-only navy strip telling the reader the proposal is best viewed on desktop and that app screens appear as tap-to-enlarge images. Default-on for every proposal; markup in `references/proposal-anatomy.md` §02b.
 
 Everything else (hero, modules, architecture, scope, pricing) is themed per the client's design system.
 
