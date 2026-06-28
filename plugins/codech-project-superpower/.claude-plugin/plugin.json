@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "codech-project-superpower",
-  "version": "1.0.0",
-  "description": "Codech Project Superpower — full pre-development workflow: requirement docs → proposal (MD/HTML/PDF) → FSD/SAD/TDD/SRS → interactive single-file React prototype with shadcn + Framer Motion.",
+  "version": "1.1.0",
+  "description": "Codech Project Superpower — end-to-end engagement workflow: requirement docs → proposal (MD/HTML/PDF) → FSD/SAD/TDD/SRS → interactive single-file React prototype with shadcn + Framer Motion → production development (master plan + gated TDD sub-plans, prototype as pixel-diff contract).",
   "author": {
     "name": "Codech",
     "email": "team@codech.dev",
@@ -28,6 +28,9 @@
     "PoC",
     "shadcn",
     "framer-motion",
+    "production-development",
+    "master-plan",
+    "pixel-diff",
     "codech"
   ]
 }

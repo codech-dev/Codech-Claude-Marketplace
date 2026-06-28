@@ -14,8 +14,8 @@
     {
       "name": "codech-project-superpower",
       "source": "./plugins/codech-project-superpower",
-      "description": "End-to-end project workflow: turns raw requirements (docx, pdf, meeting notes) into a styled bilingual proposal (MD + HTML + PDF), pre-development documents (FSD, SAD, TDD, SRS), and an interactive single-file React prototype. Orchestrates docx, brainstorming, and ui-ux-pro-max skills.",
-      "version": "1.0.0",
+      "description": "End-to-end engagement workflow: turns raw requirements (docx, pdf, meeting notes) into a styled bilingual proposal (MD + HTML + PDF), pre-development documents (FSD, SAD, TDD, SRS), and an interactive single-file React prototype — then carries the approved package through production development (master plan + gated TDD sub-plans, prototype as pixel-diff contract). Orchestrates docx, brainstorming, ui-ux-pro-max, and the superpowers writing-plans/executing-plans/subagent-driven-development/finishing-a-development-branch skills.",
+      "version": "1.1.0",
       "category": "workflow",
       "keywords": [
         "project-proposal",
@@ -29,7 +29,10 @@
         "bilingual",
         "PoC",
         "shadcn",
-        "framer-motion"
+        "framer-motion",
+        "production-development",
+        "master-plan",
+        "pixel-diff"
       ],
       "tags": ["codech", "workflow", "skill", "consulting", "ERP"],
       "license": "MIT",

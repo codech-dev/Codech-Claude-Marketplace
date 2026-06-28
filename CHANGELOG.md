@@ -47,6 +47,29 @@ Initial release. Extracted from the JY Global AI Portal proposal engagement (Q2 
 
 ## codech-project-superpower
 
+### [1.1.0] — 2026-06-29
+
+Phase 5 — Production Development extension. The skill now carries an approved pre-dev package through into a shipping production codebase, not just to the prototype. Backward-compatible: Phases 1–4 are unchanged.
+
+**Added:**
+- Phase 5 — Production Development section in `SKILL.md`: master implementation plan, gated TDD sub-plan loop, foundation/auth/module universal (stack-agnostic) patterns, CLAUDE.md + cross-session-memory + pixel-diff discipline, Phase 5 approval gates
+- `templates/master-plan-structure.md` — 11-section master implementation plan
+- `recipes/pixel-diff-harness.md` — cross-platform Playwright visual-regression setup
+- `recipes/backend-crud-module-fastapi.md` — CRUD module reference impl (FastAPI + SQLModel + Alembic)
+- `recipes/field-level-encryption-python.md` — AES-256-GCM + AES-256-SIV reference impl
+- Phase 5 trigger phrases ("ready to proceed development", "scaffold the monorepo", "build the X module"; `docs/` with FSD/SAD/TDD/SRS present)
+
+**Changed:**
+- `README.md` + both manifests updated from "4-phase, ends at prototype" to the full 5-phase end-to-end workflow; removed the now-false "production code generation / real backend — NOT in scope" lines
+
+**Integration:**
+- Phase 5 additionally orchestrates `superpowers:writing-plans`, `superpowers:executing-plans`, `superpowers:subagent-driven-development`, `superpowers:finishing-a-development-branch`
+
+**Tested on:**
+- CGG Agricultural ERP — drove the production build through 20+ gated TDD sub-plans to a live staging deployment
+
+---
+
 ### [1.0.0] — 2026-05-21
 
 Initial release. Extracted from the CGG Agricultural ERP engagement (2026).
