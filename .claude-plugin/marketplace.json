@@ -83,6 +83,28 @@
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-client-proposal",
       "strict": false
+    },
+    {
+      "name": "codech-web-builder",
+      "source": "./plugins/codech-web-builder",
+      "description": "Turn reference website(s) + a brand logo into a deployed site: vision-extracted palette, taste-skill design system + HTML prototype, then convert to a target stack (WordPress or static) and deploy. Stack-agnostic via a portable core + thin adapters; two human gates (after design, before deploy). Use when building or designing a site like a reference, deriving a brand palette from a logo, or converting an approved design into WordPress or a static site and deploying it.",
+      "version": "0.1.0",
+      "category": "workflow",
+      "keywords": [
+        "web-builder",
+        "design-system",
+        "wordpress",
+        "static-site",
+        "palette",
+        "logo",
+        "prototype",
+        "cloudflare-pages",
+        "deploy"
+      ],
+      "tags": ["codech", "skill", "design", "web", "deploy"],
+      "license": "MIT",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-web-builder",
+      "strict": false
     }
   ]
 }
