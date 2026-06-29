@@ -25,6 +25,11 @@ something to improvise).
 - **`content-map.md`** - the real copy and per-section structure to lay in.
 - The motion dials (DESIGN_VARIANCE / MOTION_INTENSITY / VISUAL_DENSITY) from
   `brand-tokens.md` - pass these through as the taste skill's dials.
+- **The sourced local images** in `artifact/assets/img/` (phase 2b, see
+  06-source-images.md). The prototype must use these REAL images for every image
+  slot (hero, product/feature shots, category tiles). Empty gray placeholder
+  boxes are not acceptable output. If a slot has no suitable image, source one
+  (06) before building, do not ship a placeholder.
 
 ## Required outputs (and where they land)
 

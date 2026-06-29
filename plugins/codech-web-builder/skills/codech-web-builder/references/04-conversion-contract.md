@@ -19,8 +19,16 @@ artifact/
   prototype/           Section-structured HTML/CSS/JS prototype. The VISUAL
                        SOURCE OF TRUTH. index.html plus assets it references.
   assets/              Logo + local images used by the prototype.
-  assets/manifest.json Array describing every asset, e.g.
-                       [{ "file": "logo.svg", "role": "logo", "alt": "Brand" }]
+  assets/img/          Sourced stock images (phase 2b, see 06-source-images.md).
+  assets/manifest.json Array describing every asset. Logo entry is minimal;
+                       sourced images carry license + attribution, e.g.
+                       [
+                         { "file": "logo.svg", "role": "logo", "alt": "Brand" },
+                         { "file": "img/hero.jpg", "role": "image", "alt": "...",
+                           "source": "Openverse", "license": "by-sa 3.0",
+                           "attribution": "Title by Author",
+                           "sourceUrl": "https://..." }
+                       ]
   content-map.md       Per-section copy and structure derived from the
                        reference analysis (see 02-capture-references.md).
 ```

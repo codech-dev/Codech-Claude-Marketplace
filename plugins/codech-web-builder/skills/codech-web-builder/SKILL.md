@@ -22,6 +22,9 @@ converts + deploys it.
 2. **Capture references** - screenshot + analyze the references into
    `reference-analysis.md` + `content-map.md`.
    See [references/02-capture-references.md](references/02-capture-references.md).
+2b. **Source imagery** - download real, topical images locally (one per image
+   slot in the content map) so the prototype is never empty gray boxes.
+   See [references/06-source-images.md](references/06-source-images.md).
 3. **Design** - hand tokens + analysis to a taste skill, which produces
    `artifact/DESIGN-SYSTEM.md` + `artifact/prototype/`.
    See [references/03-design-handoff.md](references/03-design-handoff.md).
@@ -53,5 +56,7 @@ deploy step outside an adapter.
   engine (phase 3). Stop and ask the user to install it if absent.
 - **Playwright** - reference capture + QA screenshots (`scripts/capture.mjs`).
 - **Firecrawl** - optional structured extraction; the skill degrades without it.
+- **Images** - `scripts/fetch-images.mjs` uses `PEXELS_API_KEY` or
+  `UNSPLASH_ACCESS_KEY` if set (better quality), else Openverse (no key).
 - **coway-starter** checkout - WordPress adapter only.
 - **Cloudflare / wrangler** - static adapter deploy.
