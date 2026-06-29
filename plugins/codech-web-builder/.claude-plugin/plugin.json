@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "codech-web-builder",
+  "version": "0.1.0",
+  "description": "Turn reference website(s) + a brand logo into a deployed site: vision-extracted palette, taste-skill design system + HTML prototype, then convert to a target stack (WordPress or static) and deploy. Stack-agnostic via portable core + thin adapters.",
+  "author": {
+    "name": "Codech",
+    "email": "team@codech.dev",
+    "url": "https://github.com/codech-dev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codech-dev/Codech-Claude-Marketplace.git",
+    "directory": "plugins/codech-web-builder"
+  },
+  "keywords": [
+    "claude-code-plugin",
+    "web-builder",
+    "design-system",
+    "wordpress",
+    "static-site",
+    "palette",
+    "logo",
+    "prototype",
+    "deploy",
+    "codech"
+  ]
+}

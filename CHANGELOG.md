@@ -6,6 +6,26 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## codech-web-builder
+
+### [0.1.0] — 2026-06-29
+
+Initial release. Productizes the Coway agent-site build arc (taste-skill design + coway-starter deploy) into a reusable, stack-agnostic plugin.
+
+**Added:**
+- 5-phase pipeline: Palette → Capture references → Design → Convert → Deploy, with two human gates (after design, before deploy)
+- `SKILL.md` lean orchestrator with trigger-focused description and a references/adapters map
+- `references/01-palette-from-logo.md` — vision-based palette extraction + fixed token schema with WCAG AA contrast checks
+- `references/02-capture-references.md` — Playwright (visual + DOM) + Firecrawl (structured) capture with a degradation ladder
+- `references/03-design-handoff.md` — hands tokens + analysis to a taste skill (`design-taste-frontend`/`frontend-design`) as the design engine
+- `references/04-conversion-contract.md` — the versioned portable-artifact spec every adapter consumes (stack-neutral seam)
+- `references/05-gates-and-qa.md` — the two gates + post-deploy live-screenshot QA
+- `adapters/static.md` — static site to Cloudflare Pages (universal fallback)
+- `adapters/wordpress.md` — maps the artifact onto coway-starter (new skin + provisioner), with unique no-prices SEO
+- `scripts/capture.mjs` — Playwright multi-viewport screenshot + DOM dump (dynamic import so usage works without Playwright)
+
+---
+
 ## codech-client-proposal
 
 ### [1.0.0] — 2026-06-28
