@@ -22,14 +22,20 @@ converts + deploys it.
 2. **Capture references** - screenshot + analyze the references into
    `reference-analysis.md` + `content-map.md`.
    See [references/02-capture-references.md](references/02-capture-references.md).
+2b. **Source imagery** - download real, topical images locally (one per image
+   slot in the content map) so the prototype is never empty gray boxes.
+   See [references/06-source-images.md](references/06-source-images.md).
 3. **Design** - hand tokens + analysis to a taste skill, which produces
    `artifact/DESIGN-SYSTEM.md` + `artifact/prototype/`.
    See [references/03-design-handoff.md](references/03-design-handoff.md).
    **>> GATE 1: user approves the design before continuing.**
 4. **Convert** - select the adapter for the target stack and map the artifact
-   into it. Runs autonomously (no gate).
-5. **Deploy** - **>> GATE 2: user approves**, then the adapter runs its own
-   deploy recipe; verify with a live screenshot.
+   into it. Runs autonomously (no gate). The converted, ready-to-deploy build is
+   the skill's primary deliverable.
+5. **Deploy (OPTIONAL)** - deployment is not compulsory. First ask whether the
+   user wants to deploy at all; if not, stop at the built artifact and hand them
+   the deploy instructions. If yes: **>> GATE 2: user approves**, then the
+   adapter runs its own deploy recipe; verify with a live screenshot.
 
 The artifact every adapter consumes is defined in
 [references/04-conversion-contract.md](references/04-conversion-contract.md).
@@ -53,5 +59,7 @@ deploy step outside an adapter.
   engine (phase 3). Stop and ask the user to install it if absent.
 - **Playwright** - reference capture + QA screenshots (`scripts/capture.mjs`).
 - **Firecrawl** - optional structured extraction; the skill degrades without it.
+- **Images** - `scripts/fetch-images.mjs` uses `PEXELS_API_KEY` or
+  `UNSPLASH_ACCESS_KEY` if set (better quality), else Openverse (no key).
 - **coway-starter** checkout - WordPress adapter only.
 - **Cloudflare / wrangler** - static adapter deploy.

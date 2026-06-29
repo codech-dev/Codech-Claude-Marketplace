@@ -21,10 +21,12 @@ root and deploys it to Cloudflare Pages.
    `dist/assets/css/tokens.css` and link it from the pages' `<head>`.
 5. Confirm `dist/index.html` opens standalone with all assets resolving.
 
-## Deploy (GATE 2 first)
+## Deploy (OPTIONAL; GATE 2 first)
 
-Do not run any deploy command until GATE 2 has passed (see 05-gates-and-qa.md):
-confirm the project name and that the user wants to publish.
+Deployment is optional. The built `dist/` is a complete deliverable - the user
+may just want it to host themselves or hand off. Only deploy if the user opts in
+at GATE 2 (see 05-gates-and-qa.md): confirm the project name and that they want
+to publish. If they decline, stop at `dist/` and give them the commands below.
 
 One-time, if the Pages project does not exist yet:
 
@@ -42,6 +44,15 @@ Auth note: `wrangler` needs a Cloudflare login (`npx wrangler login`) or a
 `CLOUDFLARE_API_TOKEN` env var with Pages write scope. If neither is present,
 stop at the built `dist/` and give the user the two commands above to run
 themselves.
+
+Pages scope gotcha: a default `wrangler login` token may carry only
+`workers (write)` and NOT Cloudflare Pages edit. With a workers-only token,
+`pages project create` fails with a generic API error (code 8000000) and the
+deploy then reports "Project not found" (code 8000007). Check scopes with
+`npx wrangler whoami`; if `pages` is absent, the user must re-auth with Pages
+edit permission (`wrangler login` and grant Pages, or use a
+`CLOUDFLARE_API_TOKEN` with the "Cloudflare Pages: Edit" template). Do not treat
+this as a build failure - the `dist/` is valid; only the publish step is blocked.
 
 ## Post-deploy
 

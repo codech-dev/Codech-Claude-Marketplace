@@ -20,6 +20,8 @@ Initial release. Productizes the Coway agent-site build arc (taste-skill design 
 - `references/03-design-handoff.md` — hands tokens + analysis to a taste skill (`design-taste-frontend`/`frontend-design`) as the design engine
 - `references/04-conversion-contract.md` — the versioned portable-artifact spec every adapter consumes (stack-neutral seam)
 - `references/05-gates-and-qa.md` — the two gates + post-deploy live-screenshot QA
+- `references/06-source-images.md` — source real topical images locally (no placeholders, no hotlinking)
+- `scripts/fetch-images.mjs` — downloads stock images: Pexels/Unsplash via API key, Openverse (CC, no key) fallback, with license + attribution recorded
 - `adapters/static.md` — static site to Cloudflare Pages (universal fallback)
 - `adapters/wordpress.md` — maps the artifact onto coway-starter (new skin + provisioner), with unique no-prices SEO
 - `scripts/capture.mjs` — Playwright multi-viewport screenshot + DOM dump (dynamic import so usage works without Playwright)
