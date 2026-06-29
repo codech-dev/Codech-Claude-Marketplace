@@ -43,6 +43,15 @@ Auth note: `wrangler` needs a Cloudflare login (`npx wrangler login`) or a
 stop at the built `dist/` and give the user the two commands above to run
 themselves.
 
+Pages scope gotcha: a default `wrangler login` token may carry only
+`workers (write)` and NOT Cloudflare Pages edit. With a workers-only token,
+`pages project create` fails with a generic API error (code 8000000) and the
+deploy then reports "Project not found" (code 8000007). Check scopes with
+`npx wrangler whoami`; if `pages` is absent, the user must re-auth with Pages
+edit permission (`wrangler login` and grant Pages, or use a
+`CLOUDFLARE_API_TOKEN` with the "Cloudflare Pages: Edit" template). Do not treat
+this as a build failure - the `dist/` is valid; only the publish step is blocked.
+
 ## Post-deploy
 
 Emit the `https://<slug>.pages.dev` URL and run the post-deploy QA screenshot
