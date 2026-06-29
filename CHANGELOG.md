@@ -19,6 +19,7 @@ Initial release. Productizes the Coway agent-site build arc (taste-skill design 
 - `references/02-capture-references.md` — Playwright (visual + DOM) + Firecrawl (structured) capture with a degradation ladder
 - `references/03-design-handoff.md` — hands tokens + analysis to a taste skill (`design-taste-frontend`/`frontend-design`) as the design engine
 - `references/04-conversion-contract.md` — the versioned portable-artifact spec every adapter consumes (stack-neutral seam)
+- `references/00-preflight.md` + `scripts/preflight.mjs` — Phase 0 dependency check (required/optional/conditional tiers); stops and asks the user to install missing required skills/tools before any pipeline work
 - `references/05-gates-and-qa.md` — the two gates + post-deploy live-screenshot QA
 - `references/06-source-images.md` — source real topical images locally (no placeholders, no hotlinking)
 - `scripts/fetch-images.mjs` — downloads stock images: Pexels/Unsplash via API key, Openverse (CC, no key) fallback, with license + attribution recorded
