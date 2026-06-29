@@ -30,9 +30,12 @@ converts + deploys it.
    See [references/03-design-handoff.md](references/03-design-handoff.md).
    **>> GATE 1: user approves the design before continuing.**
 4. **Convert** - select the adapter for the target stack and map the artifact
-   into it. Runs autonomously (no gate).
-5. **Deploy** - **>> GATE 2: user approves**, then the adapter runs its own
-   deploy recipe; verify with a live screenshot.
+   into it. Runs autonomously (no gate). The converted, ready-to-deploy build is
+   the skill's primary deliverable.
+5. **Deploy (OPTIONAL)** - deployment is not compulsory. First ask whether the
+   user wants to deploy at all; if not, stop at the built artifact and hand them
+   the deploy instructions. If yes: **>> GATE 2: user approves**, then the
+   adapter runs its own deploy recipe; verify with a live screenshot.
 
 The artifact every adapter consumes is defined in
 [references/04-conversion-contract.md](references/04-conversion-contract.md).

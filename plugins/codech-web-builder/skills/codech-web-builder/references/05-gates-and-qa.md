@@ -15,14 +15,21 @@ When phase 3 has produced `artifact/DESIGN-SYSTEM.md` + `artifact/prototype/`:
 4. **Do not proceed to conversion until the user approves.** On rejection, loop
    back to phase 3 with the feedback and re-present. Iterate until approved.
 
-## GATE 2 - before deploy
+## GATE 2 - before deploy (deploy is OPTIONAL)
+
+Deployment is not a compulsory phase. The converted, ready-to-deploy build is a
+complete deliverable on its own.
 
 When an adapter has produced a deploy-ready build:
 
-1. State exactly what will happen: the target stack, the destination (domain /
-   project / host), and the deploy command the adapter will run.
-2. Ask the user to confirm.
-3. **Deploy NEVER runs without explicit approval.** If the user does not
+1. **First ask whether to deploy at all.** Many users only want the built site
+   (to deploy themselves, hand to a client, or review locally). If they do not
+   want to deploy, stop here, hand them the build plus the adapter's deploy
+   instructions, and treat the task as done.
+2. If they do want to deploy: state exactly what will happen - the target stack,
+   the destination (domain / project / host), and the deploy command.
+3. Ask the user to confirm.
+4. **Deploy NEVER runs without explicit approval.** If the user does not
    confirm, stop at the built artifact and hand them the manual steps.
 
 ## Post-deploy QA

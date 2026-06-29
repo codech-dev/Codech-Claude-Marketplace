@@ -60,10 +60,13 @@ skin carries the per-site look. So map the artifact into a NEW skin:
    in cached snippets; the live price belongs in Product schema. (This matches the
    starter's per-skin SEO mechanism.)
 
-## Deploy (GATE 2 first)
+## Deploy (OPTIONAL; GATE 2 first)
 
-Do not provision or deploy until GATE 2 has passed (see 05-gates-and-qa.md):
-confirm the domain, the host, and that the user wants to publish.
+Deployment is optional. The generated theme (base + new skin) + the
+`site.config.json` are a complete deliverable the user can provision themselves.
+Only provision/deploy if the user opts in at GATE 2 (see 05-gates-and-qa.md):
+confirm the domain, the host, and that they want to publish. If they decline,
+hand over the theme + config + the commands below.
 
 Reuse the starter's scripts - do not reinvent:
 
