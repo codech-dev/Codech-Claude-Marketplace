@@ -17,6 +17,10 @@ converts + deploys it.
 
 ## Pipeline (run in order)
 
+0. **Preflight** - check dependencies BEFORE any work. Confirm a taste skill is
+   installed, run `node scripts/preflight.mjs` for tools, and confirm the logo +
+   references. If anything REQUIRED is missing, STOP and ask the user to install
+   or provide it first. See [references/00-preflight.md](references/00-preflight.md).
 1. **Palette** - read the logo and write `artifact/brand-tokens.md`.
    See [references/01-palette-from-logo.md](references/01-palette-from-logo.md).
 2. **Capture references** - screenshot + analyze the references into
