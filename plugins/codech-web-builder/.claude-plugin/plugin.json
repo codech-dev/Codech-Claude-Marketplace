@@ -10,11 +10,7 @@
   },
   "license": "MIT",
   "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/codech-dev/Codech-Claude-Marketplace.git",
-    "directory": "plugins/codech-web-builder"
-  },
+  "repository": "https://github.com/codech-dev/Codech-Claude-Marketplace",
   "keywords": [
     "claude-code-plugin",
     "web-builder",
