@@ -33,16 +33,18 @@ converts + deploys it.
    which builds the HOME PAGE prototype only (`artifact/prototype/`). Do NOT write
    the design system yet. See [references/03-design-handoff.md](references/03-design-handoff.md).
    **>> GATE 1: user reviews and confirms the home page. Iterate here until approved.**
-3b. **Write the design system** - ONLY after GATE 1, derive
+3b. **Write the design system + remaining pages** - ONLY after GATE 1, derive
    `artifact/DESIGN-SYSTEM.md` from the APPROVED home page (the tokens, components,
-   and patterns as actually used), then build any additional page types to match
-   it. See [references/03-design-handoff.md](references/03-design-handoff.md).
+   and patterns as actually used), then build the other page types to match it
+   (most projects are multi-page). See [references/03-design-handoff.md](references/03-design-handoff.md).
+   **>> GATE 2: user reviews the remaining pages. Iterate until approved.**
+   (Skip GATE 2 only if the site is a single page.)
 4. **Convert** - select the adapter for the target stack and map the artifact
    into it. Runs autonomously (no gate). The converted, ready-to-deploy build is
    the skill's primary deliverable.
 5. **Deploy (OPTIONAL)** - deployment is not compulsory. First ask whether the
    user wants to deploy at all; if not, stop at the built artifact and hand them
-   the deploy instructions. If yes: **>> GATE 2: user approves**, then the
+   the deploy instructions. If yes: **>> GATE 3: user approves**, then the
    adapter runs its own deploy recipe; verify with a live screenshot.
 
 The artifact every adapter consumes is defined in

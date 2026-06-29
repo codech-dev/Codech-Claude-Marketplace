@@ -1,7 +1,10 @@
 # Gates and QA
 
-Two human gates protect the irreversible and taste-sensitive steps. Both are hard
-stops. The plugin never skips them, even when the user seems to be in a hurry.
+Three human gates protect the taste-sensitive and irreversible steps:
+GATE 1 (home page), GATE 2 (remaining pages), GATE 3 (deploy, optional). They are
+hard stops. The plugin never skips them, even when the user seems to be in a
+hurry. (GATE 2 is skipped only when the site is a single page; GATE 3 only runs
+if the user opts to deploy.)
 
 ## GATE 1 - confirm the HOME PAGE, before writing the design system
 
@@ -19,9 +22,24 @@ design system yet):
 3. Ask the user to approve or give feedback.
 4. **Do not write the design system or build other pages until the user
    approves.** On feedback, loop back into Step A and re-present. Iterate until
-   approved. Only then proceed to Step B (design system) and conversion.
+   approved. Only then proceed to Step B (design system + remaining pages).
 
-## GATE 2 - before deploy (deploy is OPTIONAL)
+## GATE 2 - confirm the REMAINING pages, before conversion
+
+After Step B has written the design system and built the other page types (most
+projects are multi-page):
+
+1. Present each additional page for review (screenshot at desktop + mobile).
+2. Check each one is consistent with the approved home page and the design system
+   (shared header/footer, components, tokens, spacing, motion).
+3. Ask the user to approve or give feedback.
+4. **Do not proceed to conversion until the user approves the remaining pages.**
+   On feedback, fix the pages (and the design system if a real pattern gap is
+   found) and re-present. Iterate until approved.
+
+Skip this gate only if the site is a single page (nothing beyond the home page).
+
+## GATE 3 - before deploy (deploy is OPTIONAL)
 
 Deployment is not a compulsory phase. The converted, ready-to-deploy build is a
 complete deliverable on its own.

@@ -59,7 +59,7 @@ An adapter takes `artifact/` and:
   possible),
 - maps `content-map.md` -> the stack's editable copy,
 - maps `assets/` -> the stack's asset location,
-- then runs its own deploy recipe (gated by GATE 2; see 05-gates-and-qa.md).
+- then runs its own deploy recipe (gated by GATE 3; see 05-gates-and-qa.md).
 
 An adapter MUST NOT require a change to the core (`SKILL.md` or any `references/`
 file other than this contract).
