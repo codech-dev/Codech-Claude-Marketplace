@@ -21,11 +21,11 @@ root and deploys it to Cloudflare Pages.
    `dist/assets/css/tokens.css` and link it from the pages' `<head>`.
 5. Confirm `dist/index.html` opens standalone with all assets resolving.
 
-## Deploy (OPTIONAL; GATE 2 first)
+## Deploy (OPTIONAL; GATE 3 first)
 
 Deployment is optional. The built `dist/` is a complete deliverable - the user
 may just want it to host themselves or hand off. Only deploy if the user opts in
-at GATE 2 (see 05-gates-and-qa.md): confirm the project name and that they want
+at GATE 3 (see 05-gates-and-qa.md): confirm the project name and that they want
 to publish. If they decline, stop at `dist/` and give them the commands below.
 
 One-time, if the Pages project does not exist yet:

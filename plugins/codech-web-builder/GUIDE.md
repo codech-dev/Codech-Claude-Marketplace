@@ -27,12 +27,19 @@ comes out. Deployment is an optional last step.
  [2b] SOURCE IMAGES ....... download real, topical images locally (no hotlinking)
      |                      -> assets/img/* (+ license/attribution recorded)
      |
- [3] DESIGN (taste skill).. tokens + analysis + images handed to the taste skill
-     |                      -> DESIGN-SYSTEM.md + prototype/ (real HTML, real images)
+ [3] DESIGN HOME PAGE ..... taste skill builds the HOME PAGE prototype only
+     |   (taste skill)        (real HTML, real images). No design system yet.
      |
-     === GATE 1: you review the design ===
-     |   not happy? --> loop back to [3] with feedback
-     | approved
+     === GATE 1: you review + confirm the HOME PAGE ===
+     |   not happy? --> loop back to [3] with feedback (expect adjustments)
+     | confirmed
+ [3b] DESIGN SYSTEM + PAGES  derive DESIGN-SYSTEM.md FROM the approved home page,
+     |                      then build the other page types to match it
+     |
+     === GATE 2: you review + confirm the REMAINING pages ===
+     |   not happy? --> fix pages (and design system) and re-present
+     |   (single-page site? this gate is skipped)
+     | confirmed
  [4] CONVERT (adapter) .... map the artifact into the target stack
      |                      -> the BUILD (static: dist/  |  wordpress: theme + config)
      |                         <-- this is the primary deliverable
@@ -40,7 +47,7 @@ comes out. Deployment is an optional last step.
      === DEPLOY?  (OPTIONAL - not compulsory) ===
      |   no  --> hand over the build + deploy instructions.  DONE.
      | yes
-     === GATE 2: you approve the deploy target ===
+     === GATE 3: you approve the deploy target ===
      |   no  --> stop at the build.  DONE.
      | yes
  [5] DEPLOY (adapter recipe) -> live URL + QA screenshot.  DONE.
@@ -54,22 +61,28 @@ comes out. Deployment is an optional last step.
 | 1 | Palette | the logo | `artifact/brand-tokens.md` (WCAG-checked tokens + motion dials) |
 | 2 | Capture | reference URL(s) | `reference-analysis.md`, `content-map.md` |
 | 2b | Images | (optional API key) | `artifact/assets/img/*` + `credits.json` |
-| 3 | Design | review at GATE 1 | `artifact/DESIGN-SYSTEM.md` + `artifact/prototype/` |
+| 3 | Design home page | review + confirm at GATE 1 | `artifact/prototype/index.html` (home page only) |
+| 3b | Design system + pages | review + confirm at GATE 2 | `artifact/DESIGN-SYSTEM.md` (derived from approved home page) + the other pages |
 | 4 | Convert | target stack | the build (static `dist/` or WordPress theme + `site.config.json`) |
-| 5 | Deploy | opt in at GATE 2 | live URL + QA screenshot |
+| 5 | Deploy | opt in at GATE 3 | live URL + QA screenshot |
 
 ## Decision points (what the team actually chooses)
 
 1. **Target stack** - `static` (Cloudflare Pages) or `wordpress` (coway-starter).
    If unsure, static is the safe default. Other stacks are added later as one
    adapter file; the core never changes.
-2. **GATE 1 - design approval** - the prototype is shown for review before any
-   stack conversion. Iterate here until it is right; this is the cheap place to
-   change things.
-3. **Deploy yes/no** - deployment is OPTIONAL. The converted build is a complete
+2. **GATE 1 - home page confirmation** - the HOME PAGE prototype is shown for
+   review FIRST. Iterate here until it is right; this is the cheap place to change
+   things. The design system is written only after you confirm the home page (so
+   it documents the approved design, not a guess ahead of it).
+3. **GATE 2 - remaining pages** - the other page types (built to the design
+   system) are reviewed before conversion. Most projects are multi-page, so this
+   is where you confirm interior pages are consistent. Skipped for single-page
+   sites.
+4. **Deploy yes/no** - deployment is OPTIONAL. The converted build is a complete
    deliverable. Choose to stop there (review locally / hand to client / deploy
    yourself) or let the skill deploy.
-4. **GATE 2 - deploy target** - if deploying, confirm the exact destination
+5. **GATE 3 - deploy target** - if deploying, confirm the exact destination
    before anything is published.
 
 ## Dependencies (checked at Phase 0)

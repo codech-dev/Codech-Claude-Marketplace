@@ -1,8 +1,9 @@
 # Phase 3: design handoff to the taste skill
 
-This phase turns the brand tokens + reference analysis into the design system and
-the HTML prototype. The web-builder does NOT do the visual design itself; it
-hands off to a taste skill and supplies the constraints.
+This phase turns the brand tokens + reference analysis into a confirmed home page
+and then a design system derived from it. The web-builder does NOT do the visual
+design itself; it hands off to a taste skill and supplies the constraints. The
+order matters: home page first, user confirms, THEN the design system (see below).
 
 ## Design engine
 
@@ -31,21 +32,37 @@ something to improvise).
   boxes are not acceptable output. If a slot has no suitable image, source one
   (06) before building, do not ship a placeholder.
 
-## Required outputs (and where they land)
+## Order: home page FIRST, design system AFTER approval
 
-The taste skill must produce, written into the artifact:
+Do NOT write the design system up front. The design system is DERIVED from the
+approved home page (the way the Coway DESIGN-SYSTEM.md was "derived from the
+approved homepage"), so the page is confirmed first and the doc records what was
+actually shipped. Two steps with the gate between them:
 
-- **`artifact/DESIGN-SYSTEM.md`** - the full design system (tokens in use,
-  components, section patterns, copy rules).
-- **`artifact/prototype/`** - a section-structured HTML/CSS/JS prototype with
-  `index.html` as the entry, plus any additional page types the user asked for.
-  All images live under `artifact/assets/` and are listed in
-  `artifact/assets/manifest.json` (see 04-conversion-contract.md).
+### Step A - build the home page prototype (taste skill)
 
-The prototype is the visual source of truth for every downstream adapter, so it
-must be self-contained and openable in a browser with no build step.
+The taste skill builds ONLY the home page into `artifact/prototype/index.html`
+(self-contained HTML/CSS/JS, openable with no build step, using the real local
+images). Do not write `DESIGN-SYSTEM.md` in this step, and do not build other
+page types yet.
 
-## End of phase
+**>> GATE 1 (see 05-gates-and-qa.md): show the home page, the user reviews and
+confirms.** Expect adjustments; loop back into Step A with the feedback and
+re-present until the user approves. Nothing downstream happens until then.
 
-This phase ends at GATE 1. Do not proceed to conversion until the user has
-visually approved the prototype. See 05-gates-and-qa.md.
+### Step B - write the design system from the APPROVED home page
+
+Only after GATE 1 approval:
+
+- Write **`artifact/DESIGN-SYSTEM.md`** by reading the approved home page and
+  recording what it actually uses: tokens in use, components, section patterns,
+  spacing/shape/motion rules, copy rules. It documents reality, it does not
+  prescribe ahead of it.
+- Build any **additional page types** the user asked for, consistent with that
+  design system, reusing the confirmed home-page components.
+
+All images live under `artifact/assets/` and are listed in
+`artifact/assets/manifest.json` (see 04-conversion-contract.md). The approved
+home page is the visual source of truth for every downstream adapter.
+
+After Step B the artifact is complete; proceed to conversion (phase 4).

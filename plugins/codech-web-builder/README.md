@@ -17,19 +17,24 @@ per-stack adapters.
 Then start a session and say something like "build a site like these references
 using this logo" and the skill activates.
 
-## Pipeline (five phases, two gates)
+## Pipeline (phases + three gates)
 
+0. **Preflight** - check required skills/tools/inputs; stop and ask if anything
+   required is missing.
 1. **Palette** - read the logo (vision) and emit a token system (`brand-tokens.md`)
    with WCAG-checked text-on-background pairs. No color-extraction dependency.
 2. **Reference capture** - screenshot references at desktop + mobile and dump the
    rendered DOM (Playwright), plus structured content (Firecrawl, optional);
-   write `reference-analysis.md` + `content-map.md`.
-3. **Design** - hand the tokens + analysis to the taste skill, which produces
-   `DESIGN-SYSTEM.md` + an HTML/CSS prototype. **GATE 1: you approve the design.**
+   write `reference-analysis.md` + `content-map.md`. Then source real images locally.
+3. **Design the home page** - the taste skill builds the home page prototype.
+   **GATE 1: you confirm the home page.**
+3b. **Design system + pages** - derive `DESIGN-SYSTEM.md` from the approved home
+   page, then build the other pages to match. **GATE 2: you confirm the remaining
+   pages** (skipped for single-page sites).
 4. **Convert** - load the chosen adapter and map the portable artifact into the
-   target stack. Runs autonomously.
-5. **Deploy** - **GATE 2: you approve**, then the adapter runs its own deploy
-   recipe; a live screenshot verifies the result.
+   target stack. Runs autonomously. The build is the primary deliverable.
+5. **Deploy (optional)** - **GATE 3: you approve**, then the adapter runs its own
+   deploy recipe; a live screenshot verifies the result.
 
 ## v1 adapters
 
