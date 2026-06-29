@@ -29,10 +29,14 @@ converts + deploys it.
 2b. **Source imagery** - download real, topical images locally (one per image
    slot in the content map) so the prototype is never empty gray boxes.
    See [references/06-source-images.md](references/06-source-images.md).
-3. **Design** - hand tokens + analysis to a taste skill, which produces
-   `artifact/DESIGN-SYSTEM.md` + `artifact/prototype/`.
-   See [references/03-design-handoff.md](references/03-design-handoff.md).
-   **>> GATE 1: user approves the design before continuing.**
+3. **Design the home page** - hand tokens + analysis + images to a taste skill,
+   which builds the HOME PAGE prototype only (`artifact/prototype/`). Do NOT write
+   the design system yet. See [references/03-design-handoff.md](references/03-design-handoff.md).
+   **>> GATE 1: user reviews and confirms the home page. Iterate here until approved.**
+3b. **Write the design system** - ONLY after GATE 1, derive
+   `artifact/DESIGN-SYSTEM.md` from the APPROVED home page (the tokens, components,
+   and patterns as actually used), then build any additional page types to match
+   it. See [references/03-design-handoff.md](references/03-design-handoff.md).
 4. **Convert** - select the adapter for the target stack and map the artifact
    into it. Runs autonomously (no gate). The converted, ready-to-deploy build is
    the skill's primary deliverable.

@@ -14,10 +14,11 @@ artifact/
   brand-tokens.md      Color tokens + ramps + WCAG pairs, type scale, spacing,
                        radii, shadow, motion dials. Produced by phase 1
                        (see 01-palette-from-logo.md for the exact token schema).
-  DESIGN-SYSTEM.md     Full design system. Produced by the taste skill in
-                       phase 3 (see 03-design-handoff.md).
+  DESIGN-SYSTEM.md     Full design system, DERIVED from the approved home page
+                       in phase 3 Step B (after GATE 1; see 03-design-handoff.md).
   prototype/           Section-structured HTML/CSS/JS prototype. The VISUAL
-                       SOURCE OF TRUTH. index.html plus assets it references.
+                       SOURCE OF TRUTH. index.html (home page) is confirmed at
+                       GATE 1; other pages built to the design system after.
   assets/              Logo + local images used by the prototype.
   assets/img/          Sourced stock images (phase 2b, see 06-source-images.md).
   assets/manifest.json Array describing every asset. Logo entry is minimal;

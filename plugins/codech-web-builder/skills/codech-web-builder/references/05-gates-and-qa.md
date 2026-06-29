@@ -3,17 +3,23 @@
 Two human gates protect the irreversible and taste-sensitive steps. Both are hard
 stops. The plugin never skips them, even when the user seems to be in a hurry.
 
-## GATE 1 - after design, before conversion
+## GATE 1 - confirm the HOME PAGE, before writing the design system
 
-When phase 3 has produced `artifact/DESIGN-SYSTEM.md` + `artifact/prototype/`:
+GATE 1 sits between Step A (home page prototype) and Step B (design system) of
+phase 3. The design system is written only AFTER the home page is confirmed, so
+it documents what was actually approved (see 03-design-handoff.md).
 
-1. Open the prototype and present it for visual review (screenshot the
-   `index.html` and any other page types at desktop + mobile).
+When Step A has produced `artifact/prototype/index.html` (home page only, no
+design system yet):
+
+1. Open the home page and present it for visual review (screenshot `index.html`
+   at desktop + mobile).
 2. Summarise the design decisions: palette in use, section structure, motion
    level.
 3. Ask the user to approve or give feedback.
-4. **Do not proceed to conversion until the user approves.** On rejection, loop
-   back to phase 3 with the feedback and re-present. Iterate until approved.
+4. **Do not write the design system or build other pages until the user
+   approves.** On feedback, loop back into Step A and re-present. Iterate until
+   approved. Only then proceed to Step B (design system) and conversion.
 
 ## GATE 2 - before deploy (deploy is OPTIONAL)
 
