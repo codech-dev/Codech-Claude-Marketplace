@@ -4,6 +4,9 @@ Turn reference website(s) + a brand logo into a deployed website. The skill
 drives the whole arc and stays stack-agnostic through a portable core plus thin
 per-stack adapters.
 
+> **Team walkthrough:** for the complete end-to-end flow (diagram, phase-by-phase,
+> decision points, worked example) see [GUIDE.md](GUIDE.md).
+
 ## Install
 
 ```
