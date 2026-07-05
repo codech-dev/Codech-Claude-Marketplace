@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "codech-mockup-design",
+  "version": "1.4.2",
+  "description": "Codech Mockup Design — structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step. Supports multiple design directions with mandatory 7-axis differentiation, optional interactive Framer Motion + shadcn/ui prototypes, and AI-generated brand imagery via Hugging Face Inference API.",
+  "author": {
+    "name": "Codech",
+    "email": "team@codech.dev",
+    "url": "https://github.com/codech-dev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codech-dev/Codech-Claude-Marketplace.git",
+    "directory": "plugins/codech-mockup-design"
+  },
+  "keywords": [
+    "design",
+    "mockup",
+    "prototyping",
+    "design-system",
+    "ui-ux",
+    "showcase",
+    "tailwind",
+    "shadcn",
+    "framer-motion",
+    "differentiation",
+    "visual-design",
+    "codech"
+  ]
+}

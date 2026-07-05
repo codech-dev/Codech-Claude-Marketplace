@@ -10,8 +10,11 @@ A Claude Code [marketplace](https://docs.claude.com/en/docs/claude-code/plugin-m
 
 | Plugin | Version | Description |
 |---|---|---|
-| [`codech-project-superpower`](./plugins/codech-project-superpower) | `1.0.0` | End-to-end pre-development workflow: requirements docs → bilingual proposal (MD/HTML/PDF) → FSD/SAD/TDD/SRS → interactive React prototype |
+| [`codech-project-superpower`](./plugins/codech-project-superpower) | `1.1.0` | End-to-end engagement workflow: requirements docs → bilingual proposal (MD/HTML/PDF) → FSD/SAD/TDD/SRS → interactive React prototype → production development with prototype as pixel-diff contract |
+| [`codech-mockup-design`](./plugins/codech-mockup-design) | `1.4.2` | Structured design ideation and visual prototyping — design system documents (tokens, principles, accessibility rules) + self-contained HTML showcases. 7-axis differentiation, optional Framer Motion + shadcn/ui interactive prototypes |
 | [`codech-client-proposal`](./plugins/codech-client-proposal) | `1.0.0` | Packages a Codech engagement into a deployed, client-shareable HTML proposal. Applies a per-client design system to the canonical proposal anatomy, captures prototype screenshots via Playwright, deploys to Cloudflare Pages with a `*.pages.dev` URL |
+| [`codech-web-builder`](./plugins/codech-web-builder) | `0.1.0` | Turn reference website(s) + a brand logo into a deployed site: vision-extracted palette, taste-skill design system + HTML prototype, then convert to WordPress or static and deploy |
+| [`fintech-compliance-copy`](./plugins/fintech-compliance-copy) | `1.0.0` | Design, build, and keep regulator-safe a crypto / digital-asset / payment / fintech marketing website. Compliance baked in — disclaimers, unlaunched-service tagging, lawyer-approved wording |
 
 More plugins will be added over time.
 
@@ -87,17 +90,31 @@ Or when Claude detects a `design-system.md` and `prototype-app/*.html` files in 
 
 See [`plugins/codech-client-proposal/README.md`](./plugins/codech-client-proposal/README.md) for the full skill documentation.
 
-### Composing the two plugins
+### `codech-mockup-design` triggers on:
 
-The typical Codech engagement uses both in sequence:
+- _"Design the UI"_ / _"create a mockup"_
+- _"Explore different styles"_ / _"show me what it would look like"_
+- _"Build a visual prototype"_ / _"design a landing page"_
+- _"Create a design system"_ / _"design 2-3 directions"_
+- _"What should the homepage look like?"_
+
+Requires the `ui-ux-pro-max` skill for the Phase 1 design intelligence queries.
+
+See [`plugins/codech-mockup-design/README.md`](./plugins/codech-mockup-design/README.md) for the full skill documentation.
+
+### Composing plugins across an engagement
+
+The typical Codech engagement chains three plugins in sequence — each takes the previous plugin's output as its input:
 
 ```
-codech-project-superpower      codech-client-proposal
-─────────────────────────  →   ─────────────────────────
-Requirements → FSD/SRS         design-system + prototype
-+ React prototype              + content → deployed
-                               *.pages.dev URL
+codech-project-superpower      codech-mockup-design           codech-client-proposal
+─────────────────────────  →   ────────────────────────  →   ─────────────────────────
+Requirements → FSD/SRS         design-system.md +             design-system + prototype
++ engagement scope             HTML showcase + optional        + content →
+                               interactive prototype           deployed *.pages.dev URL
 ```
+
+Or, for a full website deliverable rather than a proposal, `codech-web-builder` replaces the final step by turning references + logo into a deployed WordPress or static site.
 
 ---
 
@@ -108,7 +125,10 @@ Plugins are updated whenever new lessons are learned from real engagements. To p
 ```
 /plugin marketplace update codech-marketplace
 /plugin update codech-project-superpower
+/plugin update codech-mockup-design
 /plugin update codech-client-proposal
+/plugin update codech-web-builder
+/plugin update fintech-compliance-copy
 ```
 
 Run this periodically — especially before starting a new client project.

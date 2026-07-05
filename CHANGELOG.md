@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## codech-mockup-design
+
+### [1.4.2] — 2026-06-28
+
+Migrated into the central `codech-marketplace` from the standalone `codech-dev/codech-mockup-design` repo. This is the first release published through the central marketplace; version continues from the standalone's `package.json` (1.4.2) rather than resetting to 1.0.0.
+
+**Contents:**
+- `SKILL.md` — 7-phase design workflow (Gather intelligence → Design system → Showcase HTML → Mobile mockup → AI image generation → Present & iterate → Multiple directions + lock)
+- `references/differentiation-axes.md` — the 7-axis differentiation checklist for multi-direction comparisons
+- `references/showcase-template.md` — self-contained HTML showcase structure
+- `references/interactive-prototype-scaffold.md` — Framer Motion + shadcn/ui prototype scaffold
+- `scripts/generate_mockup_images.py` — Hugging Face Inference API image generator for hero banners, product shots, lifestyle photos, textures
+
+**Integration:**
+- **Requires** `ui-ux-pro-max` for Phase 1 design intelligence queries
+- Composes with `codech-project-superpower` (Phase 2 proposal step) and `codech-client-proposal` (consumes the produced `design-system.md`)
+
+**Migration note:**
+- Standalone repo `codech-dev/codech-mockup-design` still exists but is not the source of truth going forward. Future updates land here; the standalone repo will be marked as archived / redirect-only in a follow-up.
+
+---
+
 ## codech-web-builder
 
 ### [0.1.0] — 2026-06-29

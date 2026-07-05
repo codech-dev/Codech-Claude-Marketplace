@@ -105,6 +105,30 @@
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-web-builder",
       "strict": false
+    },
+    {
+      "name": "codech-mockup-design",
+      "source": "./plugins/codech-mockup-design",
+      "description": "Structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step. Supports multiple design directions with mandatory 7-axis differentiation, optional interactive Framer Motion + shadcn/ui prototypes, and AI-generated brand imagery via Hugging Face Inference API.",
+      "version": "1.4.2",
+      "category": "design",
+      "keywords": [
+        "design",
+        "mockup",
+        "prototyping",
+        "design-system",
+        "ui-ux",
+        "showcase",
+        "tailwind",
+        "shadcn",
+        "framer-motion",
+        "differentiation",
+        "visual-design"
+      ],
+      "tags": ["codech", "skill", "design", "showcase", "prototyping"],
+      "license": "MIT",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-mockup-design",
+      "strict": false
     }
   ]
 }
