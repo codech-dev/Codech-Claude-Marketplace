@@ -1,0 +1,255 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scroll deck - reference implementation</title>
+<!--
+  codech-cinematic-web :: scroll deck reference implementation
+
+  One gesture advances exactly ONE panel. A tall scroller drives a sticky stage.
+
+  What is deliberate (see references/03-scroll-deck.md):
+    - snapping keys off GESTURE DIRECTION, not net scroll position
+    - the deck title is a scroll-driven fade, NOT a snap stop
+    - the snap engages only once progress() >= CARDS_START
+    - panels degrade to plain stacked cards without JS (no .is-armed)
+  For the video-background layer see references/04-video-backgrounds.md.
+-->
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#fff;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  .spacer{height:80vh;display:grid;place-items:center;color:#667}
+
+  .deck-scroller{position:relative}
+  .deck-scroller.is-armed{height:360vh}           /* tall: this is the runway */
+
+  .deck-stage{padding:64px 24px}
+  .is-armed .deck-stage{
+    position:sticky;top:0;height:100svh;padding:0;
+    display:grid;place-items:center;overflow:hidden;
+    background:#05080f;
+  }
+  .deck-title{
+    margin:0 0 32px;text-align:center;font-size:clamp(28px,4vw,52px);
+    letter-spacing:-.02em;color:#0b1220;
+  }
+  .is-armed .deck-title{
+    position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);
+    margin:0;color:#fff;z-index:3;
+  }
+
+  .deck{display:grid;gap:24px;max-width:960px;margin:0 auto;width:100%}
+  .is-armed .deck{position:relative;height:100%;display:block}
+  .is-armed .deck-slot{
+    position:absolute;inset:0;display:grid;place-items:center;
+    opacity:0;will-change:opacity,transform;padding:24px;
+  }
+  .panel{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+    border-radius:20px;padding:clamp(24px,4vw,48px);max-width:720px;color:#fff;
+  }
+  .deck-scroller:not(.is-armed) .panel{background:#f4f6fa;border-color:#e3e8f0;color:#0b1220}
+  .panel h3{margin:0 0 8px;font-size:clamp(22px,2.4vw,34px);letter-spacing:-.01em}
+  .panel .eyebrow{margin:0 0 14px;font-size:12px;letter-spacing:.09em;
+    text-transform:uppercase;opacity:.7}
+  .panel p{margin:0;opacity:.8}
+  .dots{position:absolute;bottom:28px;left:0;right:0;display:none;gap:8px;
+    justify-content:center;z-index:4}
+  .is-armed .dots{display:flex}
+  .dots i{width:26px;height:3px;border-radius:2px;background:rgba(255,255,255,.28);
+    transition:background .3s}
+  .dots i.on{background:#fff}
+  @media(prefers-reduced-motion:reduce){
+    .deck-scroller.is-armed{height:auto}
+    .is-armed .deck-stage{position:static;height:auto;padding:64px 24px}
+    .is-armed .deck{display:grid}
+    .is-armed .deck-slot{position:static;opacity:1!important;transform:none!important}
+    .is-armed .deck-title{position:static;transform:none;opacity:1!important}
+    .is-armed .dots{display:none}
+  }
+</style>
+
+<div class="spacer">scroll down</div>
+
+<section class="deck-scroller" id="scroller">
+  <div class="deck-stage" id="stage">
+    <h2 class="deck-title" id="deckTitle">Four specialist entities</h2>
+    <div class="deck" id="deck">
+      <div class="deck-slot" data-slot="0"><article class="panel">
+        <p class="eyebrow">Seychelles</p><h3>Corporate Services</h3>
+        <p>Replace with your own panel content.</p></article></div>
+      <div class="deck-slot" data-slot="1"><article class="panel">
+        <p class="eyebrow">Saint Vincent</p><h3>Payment Services</h3>
+        <p>Replace with your own panel content.</p></article></div>
+      <div class="deck-slot" data-slot="2"><article class="panel">
+        <p class="eyebrow">Sao Tome</p><h3>Capital Markets</h3>
+        <p>Replace with your own panel content.</p></article></div>
+      <div class="deck-slot" data-slot="3"><article class="panel">
+        <p class="eyebrow">Ajman, UAE</p><h3>Advisory</h3>
+        <p>Replace with your own panel content.</p></article></div>
+    </div>
+    <div class="dots" id="dots"></div>
+  </div>
+</section>
+
+<div class="spacer">after the deck</div>
+
+<script>
+(function(){
+  var scroller = document.getElementById('scroller');
+  var stage    = document.getElementById('stage');
+  var title    = document.getElementById('deckTitle');
+  var dotsWrap = document.getElementById('dots');
+  var slots    = [].slice.call(document.querySelectorAll('.deck-slot'));
+  if (!scroller || !slots.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  scroller.classList.add('is-armed');            /* JS present: arm the deck */
+  slots.forEach(function(){ dotsWrap.appendChild(document.createElement('i')); });
+  var dots = [].slice.call(dotsWrap.children);
+
+  /* CARDS_START: below this the title is still fading. It is NOT a stop. */
+  var CARDS_START = 0.15;
+  var TITLE_IN    = 0.10;
+  var CFG = { overlap: 0.35, fade: 0.55, lift: 60, scale: 0.94, damp: 0.6 };
+
+  function clamp(v,a,b){ return v<a?a:v>b?b:v; }
+  function easeOutCubic(t){ var u=1-t; return 1-u*u*u; }
+
+  function progress(){
+    var r = scroller.getBoundingClientRect();
+    var span = scroller.offsetHeight - window.innerHeight;
+    return span <= 0 ? 0 : clamp((-r.top)/span, 0, 1);
+  }
+  function windows(){
+    var n = slots.length, span = 1 - CARDS_START;
+    var len = span / (n - (n-1)*CFG.overlap);
+    return { len: len, step: len*(1-CFG.overlap) };
+  }
+
+  function render(){
+    var p = progress(), W = windows();
+    var tIn = easeOutCubic(clamp((p + TITLE_IN)/TITLE_IN, 0, 1));
+    var dim = 1 - clamp((p - (CARDS_START - 0.04))/0.04, 0, 1);
+    title.style.opacity = tIn * dim;              /* a fade, never a stop */
+
+    var best = -1, bestO = 0;
+    for (var i=0;i<slots.length;i++){
+      var t = (p - (CARDS_START + i*W.step)) / W.len;
+      var o = (t<0||t>1) ? 0 : Math.min(
+        easeOutCubic(clamp(t/CFG.fade,0,1)),
+        easeOutCubic(clamp((1-t)/CFG.fade,0,1)));
+      var rise = easeOutCubic(clamp(t/(CFG.fade*0.85),0,1));
+      slots[i].style.opacity = o;
+      slots[i].style.transform =
+        'translateY(' + ((1-rise)*CFG.lift).toFixed(1) + 'px) scale(' +
+        (CFG.scale + (1-CFG.scale)*rise).toFixed(3) + ')';
+      if (o > bestO){ bestO = o; best = i; }
+    }
+    dots.forEach(function(d,i){ d.classList.toggle('on', i===best); });
+  }
+
+  /* ---- direction-driven snapping --------------------------------------- */
+  var SETTLE = 220, GLIDE = 420;
+  var dir = 0, timer = null, gliding = false;
+
+  function scrollYFor(i){
+    var W = windows();
+    var pAt = CARDS_START + i*W.step + W.len/2;   /* panel i at its brightest */
+    var span = scroller.offsetHeight - window.innerHeight;
+    return scroller.offsetTop + pAt*span;
+  }
+  function nearestIndex(){
+    var p = progress(), W = windows(), best = 0, bd = Infinity;
+    for (var i=0;i<slots.length;i++){
+      var d = Math.abs(p - (CARDS_START + i*W.step + W.len/2));
+      if (d < bd){ bd = d; best = i; }
+    }
+    return best;
+  }
+  function inDeck(){
+    var r = stage.getBoundingClientRect();
+    if (r.top > 1 || r.bottom < window.innerHeight - 1) return false;
+    return progress() >= CARDS_START;             /* the title is not a stop */
+  }
+  function glideTo(y){
+    var y0 = window.scrollY, t0 = null; gliding = true;
+    (function step(ts){
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0)/GLIDE);
+      window.scrollTo(0, y0 + (y - y0)*easeOutCubic(k));
+      if (k < 1) requestAnimationFrame(step); else gliding = false;
+    })(performance.now());
+  }
+  /* The index we last SETTLED on. Stepping from this - rather than from
+     nearestIndex() - is what makes one gesture move exactly one panel: after
+     a free scroll (entering the deck, a jump link, a resize) nearestIndex()
+     can already be two panels away, and stepping from it skips. */
+  var settled = null;
+
+  function commit(){
+    if (!inDeck() || !dir || gliding) { dir = 0; return; }
+    if (settled === null) settled = nearestIndex();
+    var next = clamp(settled + dir, 0, slots.length-1);
+    dir = 0;
+    if (next === settled){                        /* already at an end */
+      glideTo(scrollYFor(settled));               /* re-centre, do not drift */
+      return;
+    }
+    settled = next;
+    glideTo(scrollYFor(next));                    /* exactly ONE panel */
+  }
+  function gesture(delta){
+    if (!inDeck()){
+      /* Crossing INTO the deck from above on a downward gesture: take the
+         first panel deliberately, so the deck is entered at a known stop
+         rather than wherever the momentum happened to land. */
+      var r = stage.getBoundingClientRect();
+      if (delta > 0 && r.top <= 1 && progress() < CARDS_START && !gliding){
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+          if (!gliding && progress() < CARDS_START){ settled = 0; glideTo(scrollYFor(0)); }
+        }, SETTLE);
+      }
+      return;
+    }
+    if (delta) dir = delta > 0 ? 1 : -1;          /* DIRECTION, not distance */
+    clearTimeout(timer);
+    timer = setTimeout(commit, SETTLE);
+  }
+
+  /* While inside the deck the page must NOT scroll freely: swallow the event
+     and let the snap do all the moving. Letting scrollBy() through lets a
+     single fast gesture travel two panels' worth before commit() fires - which
+     is exactly the "one swipe jumps to the third slide" bug. */
+  window.addEventListener('wheel', function(e){
+    if (!inDeck()){ gesture(e.deltaY); return; }   /* outside: normal scroll */
+    e.preventDefault();
+    if (gliding) return;
+    gesture(e.deltaY);
+  }, { passive:false });
+
+  var touchY = null;
+  window.addEventListener('touchstart', function(e){
+    touchY = e.touches[0].clientY;
+  }, { passive:true });
+  window.addEventListener('touchmove', function(e){
+    if (touchY === null) return;
+    var y = e.touches[0].clientY, d = touchY - y;
+    if (!inDeck()){ touchY = y; return; }          /* outside: normal scroll */
+    e.preventDefault();
+    if (!gliding && Math.abs(d) > 2) gesture(d);
+    touchY = y;
+  }, { passive:false });
+  window.addEventListener('touchend', function(){ touchY = null; }, { passive:true });
+
+  /* If the deck is left, or the page is moved by something other than our
+     own glide (anchor link, keyboard, resize), the settled index is stale. */
+  window.addEventListener('scroll', function(){
+    if (!gliding && !inDeck()) settled = null;
+  }, { passive:true });
+
+  /* paint on the frame, so glides animate too */
+  (function loop(){ render(); requestAnimationFrame(loop); })();
+  window.addEventListener('resize', render);
+})();
+</script>

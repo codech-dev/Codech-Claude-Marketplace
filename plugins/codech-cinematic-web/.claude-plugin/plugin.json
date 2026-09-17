@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "codech-cinematic-web",
+  "version": "1.0.0",
+  "description": "Build cinematic marketing pages: a Three.js hero object (dot-matrix planet, orb, product form) with an analytic screen-space atmosphere, and a sticky scroll deck where one swipe advances exactly one panel over full-bleed video. Ships a working reference implementation plus the measurement scripts that catch the failures these effects are prone to.",
+  "author": {
+    "name": "Codech",
+    "email": "team@codech.dev",
+    "url": "https://github.com/codech-dev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace",
+  "repository": "https://github.com/codech-dev/Codech-Claude-Marketplace",
+  "keywords": [
+    "claude-code-plugin",
+    "threejs",
+    "webgl",
+    "shader",
+    "scroll-deck",
+    "scroll-snap",
+    "hero-animation",
+    "particle-globe",
+    "video-background",
+    "codech"
+  ]
+}
