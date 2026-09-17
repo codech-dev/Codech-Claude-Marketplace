@@ -48,6 +48,7 @@ If you find yourself typing a magic number, stop and measure it instead.
 | The atmosphere/glow specifically, or it is banding in rings | [references/02-atmosphere.md](references/02-atmosphere.md) |
 | Sticky sections, one-swipe-per-slide, scroll-jacking | [references/03-scroll-deck.md](references/03-scroll-deck.md) |
 | Video backgrounds per section, or video that will not play on iOS | [references/04-video-backgrounds.md](references/04-video-backgrounds.md) |
+| To **generate** the section artwork/video from a still, and make it loop seamlessly | [references/06-generating-clips.md](references/06-generating-clips.md) |
 | To know what to check before saying it is done | [references/05-verification.md](references/05-verification.md) |
 | A working file to copy and adapt | [reference-impl/](reference-impl/) |
 
@@ -85,6 +86,11 @@ a real device, and cost a round trip.
   above the deck is not a panel and must not be a stop.
 - Every video needs a **poster plate underneath it**. An intro clip whose first
   frame is deliberately empty shows nothing while parked or buffering.
+- Generate **two clips per section, not one**: an intro (empty plate -> rest
+  pose) and a loop (rest pose -> rest pose). One clip cannot be both an
+  entrance and a seamless loop. Both must share the exact same rest-pose frame.
+- Blend the intro's tail into the loop's first frame **in raw YUV**, never with
+  ffmpeg's xfade or an RGB round trip - both introduce a visible step.
 
 **Both**
 
@@ -101,13 +107,18 @@ a real device, and cost a round trip.
    `python3 scripts/measure_geometry.py <frame.png>` fits the silhouette and
    prints centre/radius as fractions of frame size. Extract frames from a
    reference video with ffmpeg first.
-3. **Start from `reference-impl/`**, not from scratch. Copy the file, then
+3. **If the section needs generated video**, follow
+   [references/06-generating-clips.md](references/06-generating-clips.md):
+   build the plate and rest pose, generate the intro/loop pair with an
+   end-frame-capable model, then run `scripts/make_clip_pair.sh` to join and
+   measure them.
+4. **Start from `reference-impl/`**, not from scratch. Copy the file, then
    change geometry, palette and content. The shader structure is the part that
    took the longest to get right.
-4. **Wire the layout to the measurement.** Publish the solved crest position to
+5. **Wire the layout to the measurement.** Publish the solved crest position to
    CSS as a custom property and place copy against it, so the text and the
    object cannot drift apart when the viewport changes.
-5. **Verify** with `scripts/verify_render.mjs` before reporting done. It checks
+6. **Verify** with `scripts/verify_render.mjs` before reporting done. It checks
    the things that are invisible until a client opens the page on a phone.
    See [references/05-verification.md](references/05-verification.md).
 
@@ -118,5 +129,9 @@ a real device, and cost a round trip.
 - **Node + Playwright** for the verification scripts (`npx playwright install chromium`).
 - **Python 3 + numpy + Pillow** for the measurement scripts.
 - **ffmpeg** if the work involves video backgrounds.
+- **ImageMagick** (`magick`) to build plates and rest poses.
+- An image-to-video model that accepts **both a start and an end frame**
+  (Higgsfield/MiniMax H3 was used here). Without an end frame the loop cannot
+  be made seamless.
 
 `node scripts/preflight.mjs` checks all of these and reports what is missing.
