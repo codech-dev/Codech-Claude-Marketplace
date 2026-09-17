@@ -35,11 +35,13 @@ skills/codech-cinematic-web/
     03-scroll-deck.md          progress model, direction-driven snapping
     04-video-backgrounds.md    posters, iOS autoplay, Range requests, encoding
     05-verification.md         what to check before claiming it works
+    06-generating-clips.md     still -> seamless looping video, end to end
   reference-impl/
     hero-object.html           complete working hero, copy and adapt
     scroll-deck.html           complete working deck, copy and adapt
   scripts/
     measure_geometry.py        fit a reference frame's silhouette
+    make_clip_pair.sh          join an intro/loop pair + measure every seam
     verify_render.mjs          layout / rim / profile / hover / novideo checks
     preflight.mjs              dependency check
 ```
@@ -69,6 +71,13 @@ a legibility scrim painting over the crest. The shader was innocent.
 lets a fast swipe skip two panels and a small nudge spring back. Step from the
 last *settled* index in the gesture's direction.
 
+**Two clips per section, sharing one frame.** A loop needs its first and last
+frames identical; an entrance starts somewhere else. One clip cannot be both.
+Generate an intro (empty plate -> rest pose) and a loop (rest pose -> rest
+pose) with a model that accepts an end frame, then blend the intro's tail into
+the loop's exact first frame **in raw YUV** - ffmpeg's `xfade` reverts mid-fade
+and an RGB round trip biases by ~1.3 levels, both visible as a flash.
+
 **Assume the video will not play.** iOS refuses autoplay without `muted` as a
 property; rejects `play()` when `preload="none"` leaves no buffered data; and
 stalls entirely when the host does not serve `206` to Range requests. Put a
@@ -87,6 +96,7 @@ The reference implementations were measured in-browser, not eyeballed:
 | Deck title readable on approach | opacity 1.0 throughout — a fade, not a stop |
 | `prefers-reduced-motion` | deck unarmed, all panels visible, stage static |
 | Console errors | none |
+| `make_clip_pair.sh` on real clips | loop wrap 1.01 vs p95 1.07 (invisible); join 0.64, signed [0.05,0.05,0.05] (clean); intro ends still |
 
 `measure_geometry.py` independently reproduced the manual measurement of the
 original reference frame to within 1% (49.5% vs 49.6% centre, 22.1% vs 22%

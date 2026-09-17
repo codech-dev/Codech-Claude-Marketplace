@@ -26,6 +26,8 @@ const r = [
   check('pngjs', 'node -e "import(\'pngjs\').then(()=>console.log(\'ok\'))"',
         false, 'npm i -D pngjs   (needed by verify_render.mjs)'),
   check('ffmpeg', 'ffmpeg -version', false, 'brew install ffmpeg (video work only)'),
+  check('ImageMagick', 'magick -version', false,
+        'brew install imagemagick (plates + rest poses for clip generation)'),
   check('ffprobe', 'ffprobe -version', false, 'ships with ffmpeg')
 ];
 
