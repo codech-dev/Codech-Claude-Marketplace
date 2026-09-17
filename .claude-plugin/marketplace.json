@@ -34,7 +34,13 @@
         "master-plan",
         "pixel-diff"
       ],
-      "tags": ["codech", "workflow", "skill", "consulting", "ERP"],
+      "tags": [
+        "codech",
+        "workflow",
+        "skill",
+        "consulting",
+        "ERP"
+      ],
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-project-superpower",
       "strict": false
@@ -57,7 +63,13 @@
         "landing-page",
         "regulatory"
       ],
-      "tags": ["codech", "skill", "fintech", "compliance", "design"],
+      "tags": [
+        "codech",
+        "skill",
+        "fintech",
+        "compliance",
+        "design"
+      ],
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/fintech-compliance-copy",
       "strict": false
@@ -79,7 +91,13 @@
         "wrangler",
         "deploy"
       ],
-      "tags": ["codech", "workflow", "skill", "delivery", "deploy"],
+      "tags": [
+        "codech",
+        "workflow",
+        "skill",
+        "delivery",
+        "deploy"
+      ],
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-client-proposal",
       "strict": false
@@ -101,7 +119,13 @@
         "cloudflare-pages",
         "deploy"
       ],
-      "tags": ["codech", "skill", "design", "web", "deploy"],
+      "tags": [
+        "codech",
+        "skill",
+        "design",
+        "web",
+        "deploy"
+      ],
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-web-builder",
       "strict": false
@@ -125,9 +149,46 @@
         "differentiation",
         "visual-design"
       ],
-      "tags": ["codech", "skill", "design", "showcase", "prototyping"],
+      "tags": [
+        "codech",
+        "skill",
+        "design",
+        "showcase",
+        "prototyping"
+      ],
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-mockup-design",
+      "strict": false
+    },
+    {
+      "name": "codech-cinematic-web",
+      "source": "./plugins/codech-cinematic-web",
+      "description": "Build cinematic marketing-page effects: a Three.js hero object (dot-matrix planet, orb, product form) lit by one analytic screen-space atmosphere, and a sticky scroll deck where one gesture advances exactly one panel over full-bleed video. Ships working reference implementations plus the measurement scripts that catch the failures these effects are prone to - shell-banded glow, viewport-dependent brightness, position-based snapping that skips panels, and video that silently never plays on iOS.",
+      "version": "1.0.0",
+      "category": "design",
+      "keywords": [
+        "threejs",
+        "webgl",
+        "shader",
+        "hero-animation",
+        "particle-globe",
+        "scroll-deck",
+        "scroll-snap",
+        "sticky-sections",
+        "video-background",
+        "ios-autoplay",
+        "prefers-reduced-motion",
+        "playwright-verification"
+      ],
+      "tags": [
+        "codech",
+        "skill",
+        "design",
+        "web",
+        "animation"
+      ],
+      "license": "MIT",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-cinematic-web",
       "strict": false
     }
   ]

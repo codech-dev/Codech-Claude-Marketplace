@@ -1,0 +1,415 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cinematic hero - reference implementation</title>
+<!--
+  codech-cinematic-web :: reference implementation
+
+  A complete, self-contained hero object. Copy this file, then change:
+    - PALETTE           the four colours below
+    - GEO               centre/radius, from scripts/measure_geometry.py
+    - surfacePoints()   swap the land mask for your own form
+    - the copy in .hero__inner
+
+  What is deliberate here (do not "simplify" these away):
+    - ONE analytic screen-space glow, never stacked fresnel shells
+    - glow/rim widths as CSS-pixel CONSTANTS x DPR, never viewport fractions
+    - cursor interaction via a single uniform in the vertex shader
+    - webglcontextlost/restored handling
+    - prefers-reduced-motion renders one frame then stops
+    - --crest-y published to CSS so copy and scrims track the object
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root{
+    --ink:#02040A; --sky-1:#050B1A; --sky-2:#010308;
+    --fg:#fff; --fg-muted:rgba(255,255,255,.72);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#fff;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1400px;margin:0 auto;padding:24px}
+  .hero__card{
+    position:relative;border-radius:28px;overflow:hidden;isolation:isolate;
+    background:radial-gradient(120% 90% at 50% 8%, var(--sky-1) 0%, var(--ink) 62%, var(--sky-2) 100%);
+    min-height:min(80svh,820px);
+  }
+  .fx{position:absolute;inset:0}
+  .fx__canvas{position:absolute;inset:0;width:100%;height:100%;display:block;
+    opacity:0;transition:opacity .9s ease}
+  .fx__canvas.is-ready{opacity:1}
+  /* Legibility scrim driven by the MEASURED crest, so it can never paint over
+     the rim. --crest-y is written by resize(). */
+  .fx__scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(to bottom,
+      transparent 0,
+      transparent calc(var(--crest-y, 40%) + 90px),
+      rgba(1,5,12,.50) calc(var(--crest-y, 40%) + 190px),
+      rgba(1,5,12,.70) calc(var(--crest-y, 40%) + 330px),
+      rgba(1,5,12,.72) 100%);
+  }
+  .hero__inner{
+    position:relative;z-index:2;text-align:center;color:var(--fg);
+    display:grid;justify-content:center;align-content:start;
+    grid-template-columns:minmax(0,min(100%,760px));
+    /* Driven by the MEASURED crest, not a guessed percentage: the headline
+       starts 60px below wherever the object's crest actually landed. The
+       clamp is the pre-JS fallback and the floor. */
+    padding:clamp(180px, calc(var(--crest-y, 34svh) + 60px), 460px)
+            clamp(24px,5vw,76px) 40px;
+    min-height:min(80svh,820px);gap:22px;
+  }
+  h1{margin:0;font-size:clamp(34px,4.2vw,68px);line-height:1.06;letter-spacing:-.02em}
+  p{margin:0 auto;max-width:56ch;color:var(--fg-muted);text-wrap:balance}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+  .btn{padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:500}
+  .btn--light{background:#fff;color:#0b1220}
+  .btn--glass{background:rgba(255,255,255,.09);color:#fff;
+    border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(14px)}
+  @media(max-width:1023px){
+    .hero__card,.hero__inner{min-height:calc(100svh - 116px)}
+    .hero__inner{padding:clamp(18px,3.2svh,32px) 22px 24px;text-align:left;gap:clamp(12px,2svh,18px)}
+    h1{font-size:clamp(30px,5.4svh,40px)}
+    p{text-align:justify;hyphens:auto;max-width:none}
+    .btns{display:grid;grid-template-columns:1fr}
+    .btn{text-align:center}
+  }
+</style>
+
+<div class="wrap">
+  <section class="hero__card" id="heroCard">
+    <div class="fx" aria-hidden="true">
+      <canvas class="fx__canvas" id="heroCanvas"></canvas>
+      <div class="fx__scrim"></div>
+    </div>
+    <div class="hero__inner">
+      <h1 id="heroTitle">Structure, clarity and execution across borders.</h1>
+      <p>Replace this copy. The layout places itself against the measured crest,
+         so the text and the object cannot drift apart when the viewport changes.</p>
+      <div class="btns" id="heroActions">
+        <a class="btn btn--light" href="#">Primary action</a>
+        <a class="btn btn--glass" href="#">Secondary</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var canvas = document.getElementById('heroCanvas');
+  var card   = document.getElementById('heroCard');
+  if (!canvas || !card || typeof THREE === 'undefined') return;
+
+  /* ---- tune these ------------------------------------------------------ */
+  var PALETTE = {
+    rim:    [0.392, 0.667, 0.949],   /* #64AAF2 - the crisp rim filament     */
+    inner:  [0.149, 0.337, 0.722],   /* #2656B8 - glow core just off the rim */
+    deep:   [0.055, 0.110, 0.384],   /* #0E1C62 - the far bleed into black   */
+    landHi: '#f2f8ff', landLo: '#9fc6f2', sea: '#37629c'
+  };
+  /* From scripts/measure_geometry.py. Cap against height or a wide short
+     card hides the crest behind the headline. */
+  var GEO = { radiusFracW: 0.438, radiusFracH: 0.75, centreY: 1.00 };
+
+  /* Widths in CSS PIXELS. Constants - never derive these from canvas size or
+     from the object radius, or brightness changes with viewport. */
+  var GLOW_W_CSS = 105, INNER_W_CSS = 95, RIM_W_CSS = 4.5;
+  var BASE_R = 376;            /* radius at which uGain == 1 (calibration)   */
+  var GAIN_K = 0.19;           /* fitted; recalibrate for your object        */
+
+  var R = 1000;                                       /* world radius        */
+  var SUN = new THREE.Vector3(0.0, 1.0, 0.28).normalize();
+  var TOUCH  = window.matchMedia('(hover: none)').matches;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var COUNT  = TOUCH ? 34000 : 120000;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(42, 1, 1, 12000);
+  var group  = new THREE.Group(); scene.add(group);
+
+  /* iOS drops contexts under memory pressure and never restores them unaided */
+  var contextLost = false;
+  canvas.addEventListener('webglcontextlost', function(e){
+    e.preventDefault(); contextLost = true;            /* required for restore */
+  }, false);
+  canvas.addEventListener('webglcontextrestored', function(){
+    contextLost = false; resize();
+    if (!reduce) requestAnimationFrame(frame);
+  }, false);
+
+  /* ---- surface: swap this for your own form ---------------------------- */
+  function landMask(){
+    var W = 512, H = 256, c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var g = c.getContext('2d');
+    g.fillStyle = '#000'; g.fillRect(0,0,W,H); g.fillStyle = '#fff';
+    function P(lon,lat){ return [(lon+180)/360*W, (90-lat)/180*H]; }
+    function poly(p){ g.beginPath();
+      for (var k=0;k<p.length;k++){ var q=P(p[k][0],p[k][1]);
+        k ? g.lineTo(q[0],q[1]) : g.moveTo(q[0],q[1]); }
+      g.closePath(); g.fill(); }
+    poly([[-168,65],[-150,71],[-125,70],[-95,74],[-62,66],[-55,52],[-70,42],[-81,25],[-97,18],[-107,23],[-125,40],[-140,59]]);
+    poly([[-81,9],[-70,11],[-60,5],[-50,-2],[-35,-8],[-38,-23],[-48,-34],[-58,-40],[-66,-55],[-73,-52],[-71,-33],[-77,-14],[-81,-4]]);
+    poly([[-10,36],[0,44],[10,38],[18,42],[30,46],[40,58],[30,70],[10,64],[-5,50]]);
+    poly([[-17,21],[0,16],[15,13],[32,16],[43,11],[51,12],[40,-2],[40,-17],[33,-27],[20,-35],[12,-18],[9,4],[-5,5],[-17,12]]);
+    poly([[30,46],[60,56],[90,60],[120,55],[140,50],[135,35],[122,31],[110,20],[100,10],[92,22],[78,8],[70,22],[60,25],[45,38]]);
+    poly([[113,-22],[130,-12],[142,-11],[150,-22],[153,-28],[147,-38],[137,-35],[125,-33],[115,-34]]);
+    poly([[-60,-62],[0,-68],[60,-68],[140,-66],[180,-70],[-120,-73],[-60,-70]]);
+    return { d: g.getImageData(0,0,W,H).data, W: W, H: H };
+  }
+  var MASK = landMask();
+  function isLand(lon, lat){
+    var x = Math.floor((lon+180)/360*MASK.W), y = Math.floor((90-lat)/180*MASK.H);
+    if (x<0||y<0||x>=MASK.W||y>=MASK.H) return false;
+    return MASK.d[(y*MASK.W+x)*4] > 128;
+  }
+
+  var pos = new Float32Array(COUNT*3), col = new Float32Array(COUNT*3), siz = new Float32Array(COUNT);
+  var HI = new THREE.Color(PALETTE.landHi), LO = new THREE.Color(PALETTE.landLo),
+      SEA = new THREE.Color(PALETTE.sea);
+  var made = 0, guard = 0;
+  while (made < COUNT && guard < COUNT*60){
+    guard++;
+    var u = Math.random()*2-1, th = Math.random()*Math.PI*2;
+    var lat = Math.asin(u)*180/Math.PI, lon = th*180/Math.PI-180;
+    var land = isLand(lon, lat);
+    if (!land && Math.random() > 0.72) continue;      /* thin the ocean      */
+    var sp = Math.sqrt(1-u*u), k3 = made*3;
+    pos[k3] = sp*Math.cos(th)*R; pos[k3+1] = u*R; pos[k3+2] = sp*Math.sin(th)*R;
+    var cc = land ? LO.clone().lerp(HI, Math.random()*Math.random())
+                  : SEA.clone().multiplyScalar(0.7 + Math.random()*0.5);
+    col[k3] = cc.r; col[k3+1] = cc.g; col[k3+2] = cc.b;
+    siz[made] = land ? (1.7 + Math.random()*2.0) : (1.1 + Math.random()*1.0);
+    made++;
+  }
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(col,3));
+  geo.setAttribute('aSize',    new THREE.BufferAttribute(siz,1));
+  geo.setDrawRange(0, made);
+
+  var dotMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uPix:{value:renderer.getPixelRatio()}, uIn:{value:0}, uSun:{value:SUN.clone()},
+      uHit:{value:new THREE.Vector3()}, uHitK:{value:0}, uHitR:{value:R*0.30}
+    },
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    vertexShader:[
+      'attribute float aSize;',
+      'varying vec3 vCol; varying float vA;',
+      'uniform float uPix, uIn, uHitK, uHitR; uniform vec3 uSun, uHit;',
+      'void main(){',
+      '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+      '  vec3 wp = (modelMatrix * vec4(position, 1.0)).xyz;',
+      '  vec3 n  = normalize(mat3(modelMatrix) * normalize(position));',
+      '  float facing = dot(n, normalize(cameraPosition - wp));',
+      '  float front  = smoothstep(-0.02, 0.30, facing);',
+      /* smoothstep-wrapped so the dense limb band has no hard inner edge */
+      '  float limb = smoothstep(0.0, 1.0, pow(1.0 - clamp(facing, 0.0, 1.0), 2.2));',
+      '  float sun  = smoothstep(-0.10, 0.80, dot(n, normalize(uSun)));',
+      '  float lit  = min(0.42 + 1.30 * limb * sun + 0.55 * sun, 2.05);',
+      /* cursor: ONE uniform, no per-point JS */
+      '  float hd  = distance(wp, uHit);',
+      '  float hov = uHitK * (1.0 - smoothstep(0.0, uHitR, hd)) * step(0.0, facing);',
+      '  vCol = mix(color * lit, vec3(0.86, 0.92, 1.0), clamp(hov, 0.0, 1.0));',
+      '  vA   = front * clamp(0.34 + lit * 0.92 + hov, 0.0, 1.0) * uIn;',
+      '  gl_Position  = projectionMatrix * mv;',
+      '  gl_PointSize = aSize * uPix * (620.0 / -mv.z) * (1.0 + 2.0 * hov);',
+      '}'
+    ].join('\n'),
+    fragmentShader:[
+      'varying vec3 vCol; varying float vA;',
+      'void main(){',
+      /* discs, never squares */
+      '  float r = length(gl_PointCoord - 0.5);',
+      '  if (r > 0.5) discard;',
+      '  float a = (1.0 - smoothstep(0.34, 0.5, r)) * vA;',
+      '  if (a < 0.004) discard;',
+      '  gl_FragColor = vec4(vCol, a);',
+      '}'
+    ].join('\n')
+  });
+  dotMat.vertexColors = true;
+  var dots = new THREE.Points(geo, dotMat); dots.frustumCulled = false;
+  group.add(dots);
+
+  /* ---- ONE analytic glow (see references/02-atmosphere.md) -------------- */
+  function v3(a){ return 'vec3(' + a[0] + ', ' + a[1] + ', ' + a[2] + ')'; }
+  var glowMat = new THREE.ShaderMaterial({
+    uniforms:{ uIn:{value:0}, uPulse:{value:1}, uGain:{value:1},
+               uC:{value:new THREE.Vector2()}, uR:{value:100},
+               uGlowW:{value:110}, uInnerW:{value:90} },
+    transparent:true, depthWrite:false, depthTest:false,
+    blending:THREE.AdditiveBlending,
+    vertexShader:'void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader:[
+      'precision highp float;',
+      'uniform vec2 uC; uniform float uR, uGlowW, uInnerW, uIn, uPulse, uGain;',
+      'float dither(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453); }',
+      'void main(){',
+      '  vec2  v = gl_FragCoord.xy - uC;',
+      '  float d = length(v);',
+      '  float up  = d > 0.0 ? clamp(v.y / d, -1.0, 1.0) : 1.0;',
+      '  float ang = 0.22 + 0.78 * pow(clamp(up * 0.5 + 0.5, 0.0, 1.0), 2.6);',
+      '  vec3 cI = ' + v3(PALETTE.rim)   + ';',
+      '  vec3 cO = ' + v3(PALETTE.inner) + ';',
+      '  vec3 cD = ' + v3(PALETTE.deep)  + ';',
+      '  vec3 c = vec3(0.0); float a = 0.0;',
+      '  if (d >= uR) {',
+      /* peak AT the rim, monotonic decay outward */
+      '    float t  = (d - uR) / max(uGlowW, 1.0);',
+      '    float i1 = exp(-t * 6.00);',
+      '    float i2 = exp(-t * 2.00);',
+      '    float i3 = exp(-t * 0.65);',
+      '    c = cI * i1 * 0.85 + cO * i2 * 0.55 + cD * i3 * 0.30;',
+      '    a = clamp(i1 * 0.85 + i2 * 0.55 + i3 * 0.30, 0.0, 1.0);',
+      '  } else {',
+      /* exp(0)==1 at the limb, so the two branches meet with no seam */
+      '    float t = (uR - d) / max(uInnerW, 1.0);',
+      '    float w = exp(-t);',
+      '    c = mix(cO, cI, 0.35) * w * 0.80;',
+      '    a = w * 0.80;',
+      '  }',
+      '  a *= ang * uIn * uPulse * uGain;',
+      '  c *= ang * uGain;',
+      '  float n = (dither(gl_FragCoord.xy) - 0.5) / 255.0;',   /* anti-banding */
+      '  gl_FragColor = vec4(max(c + n, 0.0), clamp(a + n, 0.0, 1.0));',
+      '}'
+    ].join('\n')
+  });
+  var quad = new THREE.Mesh(new THREE.PlaneGeometry(2,2), glowMat);
+  quad.frustumCulled = false; quad.renderOrder = -10; scene.add(quad);
+
+  /* ---- rim: FRONT side, on the surface, so it adds no silhouette ------- */
+  var rimMat = new THREE.ShaderMaterial({
+    uniforms:{ uIn:{value:0}, uSun:{value:SUN.clone()},
+               uRimAng:{value:0.06}, uGain:{value:1} },
+    transparent:true, depthWrite:false, side:THREE.FrontSide,
+    blending:THREE.AdditiveBlending,
+    vertexShader:[
+      'varying vec3 vN; varying vec3 vP; varying vec3 vW;',
+      'void main(){',
+      '  vN = normalize(normalMatrix * normal);',
+      '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+      '  vP = mv.xyz; vW = normalize(mat3(modelMatrix) * normal);',
+      '  gl_Position = projectionMatrix * mv;',
+      '}'
+    ].join('\n'),
+    fragmentShader:[
+      'varying vec3 vN; varying vec3 vP; varying vec3 vW;',
+      'uniform float uIn, uRimAng, uGain; uniform vec3 uSun;',
+      'void main(){',
+      '  float f = 1.0 - abs(dot(normalize(vN), normalize(-vP)));',
+      /* angular width solved per resize so the line is constant in CSS px */
+      '  float band = pow(smoothstep(1.0 - uRimAng, 1.0, f), 1.5);',
+      '  float sun  = clamp(dot(normalize(vW), normalize(uSun)), 0.0, 1.0);',
+      '  float t    = band * (0.22 + 0.78 * pow(sun, 1.3));',
+      '  vec3  c    = mix(' + v3(PALETTE.rim) + ', vec3(0.97,0.99,1.0), smoothstep(0.25,0.85,t));',
+      '  gl_FragColor = vec4(c, clamp(t * 1.25 * uGain, 0.0, 1.0) * uIn);',
+      '}'
+    ].join('\n')
+  });
+  group.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.0005, 160, 96), rimMat));
+
+  /* ---- framing: solve the camera from the measurement ------------------ */
+  var actions = document.getElementById('heroActions');
+  function resize(){
+    var w = card.clientWidth, h = card.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+
+    var radiusPx, CENTRE_Y;
+    if (w < 1024){
+      /* Phone: guarantee the object a share of the card. Without the cap a
+         short viewport lets the copy fill everything and the object becomes a
+         sliver at the bottom - which reads as "the object is not showing". */
+      var copyBottom = actions
+        ? actions.getBoundingClientRect().bottom - card.getBoundingClientRect().top : h*0.5;
+      var crestWant = Math.min(Math.max(copyBottom + 36, h*0.46), h*0.72);
+      var avail = Math.max(110, h - crestWant);
+      radiusPx  = Math.max(0.85*w, Math.min(1.6*w, avail*1.9));
+      CENTRE_Y  = (crestWant + radiusPx) / h;
+    } else {
+      CENTRE_Y = GEO.centreY;
+      radiusPx = Math.min(GEO.radiusFracW * w, GEO.radiusFracH * h);
+    }
+
+    var halfH = Math.tan(camera.fov * Math.PI / 360);
+    var dist  = (R / (radiusPx / (h/2))) / halfH;
+    camera.position.set(0, 0, dist); camera.lookAt(0,0,0);
+    var worldPerPx = (2 * halfH * dist) / h;
+    group.position.y = -(CENTRE_Y - 0.5) * h * worldPerPx;
+
+    var dpr = renderer.getPixelRatio();
+    dotMat.uniforms.uPix.value = dpr;
+    glowMat.uniforms.uC.value.set(w * 0.5 * dpr, (h - h * CENTRE_Y) * dpr);
+    glowMat.uniforms.uR.value      = radiusPx * dpr;
+    glowMat.uniforms.uGlowW.value  = GLOW_W_CSS  * dpr;   /* CONSTANT x DPR */
+    glowMat.uniforms.uInnerW.value = INNER_W_CSS * dpr;
+    rimMat.uniforms.uRimAng.value  =
+      Math.min(0.5, Math.max(0.012, (RIM_W_CSS / radiusPx) * 2.0));
+
+    var gain = 1 + Math.max(0, (radiusPx - BASE_R) / BASE_R) * GAIN_K;
+    glowMat.uniforms.uGain.value = gain;
+    rimMat.uniforms.uGain.value  = gain;
+
+    /* publish so CSS places copy and scrims against the real geometry */
+    card.style.setProperty('--crest-y', (h * CENTRE_Y - radiusPx) + 'px');
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  /* the phone branch measures a DOM element, which moves when webfonts land */
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(function(){ resize(); });
+    ro.observe(card); if (actions) ro.observe(actions);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
+
+  /* ---- cursor ---------------------------------------------------------- */
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  var sphere = new THREE.Sphere(new THREE.Vector3(), R);
+  var hitTarget = new THREE.Vector3(), hitWorld = new THREE.Vector3();
+  var smooth = new THREE.Vector3(), wantK = 0, curK = 0;
+  if (!TOUCH && !reduce){
+    card.addEventListener('pointermove', function(ev){
+      var b = card.getBoundingClientRect();
+      ndc.x =  ((ev.clientX - b.left) / b.width)  * 2 - 1;
+      ndc.y = -((ev.clientY - b.top)  / b.height) * 2 + 1;
+      ray.setFromCamera(ndc, camera);
+      sphere.center.copy(group.position);
+      if (ray.ray.intersectSphere(sphere, hitTarget)){ hitWorld.copy(hitTarget); wantK = 1; }
+      else wantK = 0;
+    });
+    card.addEventListener('pointerleave', function(){ wantK = 0; });
+  }
+
+  /* ---- loop ------------------------------------------------------------ */
+  var clock = new THREE.Clock(), tAll = 0;
+  function frame(){
+    if (contextLost) return;                      /* never render into a dead ctx */
+    var dt = Math.min(clock.getDelta(), 0.05); tAll += dt;
+    var uIn = reduce ? 1 : Math.min(1, tAll / 1.8);
+    dotMat.uniforms.uIn.value = uIn;
+    rimMat.uniforms.uIn.value = uIn;
+    glowMat.uniforms.uIn.value = uIn;
+    glowMat.uniforms.uPulse.value = reduce ? 1 : (1 + Math.sin(tAll * (Math.PI*2/7.5)) * 0.14);
+
+    var k = 1 - Math.pow(0.001, dt / 0.25);       /* ~250ms, framerate independent */
+    curK += (wantK - curK) * k;
+    smooth.lerp(hitWorld, k);
+    dotMat.uniforms.uHitK.value = curK;
+    dotMat.uniforms.uHit.value.copy(smooth);
+
+    if (!reduce) group.rotation.y += dt * 0.030;
+    renderer.render(scene, camera);
+    if (reduce) return;                           /* one frame, then stop */
+    requestAnimationFrame(frame);
+  }
+  canvas.classList.add('is-ready');
+  if (reduce) group.rotation.y = 0.6;
+  frame();
+})();
+</script>
