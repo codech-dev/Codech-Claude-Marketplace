@@ -62,33 +62,46 @@ html,body{margin:0;background:var(--th-deep);overflow:hidden}
 .fm-prog div.on{color:#fff}
 .fm-prog div.done i b{width:100%}
 
-/* end card: logo with a gold ring drawing in, contact details and a WhatsApp QR (film.end_card) */
-.fm-end{display:grid;place-items:center;align-content:center;text-align:center}
-.fm-end .lg{position:relative;width:300px;height:300px;display:grid;place-items:center}
-.fm-end .lg::before{content:"";position:absolute;inset:-70px;border-radius:50%;background:radial-gradient(closest-side,rgba(242,180,140,.36),rgba(212,184,149,.12) 55%,transparent);opacity:0;transform:scale(.6);transition:opacity 1.2s ease .3s,transform 1.6s cubic-bezier(.22,.8,.2,1) .3s}
-.fm-end .lg svg.ring{position:absolute;inset:0;width:300px;height:300px;transform:rotate(-90deg)}
-.fm-end .lg svg.ring circle{fill:none;stroke:url(#endRing);stroke-width:5;stroke-linecap:round;stroke-dasharray:893;stroke-dashoffset:893;transition:stroke-dashoffset 1.5s cubic-bezier(.65,0,.35,1) .2s}
-.fm-end .lg img{position:relative;height:150px;width:auto;opacity:0;transform:scale(.72);filter:blur(10px);transition:opacity .8s ease .5s,transform 1.1s cubic-bezier(.22,.8,.2,1) .5s,filter .8s ease .5s}
-.fm-end.on .lg::before{opacity:1;transform:none;animation:endGlow 3.2s ease-in-out 1.8s infinite}
-.fm-end.on .lg svg.ring circle{stroke-dashoffset:0}
-.fm-end.on .lg img{opacity:1;transform:none;filter:none}
+/* end card (film.end_card): animated logo centre stage, contacts in one row, small WhatsApp QR bottom-right */
+.fm-end{display:grid;place-items:center;align-content:center;text-align:center;padding-bottom:40px}
+.fm-end .lg{position:relative;width:320px;height:320px;display:grid;place-items:center}
+.fm-end .lg::before{content:"";position:absolute;inset:-80px;border-radius:50%;background:radial-gradient(closest-side,rgba(242,180,140,.34),rgba(212,184,149,.12) 55%,transparent);opacity:0;transform:scale(.6);transition:opacity 1.2s ease .3s,transform 1.6s cubic-bezier(.22,.8,.2,1) .3s}
+.fm-end .lg svg{position:absolute;inset:0;width:320px;height:320px;overflow:visible}
+.fm-end .ring{fill:none;stroke:url(#endRing);stroke-width:4;stroke-linecap:round;stroke-dasharray:892;stroke-dashoffset:892;transform:rotate(-90deg);transform-origin:160px 160px;transition:stroke-dashoffset 1.5s cubic-bezier(.65,0,.35,1) .15s}
+.fm-end .dash{fill:none;stroke:rgba(246,210,190,.32);stroke-width:1.5;stroke-dasharray:3 11;transform-origin:160px 160px;opacity:0;transition:opacity 1s ease 1.2s;animation:endSpin 24s linear infinite}
+.fm-end .orbit{transform-origin:160px 160px;opacity:0;transition:opacity .5s ease 1.5s;animation:endSpin 6s linear infinite}
+.fm-end .orbit circle{fill:#FFE3CF;filter:drop-shadow(0 0 8px #F2B48C) drop-shadow(0 0 18px rgba(242,180,140,.8))}
+.fm-end .mark{position:relative;height:150px;aspect-ratio:var(--lg-ar,1.45);opacity:0;transform:scale(.7);filter:blur(12px);transition:opacity .8s ease .45s,transform 1.2s cubic-bezier(.22,.8,.2,1) .45s,filter .8s ease .45s}
+.fm-end .mark img{height:100%;width:100%;display:block}
+.fm-end .mark i{position:absolute;inset:0;-webkit-mask:var(--lg-url) center/contain no-repeat;mask:var(--lg-url) center/contain no-repeat;background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.95) 50%,transparent 62%) 180% 0/260% 100% no-repeat}
+.fm-end.on .lg::before{opacity:1;transform:none;animation:endGlow 3.4s ease-in-out 1.8s infinite}
+.fm-end.on .ring{stroke-dashoffset:0}
+.fm-end.on .dash,.fm-end.on .orbit{opacity:1}
+.fm-end.on .mark{opacity:1;transform:none;filter:none;animation:endFloat 4s ease-in-out 1.8s infinite}
+.fm-end.on .mark i{animation:endShine 3.6s cubic-bezier(.45,0,.2,1) 1.4s infinite}
+@keyframes endSpin{to{transform:rotate(360deg)}}
 @keyframes endGlow{50%{transform:scale(1.08);opacity:.7}}
-.fm-end h2{margin:26px 0 0;font-size:64px;line-height:1.05;letter-spacing:-.045em;font-weight:800}
+@keyframes endFloat{50%{transform:translateY(-6px)}}
+@keyframes endShine{0%{background-position:180% 0}45%,100%{background-position:-80% 0}}
+.fm-end h2{margin:30px 0 0;font-size:72px;line-height:1.05;letter-spacing:-.045em;font-weight:800}
 .fm-end h2 em{font-style:normal;background:linear-gradient(135deg,#D4B895,#F6D2BE 55%,#F2B48C);-webkit-background-clip:text;background-clip:text;color:transparent}
-.fm-end .row{display:flex;align-items:center;gap:56px;margin-top:44px;text-align:left}
-.fm-end .ct{display:grid;gap:22px}
-.fm-end .ct > div{display:flex;align-items:center;gap:18px;font-size:34px;font-weight:700;letter-spacing:-.01em}
-.fm-end .ct .ic{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);flex:none}
-.fm-end .ct .ic.wa{background:#25D366;border-color:#25D366}
-.fm-end .ct .ic svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.fm-end .ct small{display:block;font:500 15px/1 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px}
-.fm-end .qr{background:#fff;border-radius:26px;padding:22px 22px 16px;box-shadow:0 30px 70px -30px rgba(0,0,0,.7),0 0 0 6px rgba(212,184,149,.35)}
-.fm-end .qr svg{display:block;width:230px;height:230px}
-.fm-end .qr span{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:17px;font-weight:800;color:#0b0d12}
-.fm-end .qr span i{width:10px;height:10px;border-radius:50%;background:#25D366}
+.fm-end .ct{display:flex;justify-content:center;gap:20px;margin-top:40px}
+.fm-end .ct > div{display:flex;align-items:center;gap:14px;height:76px;padding:0 28px 0 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);font-size:30px;font-weight:700;letter-spacing:-.01em}
+.fm-end .ct .ic{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);flex:none}
+.fm-end .ct .ic.wa{background:#25D366}
+.fm-end .ct .ic svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fm-end .qr{position:absolute;right:96px;bottom:72px;display:flex;align-items:center;gap:18px;text-align:left}
+.fm-end .qr .code{background:#fff;border-radius:18px;padding:12px;box-shadow:0 20px 50px -24px rgba(0,0,0,.7),0 0 0 4px rgba(212,184,149,.35)}
+.fm-end .qr svg{display:block;width:132px;height:132px}
+.fm-end .qr p{margin:0;font-size:20px;font-weight:800;line-height:1.25}
+.fm-end .qr p small{display:flex;align-items:center;gap:8px;margin-bottom:8px;font:500 14px/1 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.fm-end .qr p small i{width:9px;height:9px;border-radius:50%;background:#25D366}
 .fm-top.hide{opacity:0}
-.social .fm-end .row{flex-direction:column;gap:40px}
-.social .fm-end h2{font-size:58px;padding:0 60px}
+.social .fm-end{padding-bottom:180px}
+.social .fm-end h2{font-size:62px}
+.social .fm-end .ct{flex-direction:column;align-items:center;gap:16px}
+.social .fm-end .qr{right:64px;bottom:64px}
+@media (prefers-reduced-motion:reduce){.fm-end *,.fm-end *::before{animation:none!important}}
 
 /* social 1080x1350 */
 .social .film{width:1080px;height:1350px}
@@ -129,12 +142,14 @@ html,body{margin:0;background:var(--th-deep);overflow:hidden}
   </section>
 
   <section class="fm-layer fm-end" id="endCard">
-    <div class="lg"><svg class="ring" viewBox="0 0 300 300"><defs><linearGradient id="endRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D4B895"/><stop offset=".55" stop-color="#F6D2BE"/><stop offset="1" stop-color="#F2B48C"/></linearGradient></defs><circle cx="150" cy="150" r="142"/></svg><img src="../../../codech-logo.png" alt="Codech"></div>
-    <h2 class="pop-in d2" id="endLine"></h2>
-    <div class="row">
-      <div class="ct pop-in d3" id="endCt"></div>
-      <div class="qr pop-in d4" id="endQr"></div>
+    <div class="lg">
+      <svg viewBox="0 0 320 320"><defs><linearGradient id="endRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D4B895"/><stop offset=".55" stop-color="#F6D2BE"/><stop offset="1" stop-color="#F2B48C"/></linearGradient></defs>
+        <circle class="dash" cx="160" cy="160" r="158"/><circle class="ring" cx="160" cy="160" r="142"/><g class="orbit"><circle cx="160" cy="18" r="6"/></g></svg>
+      <span class="mark" id="endMark"><img src="../../../codech-logo.png" alt="Codech"><i></i></span>
     </div>
+    <h2 class="pop-in d2" id="endLine"></h2>
+    <div class="ct pop-in d3" id="endCt"></div>
+    <div class="qr pop-in d4" id="endQr"></div>
   </section>
 </div>
 
@@ -160,9 +175,11 @@ html,body{margin:0;background:var(--th-deep);overflow:hidden}
     const I = { mail: '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
                 phone: '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' };
     $('#endLine').innerHTML = E.line || "Let's build <em>yours.</em>";
-    $('#endCt').innerHTML = (E.email ? `<div><span class="ic">${I.mail}</span><span><small>Email</small>${E.email}</span></div>` : '')
-      + (E.phone ? `<div><span class="ic wa">${I.phone}</span><span><small>Call / WhatsApp</small>${E.phone}</span></div>` : '');
-    if (E.qr) $('#endQr').innerHTML = E.qr + `<span><i></i>${E.qr_label || 'Scan to chat on WhatsApp'}</span>`; else $('#endQr').remove();
+    $('#endCt').innerHTML = (E.email ? `<div><span class="ic">${I.mail}</span><span>${E.email}</span></div>` : '')
+      + (E.phone ? `<div><span class="ic wa">${I.phone}</span><span>${E.phone}</span></div>` : '');
+    if (E.qr) $('#endQr').innerHTML = `<div class="code">${E.qr}</div><p><small><i></i>WhatsApp</small>${E.qr_label || 'Scan to chat<br>with us'}</p>`; else $('#endQr').remove();
+    const mk = $('#endMark'), im = mk.querySelector('img'), fit = () => mk.style.setProperty('--lg-ar', im.naturalWidth / im.naturalHeight);
+    mk.style.setProperty('--lg-url', `url("${im.src}")`); im.complete ? fit() : im.addEventListener('load', fit);
   } else $('#endCard').remove();
 
   const S = social ? D.scenes.filter(s => D.social.includes(s.scene)) : D.scenes;
