@@ -359,8 +359,9 @@ body.deck-lock{overflow:hidden}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 
-/* delivery section CTA (delivery.cta): opens the free-audit booking */
+/* delivery section CTA (delivery.cta): opens the free-audit booking; gold/peach gradient like the header CTA */
 .sec-cta{margin-top:8px}
 .sec-cta .btn .i{width:18px;height:18px;transition:transform .25s var(--ease)}
-.sec-cta .btn:hover{transform:translateY(-2px)}
+.sec-cta .btn{background:linear-gradient(135deg,#D4B895 0%,#F6D2BE 55%,#F2B48C 100%) 0 0/200% 200%;color:var(--ink);box-shadow:0 0 0 1px rgba(122,95,55,.35);transition:transform .3s var(--ease),background-position .6s var(--ease),box-shadow .3s}
+.sec-cta .btn:hover,.sec-cta .btn.btn-dark:hover{background:linear-gradient(135deg,#D4B895 0%,#F6D2BE 55%,#F2B48C 100%) 100% 100%/200% 200%;color:var(--ink);transform:translateY(-2px);box-shadow:0 0 0 1px rgba(122,95,55,.45),0 14px 30px -14px rgba(122,95,55,.6)}
 .sec-cta .btn:hover .i{transform:translateX(3px)}
