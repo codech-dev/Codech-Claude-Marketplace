@@ -36,19 +36,23 @@
     ],
     [
       "130",
-      "staff accounts, signed in with Microsoft"
+      "staff accounts, signed in with Microsoft",
+      "users"
     ],
     [
       "4",
-      "languages across the workspace"
+      "languages across the workspace",
+      "globe"
     ],
     [
       "+58%",
-      "faster downloads for staff in China"
+      "faster downloads for staff in China",
+      "download"
     ],
     [
       "1,700+",
-      "automated tests on every change"
+      "automated tests on every change",
+      "test"
     ]
   ],
   "problem": {
@@ -440,5 +444,20 @@
       "search",
       "chat"
     ]
-  }
+  },
+  "stats_eyebrow": "Delivery",
+  "stats_timeline": [
+    [
+      "29 Jun",
+      "First commit"
+    ],
+    [
+      "22 Jul",
+      "Staging live"
+    ],
+    [
+      "5 Aug",
+      "Production live"
+    ]
+  ]
 }

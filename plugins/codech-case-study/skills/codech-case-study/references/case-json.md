@@ -25,7 +25,9 @@ Dark-stage colours for the reel, decision band and film: `deep`, `mid`, `end`, `
 `headline` (one sentence, ~10 words), `sub` (2–3 sentences: who it's for, what it does, what's next).
 
 ## stats
-List of `[value, label]`, 3–5 items. Exact numbers from the brief.
+List of `[value, label]` or `[value, label, icon]`, 3–5 items. Exact numbers from the brief. Rendered as an impact bento: the **first** stat is the large dark lead tile, the rest are icon tiles (icons: see the problem section list; `users`, `globe`, `download`, `test` suit most). Numbers count up on reveal; keep the value's text final-form (`1,700+`, `+58%`, `37 days`).
+- `stats_eyebrow`: small label on the lead tile (default "Delivery").
+- `stats_timeline`: optional `[date, label]` ×2–4 milestones under the lead stat, e.g. `[["29 Jun","First commit"],["22 Jul","Staging live"],["5 Aug","Production live"]]`; dates must come from the brief/delivery log.
 
 ## problem (optional)
 `h2`, `eyebrow` (default "The problem"), `items`: `{icon, title, body}` ×3. Icons: folder, search, chat, upload, doc, graph, spark, send, shield, lock, clock, users, chart, cart, calendar, mail, bolt, database, warn, check, arrow (add more in `build_case.py` ICONS).

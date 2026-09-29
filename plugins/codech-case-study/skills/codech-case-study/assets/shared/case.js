@@ -16,6 +16,21 @@
     $$('.rv').forEach(el => el.getBoundingClientRect().top < innerHeight ? requestAnimationFrame(() => el.classList.add('in')) : io.observe(el));
   } else $$('.rv').forEach(el => el.classList.add('in'));
 
+  // stats: count numbers up once when they scroll into view (text stays correct without JS)
+  (() => {
+    const els = $$('[data-count]'); if (!els.length || RM || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; io.unobserve(e.target);
+      const el = e.target, m = el.textContent.match(/^(\D*)([\d,.]+)(.*)$/); if (!m) return;
+      const [, pre, num, suf] = m, end = parseFloat(num.replace(/,/g, '')), dec = (num.split('.')[1] || '').length, comma = num.includes(',');
+      const fmt = v => { let s = v.toFixed(dec); if (comma) s = Number(s).toLocaleString('en-US', { minimumFractionDigits:dec, maximumFractionDigits:dec }); return pre + s + suf; };
+      const t0 = performance.now(), dur = 1100;
+      const tick = now => { const p = Math.min(1, (now - t0) / dur), k = 1 - Math.pow(1 - p, 3); el.textContent = fmt(end * k); if (p < 1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    }), { threshold:.6 });
+    els.forEach(el => io.observe(el));
+  })();
+
   // delivery deck: embeds the proposal / prototype, rendered at desktop width and scaled to fit.
   // Phones get the embedded page's own mobile layout (native width) unless a pane sets data-minw.
   (() => {

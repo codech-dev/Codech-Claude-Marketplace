@@ -35,6 +35,9 @@ ICONS = {
     "mail": '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
     "bolt": '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
     "database": '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+    "globe": '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+    "download": '<path d="M12 4v11M7 10l5 5 5-5M4 20h16"/>',
+    "test": '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/>',
     "warn": '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.3"/>',
     "check": '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
     "arrow": '<path d="M5 12h14M13 6l6 6-6 6"/>',
@@ -135,8 +138,18 @@ def page(c):
   </div>
 """)
     if c.get("stats"):
-        st = "\n".join(f'    <div class="stat"><b>{t(v)}</b><span>{t(l)}</span></div>' for v, l in c["stats"])
-        W(f'  <div class="stats rv" style="--n:{len(c["stats"])}">\n{st}\n  </div>\n')
+        # Impact bento: first stat is the lead tile (dark, optional milestone timeline), the rest are icon tiles.
+        # A stat is [value, label] or [value, label, icon]; values count up on reveal (case.js).
+        lead, rest = c["stats"][0], c["stats"][1:]
+        tl = c.get("stats_timeline") or []
+        steps = "".join(f'<li{" class=\"on\"" if i == len(tl) - 1 else ""}><b>{t(d)}</b><span>{t(l)}</span></li>' for i, (d, l) in enumerate(tl))
+        tl_html = f'<ol class="st-tl">{steps}</ol>' if tl else ""
+        tiles = "\n".join(f'    <div class="st-tile rv">{("<span class=\"ic\">" + ico(s[2]) + "</span>") if len(s) > 2 else ""}<b data-count>{t(s[0])}</b><span>{t(s[1])}</span></div>' for s in rest)
+        W(f'''  <div class="stats-bento" style="--n:{len(rest)}">
+    <div class="st-lead rv"><p class="k">{t(c.get("stats_eyebrow", "Delivery"))}</p><b data-count>{t(lead[0])}</b><span>{t(lead[1])}</span>{tl_html}</div>
+{tiles}
+  </div>
+''')
     W("</header>\n")
 
     if c.get("problem"):
