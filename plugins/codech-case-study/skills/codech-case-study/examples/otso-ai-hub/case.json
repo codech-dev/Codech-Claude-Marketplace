@@ -373,15 +373,18 @@
     "cards": [
       [
         "An assistant that can't be talked into a change",
-        "It can only propose actions; a person confirms each one. Sharing and downloading are outside what it can do at all, because document text is treated as untrusted input."
+        "It can only propose actions; a person confirms each one. Sharing and downloading are outside what it can do at all, because document text is treated as untrusted input.",
+        "shield"
       ],
       [
         "Fast for staff in China",
-        "A 26 MB download took 14 attempts from Beijing. Resumable downloads fixed it, and an accelerated route measured 58% more throughput from China."
+        "A 26 MB download took 14 attempts from Beijing. Resumable downloads fixed it, and an accelerated route measured 58% more throughput from China.",
+        "download"
       ],
       [
         "Every action on record",
-        "Every change writes an audit entry in the same database transaction, and the log is append-only at the database level, not just in code."
+        "Every change writes an audit entry in the same database transaction, and the log is append-only at the database level, not just in code.",
+        "database"
       ]
     ],
     "stack": [

@@ -58,7 +58,7 @@ The single design decision that shows judgement. `eyebrow`, `quote` (short, punc
 `src`: `proposal/` or `prototype/` (hosted copies, preferred) or an absolute URL. `label` is what the fake address bar shows; never the real client-facing URL. `minw`: force a desktop-width render on phones (only for embeds with no phone layout).
 
 ## engineering (optional)
-`h2`, `cards`: `[title, text]` ×3, `stack`: list of tech names.
+`h2`, `cards`: `[title, text]` or `[title, text, icon]` ×3 (dark spotlight cards; default icons shield/bolt/database), `stack`: list of tech names.
 
 ## cta
 `h2`, `body`. Buttons are fixed: "Book a free AI audit" (opens the landing form via `#audit`) and "More results".

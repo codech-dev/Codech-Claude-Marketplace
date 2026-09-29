@@ -154,7 +154,7 @@ def page(c):
 
     if c.get("problem"):
         p = c["problem"]; n = next(num)
-        items = "\n".join(f'    <div class="prob rv"><span class="ic">{ico(i["icon"])}</span><h3>{t(i["title"])}</h3><p>{t(i["body"])}</p></div>' for i in p["items"])
+        items = "\n".join(f'    <div class="prob rv glow"><span class="no">{k+1:02d}</span><span class="ic">{ico(i["icon"])}</span><h3>{t(i["title"])}</h3><p>{t(i["body"])}</p></div>' for k, i in enumerate(p["items"]))
         W(f"""
 <section class="sec wrap" id="problem">
   <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(p.get('eyebrow','The problem'))}</p><h2 class="h-lg">{t(p['h2'])}</h2></div>
@@ -239,7 +239,7 @@ def page(c):
             minw = f' data-minw="{tb["minw"]}"' if tb.get("minw") else ""
             panes.append(f'        <div class="pane{" on" if i == 0 else ""}"{minw} data-src="{a(tb["src"])}" data-url="{a(tb["label"])}"><span class="ld">Loading…</span></div>')
             deck_hints.append(re.sub(r"<[^>]+>", "", tb.get("hint", "Scroll inside to explore")))
-        steps = "\n".join(f'    <div class="rv"><span>STEP {i+1:02d}</span><b>{t(h)}</b><p>{t(b)}</p></div>' for i, (h, b) in enumerate(d.get("steps", [])))
+        steps = "\n".join(f'    <div class="step rv" style="--i:{i}"><span class="node">{i+1:02d}</span><div class="card"><span class="lb">Step {i+1:02d}</span><b>{t(h)}</b><p>{t(b)}</p></div></div>' for i, (h, b) in enumerate(d.get("steps", [])))
         deck = ""
         if tabs:
             deck = f"""
@@ -259,7 +259,8 @@ def page(c):
         W(f"""
 <section class="sec wrap" id="process">
   <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(d.get('eyebrow','How we delivered'))}</p><h2 class="h-lg">{t(d['h2'])}</h2><p class="sub">{t(d.get('sub',''))}</p></div>{deck}
-  <div class="steps3">
+  <div class="steps3" style="--n:{len(d.get('steps', []))}">
+    <span class="track" aria-hidden="true"><i></i></span>
 {steps}
   </div>
 </section>
@@ -267,7 +268,8 @@ def page(c):
 
     if c.get("engineering"):
         e = c["engineering"]; n = next(num)
-        cards = "\n".join(f'    <div class="rv"><b>{t(h)}</b><p>{t(b)}</p></div>' for h, b in e.get("cards", []))
+        default_ic = ["shield", "bolt", "database", "check", "spark", "lock"]
+        cards = "\n".join(f'    <div class="eng-c rv glow"><span class="ic">{ico(cd[2] if len(cd) > 2 else default_ic[k % len(default_ic)])}</span><span class="no">{k+1:02d}</span><b>{t(cd[0])}</b><p>{t(cd[1])}</p></div>' for k, cd in enumerate(e.get("cards", [])))
         stack = "".join(f"<span>{t(s)}</span>" for s in e.get("stack", []))
         W(f"""
 <section class="sec wrap" id="eng">

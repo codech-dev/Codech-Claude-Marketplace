@@ -16,6 +16,15 @@
     $$('.rv').forEach(el => el.getBoundingClientRect().top < innerHeight ? requestAnimationFrame(() => el.classList.add('in')) : io.observe(el));
   } else $$('.rv').forEach(el => el.classList.add('in'));
 
+  // cursor-following glow on .glow cards
+  if (!RM && matchMedia('(hover:hover)').matches) {
+    document.addEventListener('pointermove', e => {
+      const c = e.target.closest && e.target.closest('.glow'); if (!c) return;
+      const r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive:true });
+  }
+
   // stats: count numbers up once when they scroll into view (text stays correct without JS)
   (() => {
     const els = $$('[data-count]'); if (!els.length || RM || !('IntersectionObserver' in window)) return;
