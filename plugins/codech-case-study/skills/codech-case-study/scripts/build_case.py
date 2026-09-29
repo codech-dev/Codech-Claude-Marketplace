@@ -413,6 +413,7 @@ if __name__ == "__main__":
         shutil.copyfile(SHARED / fname, shared / fname)
     (base / "index.html").write_text(page(c), encoding="utf-8")
     (base / "_film").mkdir(exist_ok=True)
+    shutil.copyfile(SHARED / "codech-logo-reveal.png", base / "_film" / "codech-logo-reveal.png")  # end-card logo reveal art (film only, never deployed)
     (base / "_film" / "film.html").write_text(film(c), encoding="utf-8")
     if not c["client"].get("consent_confirmed"):
         print("WARNING: client.consent_confirmed is false. Confirm the client may be named before sharing this page.")
