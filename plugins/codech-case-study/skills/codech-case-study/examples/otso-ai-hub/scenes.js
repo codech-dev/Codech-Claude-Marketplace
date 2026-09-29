@@ -285,7 +285,7 @@
       <div class="ac-doc">
         <div class="crumb">Client Agreements</div>
         <div class="ttl">${pdf()}<div><b>Acme Capital – Brokerage Agreement.pdf</b><small>PDF · v3 · 1.4 MB</small></div></div>
-        <div class="page"><div class="ph-h"></div><i></i><i style="width:84%"></i><i style="width:92%"></i><i style="width:70%"></i><i></i><i style="width:88%"></i><i style="width:60%"></i><i style="width:80%"></i></div>
+        <div class="page"><div class="ph-h"><b>BROKERAGE AGREEMENT</b><small>Acme Capital Pte Ltd · OTSO Markets</small></div><div class="pg"><p class="sec">1. Parties</p><i></i><i style="width:82%"></i><p class="sec">2. Settlement</p><i style="width:94%"></i><div class="hl">Settlement within <b>T+2</b> of each trade</div><p class="sec">3. Fees &amp; term</p><i style="width:90%"></i><i style="width:66%"></i><div class="sig"><span>Acme Capital</span><span>OTSO Markets</span></div></div></div>
       </div>
       <div class="ac-panel">
         <div class="hd"><span class="tile">${ic('spark')}</span><div><b>OTSO Assistant</b><small>Private · sees only your documents</small></div></div>
