@@ -123,7 +123,7 @@ def page(c):
             if r is not None:
                 reel.append({"ov": f"{slug}:{f['scene']}", "tab": t(r["tab"]), "sub": t(r["sub"]), "cap": re.sub(r"<[^>]+>", "", html.unescape(t(r["cap"]))), "est": r.get("est", 12000), "group": gi})
     if reel:
-        rgs = "\n".join(f'      <div class="rg"><div class="reel-grp">{t(g["name"])} {pill(g.get("status","live"))}</div><div class="rg-t"></div></div>' for g in groups)
+        rgs = "\n".join(f'      <div class="rg" style="--c:{max(1, sum(1 for f in g["features"] if f.get("reel") is not None))}"><div class="reel-grp">{t(g["name"])} {pill(g.get("status","live"))}</div><div class="rg-t"></div></div>' for g in groups)
         W(f"""  <div class="reel rv" id="reel">
     <div class="reel-stage">
       <div class="reel-view" id="reelView"><div class="sizer"></div></div>

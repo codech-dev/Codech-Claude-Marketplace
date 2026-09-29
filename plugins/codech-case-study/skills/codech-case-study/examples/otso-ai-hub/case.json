@@ -92,7 +92,7 @@
           ],
           "aria": "Animated demo: opening the Brokerage Ops shared drive shows its folders and classified files",
           "reel": {
-            "tab": "Shared drives",
+            "tab": "Drives",
             "sub": "Every file classified",
             "cap": "Shared drives with a classification on every file",
             "est": 11500
@@ -114,7 +114,7 @@
           ],
           "aria": "Animated demo: searching 'passport expiring soon' finds the Acme Capital KYC file with a 92% match",
           "reel": {
-            "tab": "Search by meaning",
+            "tab": "Search",
             "sub": "Finds files by what they say",
             "cap": "Search by meaning, not by file name",
             "est": 9500
@@ -133,7 +133,7 @@
           "body": "Each file gets a summary, category, tags and key facts such as client, owner and expiry dates, so you know what it is before you open it.",
           "aria": "Animated demo: an uploaded KYC file gets an AI summary, tags and key facts",
           "reel": {
-            "tab": "AI summaries",
+            "tab": "Summaries",
             "sub": "Every upload read and tagged",
             "cap": "Every upload gets a summary, tags and key facts",
             "est": 12500
@@ -202,7 +202,7 @@
           ],
           "aria": "Animated demo: a channel where shared files show classification badges and a restricted file stays locked",
           "reel": {
-            "tab": "Channels &amp; DMs",
+            "tab": "Channels",
             "sub": "Files stay the real document",
             "cap": "Share in chat without creating loose copies",
             "est": 12500

@@ -97,7 +97,7 @@
     view.insertAdjacentHTML('beforeend', `<div data-ov="${r.ov}" aria-hidden="true"></div>`);
     const b = document.createElement('button');
     b.className = 'rtab'; b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.k = k;
-    b.innerHTML = `<b>${r.tab}</b><small>${r.sub}</small>`;
+    b.innerHTML = `<i>${String(k + 1).padStart(2, '0')}</i><b>${r.tab}</b>`; b.title = r.sub.replace(/<[^>]+>/g, '');
     (slots[r.group] || slots[0]).append(b);
   });
   const panes = $$('[data-ov]', view).map(el => (OV.mount(el), el));
@@ -106,14 +106,15 @@
   function show(k) {
     const my = ++token;
     panes.forEach((p, n) => { p.classList.toggle('on', n === k); if (n !== k && p._ov) p._ov.stop(); });
-    tabEls.forEach((t, n) => { t.setAttribute('aria-selected', n === k); t.style.setProperty('--p', '0%'); });
-    cap.textContent = C.reel[k].cap; cur = k;
-    if (!inView || RM || !panes[k]._ov) { tabEls[k].style.setProperty('--p', '100%'); return; }
+    tabEls.forEach((t, n) => { t.setAttribute('aria-selected', n === k); t.style.setProperty('--pf', n < k ? 1 : 0); });
+    cap.innerHTML = ''; cap.append(C.reel[k].cap); const sm = document.createElement('small'); sm.innerHTML = C.reel[k].sub; cap.append(sm); cur = k;
+    if (tabs.scrollWidth > tabs.clientWidth) { const t = tabEls[k]; tabs.scrollTo({ left: t.offsetLeft - (tabs.clientWidth - t.offsetWidth) / 2, behavior: RM ? 'auto' : 'smooth' }); }
+    if (!inView || RM || !panes[k]._ov) { tabEls[k].style.setProperty('--pf', 1); return; }
     const t0 = performance.now(), est = C.reel[k].est || 12000;
     cancelAnimationFrame(prog);
-    const tick = now => { if (my !== token) return; tabEls[k].style.setProperty('--p', Math.min(96, (now - t0) / est * 100) + '%'); prog = requestAnimationFrame(tick); };
+    const tick = now => { if (my !== token) return; tabEls[k].style.setProperty('--pf', Math.min(.96, (now - t0) / est)); prog = requestAnimationFrame(tick); };
     prog = requestAnimationFrame(tick);
-    panes[k]._ov.once().then(() => { if (my !== token) return; tabEls[k].style.setProperty('--p', '100%'); show((k + 1) % C.reel.length); });
+    panes[k]._ov.once().then(() => { if (my !== token) return; tabEls[k].style.setProperty('--pf', 1); show((k + 1) % C.reel.length); });
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('.rtab'); if (b) show(+b.dataset.k); });
   if ('IntersectionObserver' in window) {
