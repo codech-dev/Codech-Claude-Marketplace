@@ -7,8 +7,8 @@
   const C = window.CASE || { reel:[], deckHints:[] };
 
   // sticky nav shadow
-  const nav = $('#nav'); const onScroll = () => nav.classList.toggle('stuck', scrollY > 10);
-  addEventListener('scroll', onScroll, { passive:true }); onScroll();
+  const nav = $('#nav.cnav');
+  if (nav) { const onScroll = () => nav.classList.toggle('stuck', scrollY > 10); addEventListener('scroll', onScroll, { passive:true }); onScroll(); }
 
   // reveal on scroll; anything already on screen shows at once (no blank hero)
   if ('IntersectionObserver' in window && !RM) {

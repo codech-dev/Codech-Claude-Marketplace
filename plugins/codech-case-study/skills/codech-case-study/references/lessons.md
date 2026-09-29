@@ -8,6 +8,7 @@
 | Mobile content touching screen edges | `.hero{padding:56px 0 0}` shorthand wiped `.wrap`'s side padding | use `padding-top` on elements that also have `.wrap` |
 | Phone page scrolled sideways 522px | build wrote inline `grid-template-columns` (pipeline, deck tabs) that beat the mobile media query | pass counts as CSS variables (`style="--n:5"`); never inline layout that mobile CSS must override |
 | A diagonal box edge sweeps across a gradient panel | a rotating blob layer sized with `inset:-60%` is a rectangle; on wide panels its corners enter view | the case CTA now uses a static 90° gradient (user preference: no rotation); if you ever animate a blob layer, rotate a centred square bigger than the panel diagonal |
+| Case page had its own nav/footer that drifted from the site | two copies of the chrome | build_case.py copies the landing header/footer via @chrome markers; audit/chat buttons deep-link to ../../#audit / #chat; case nav classes renamed `.cnav` so landing `.nav` rules don't collide |
 | Hero blank for 1–2 s | reveal-on-scroll waited for IntersectionObserver | items already in the viewport get `.in` immediately (case.js) |
 | QA full-page shots with blank sections | harness scrolled before first paint, so reveal-on-scroll never saw the middle | qa_shots.py waits for networkidle + 1.5 s and scrolls at 350 ms steps; cross-origin iframes still render blank in full-page shots (check them with a viewport shot) |
 | First paint ~2.7 s in tests | Google Fonts download in the sandbox | not a page bug; landing has the same; verify by blocking fonts |

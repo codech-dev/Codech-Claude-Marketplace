@@ -25,7 +25,9 @@ What a finished case study has:
 ```
 site/codech-ai-landing/
   index.html                     landing page (shared with other sessions; touch only via upsert_story.py)
-  work/_shared/                  ov.js ov.css case.css case.js   (copied from this skill by build_case.py)
+  work/_shared/                  ov.js ov.css case.css case.js chrome.js (from this skill) + chrome.css (generated)
+                                 Header/footer are the LANDING page's, copied in by build_case.py from its
+                                 <!-- @chrome:header/footer --> + /* @chrome:css */ markers: edit them on the landing page, rebuild cases.
   work/<slug>/case.json          source of truth (not deployed)
   work/<slug>/index.html         built page (don't hand-edit)
   work/<slug>/assets/            logo, scenes.js, scenes.css, film.mp4, film-poster.jpg, og-cover.jpg
