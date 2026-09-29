@@ -68,7 +68,7 @@ The single design decision that shows judgement. `eyebrow`, `quote` (short, punc
 Demo-data and In build disclaimers.
 
 ## film
-`tagline`, `duration_label` ("70-second product tour"; update after recording), `social_scenes` (2–3 scene names for the portrait cut), `outro_stats` (`[value,label]` ×3), `outro_line`, `outro_cta`.
+`tagline`, `duration_label` ("70-second product tour"; update after recording), `social_scenes` (2–3 scene names for the portrait cut), `outro_stats` (`[value,label]` ×3), `outro_line`, `outro_cta`. `music_style` (`ambient` | `bright` | `cinematic` | `lofi` | `drive`; default `ambient`). `end_card` (optional closing contact card after the outro: animated Codech logo, `line` (HTML; default "Let's build <em>yours.</em>"), `email`, `phone`, `whatsapp` (digits with country code, e.g. `60139473347`; rendered as a wa.me QR, needs `pip install segno`), `qr_label`).
 
 ## card (landing Results carousel)
 `headline`, `kpis` (`[value,label]` ×3, short values), `demos` (exactly 2 scene names; ideally one per product area so the card shows the whole product; labels and Live/In build come from their groups).
