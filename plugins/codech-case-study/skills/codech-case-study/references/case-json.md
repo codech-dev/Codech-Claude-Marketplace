@@ -34,7 +34,7 @@ List of `[value, label]` or `[value, label, icon]`, 3–5 items. Exact numbers f
 
 ## groups (required, 1–3)
 One per product area; each becomes a page section, a reel tab group and a film chapter.
-`id` (anchor), `name`, `status` (`live`/`build`), `tint` (`blue`/`teal`/`violet`/`amber`), `h2`, `sub`, `note` (optional; shown under the cards, use it for In build context), `features`:
+`id` (anchor), `name`, `status` (`live`/`build`), `h2`, `sub`, `note` (optional; shown under the cards, use it for In build context), `features`:
 
 | feature field | notes |
 |---|---|
@@ -43,6 +43,7 @@ One per product area; each becomes a page section, a reel tab group and a film c
 | `title`, `body` | card copy |
 | `bullets` | optional, 2 ticks (best on the wide card) |
 | `wide` | optional; default: first feature of each group is wide |
+| `mesh` | optional `gold`/`teal`/`violet`/`sky`: the card's design-system mesh background; default rotates sky → teal → violet → gold across the page |
 | `aria` | describes what the animation shows (screen readers) |
 | `reel` | `{tab, sub, cap, est}`: showreel tab label, tab subline, caption under the stage, estimated run ms (drives the tab progress bar). Omit to leave the feature out of the reel. |
 | `film` | `{label, cap, sub}`: film progress label, big caption, sub caption. Omit to leave it out of the film. |

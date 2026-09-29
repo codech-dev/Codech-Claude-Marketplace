@@ -167,8 +167,13 @@ def page(c):
         next(num)
 
     chk = ico("check")
+    # Each feature card gets a design-system mesh set; rotate so neighbours differ. Override per feature with "mesh".
+    MESHES = ["sky", "teal", "violet", "gold"]
+    mesh_i = iter(range(10 ** 6))
+    def mesh(f):
+        return "m-" + (f.get("mesh") or MESHES[next(mesh_i) % len(MESHES)])
     for g in groups:
-        n = next(num); tint = "t-" + g.get("tint", "blue")
+        n = next(num)
         arts = []
         for fi, f in enumerate(g["features"]):
             wide = f.get("wide", fi == 0)
@@ -178,9 +183,9 @@ def page(c):
                 bul = '\n      <ul class="bul">' + "".join(f"<li>{chk}{t(b)}</li>" for b in f["bullets"]) + "</ul>"
             txt = f'<div class="txt"><p class="k">{t(f["k"])}</p><h3>{t(f["title"])}</h3><p>{t(f["body"])}</p>{bul}</div>'
             if wide:
-                arts.append(f'    <article class="feat wide {tint} rv">{txt}\n      {art}</article>')
+                arts.append(f'    <article class="feat wide {mesh(f)} rv">{txt}\n      {art}</article>')
             else:
-                arts.append(f'    <article class="feat {tint} rv">{art}\n      {txt}</article>')
+                arts.append(f'    <article class="feat {mesh(f)} rv">{art}\n      {txt}</article>')
         note = ""
         if g.get("note"):
             note = f'\n  <p class="build-note rv">{ico("warn")}{t(g["note"])}</p>'

@@ -187,14 +187,14 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .feat.wide h3{font-size:clamp(24px,2.4vw,32px)}
 .feat.wide .art{padding:32px 32px 32px 0}
 /* feature tints: set per group in case.json ("tint": blue | teal | violet | amber) */
-.feat.t-blue .art{background:radial-gradient(90% 70% at 70% 30%,rgba(45,127,249,.16),transparent 70%)}
-.feat.t-teal .art{background:radial-gradient(90% 70% at 70% 30%,rgba(35,165,150,.16),transparent 70%)}
-.feat.t-violet .art{background:radial-gradient(90% 70% at 70% 30%,rgba(109,77,242,.15),transparent 70%)}
-.feat.t-amber .art{background:radial-gradient(90% 70% at 70% 30%,rgba(212,160,60,.18),transparent 70%)}
-.feat.wide.t-blue{background:linear-gradient(135deg,#EEF3FF 0%,#F3F1EC 60%)}
-.feat.wide.t-teal{background:linear-gradient(135deg,#E3F5F1 0%,#F3F1EC 60%)}
-.feat.wide.t-violet{background:linear-gradient(135deg,#EFEBFF 0%,#F3F1EC 60%)}
-.feat.wide.t-amber{background:linear-gradient(135deg,#FBF1DD 0%,#F3F1EC 60%)}
+/* feature cards: design-system mesh panels (DESIGN-SYSTEM.md mesh-*-1..4); one set per card, rotated */
+.feat[class*=" m-"]{position:relative;isolation:isolate;background:linear-gradient(135deg,var(--m1),var(--m2))}
+.feat[class*=" m-"]::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(42% 55% at 82% 18%,var(--m3),transparent 70%),radial-gradient(40% 50% at 12% 92%,var(--m4),transparent 70%);opacity:.85;filter:blur(8px)}
+.feat[class*=" m-"]::after{content:"";position:absolute;top:0;bottom:0;left:14px;right:14px;z-index:-1;pointer-events:none;border-left:1px solid rgba(255,255,255,.55);border-right:1px solid rgba(255,255,255,.55)}
+.feat.m-gold{--m1:#F3E3C6;--m2:#FFF4E2;--m3:#EBD9B7;--m4:#F6D2BE}
+.feat.m-teal{--m1:#CFF1EA;--m2:#EFFBF8;--m3:#8FE0D4;--m4:#BFE3F7}
+.feat.m-violet{--m1:#E3DCFF;--m2:#F6F3FF;--m3:#C9BCFF;--m4:#F4CFEA}
+.feat.m-sky{--m1:#D6E6FF;--m2:#F2F7FF;--m3:#A9C8FF;--m4:#CFF1EA}
 .bul{display:grid;gap:8px;margin-top:10px;padding:0;list-style:none}
 .bul li{display:flex;gap:10px;font-size:15px;line-height:1.45}
 .bul li svg{width:18px;height:18px;color:var(--green);margin-top:2px}
