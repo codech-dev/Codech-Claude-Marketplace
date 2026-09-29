@@ -344,7 +344,7 @@ def page(c):
 </dialog>
 """)
     W(f"""
-{('<p class="case-note wrap">' + t(c.get('footer_note', '')) + '</p>' + chr(10) + CHROME[1] + chr(10) + CHROME[3]) if CHROME else '<footer class="cfoot"><div class="wrap"><p>' + t(c.get('footer_note', '')) + '</p><p>© ' + str(c.get('year', 2026)) + ' Codech Solutions</p></div></footer>'}
+{(('<p class="case-note wrap">' + t(c['footer_note']) + '</p>' + chr(10) if c.get('footer_note') else '') + CHROME[1] + chr(10) + CHROME[3]) if CHROME else '<footer class="cfoot"><div class="wrap"><p>' + t(c.get('footer_note', '')) + '</p><p>© ' + str(c.get('year', 2026)) + ' Codech Solutions</p></div></footer>'}
 
 <script>window.CASE = {json.dumps({"reel": reel, "deckHints": deck_hints}, ensure_ascii=False)};</script>
 <script src="../_shared/ov.js"></script>
