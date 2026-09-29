@@ -16,6 +16,7 @@
   }
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-audit]'), c = e.target.closest('[data-chat]');
+    if (c && document.getElementById('cw')) return;  // chat widget is on this page (chrome-chat.js handles it)
     if (a || c) { e.preventDefault(); location.href = home + (a ? '#audit' : '#chat'); }
   });
   const cp = $('#copyEmail'), em = $('#email');
