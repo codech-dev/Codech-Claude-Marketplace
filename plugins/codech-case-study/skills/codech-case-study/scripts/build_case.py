@@ -357,6 +357,20 @@ def page(c):
 """)
     return "".join(out)
 
+def end_card(ec):
+    """film.end_card -> data for the closing contact card (logo, email, phone, WhatsApp QR). Missing = no card.
+    The QR encodes a wa.me link and is rendered to inline SVG with segno (pip install segno); without it the card has no QR."""
+    if not ec: return None
+    out = {k: ec.get(k, "") for k in ("line", "email", "phone", "qr_label")}
+    wa = re.sub(r"\D", "", str(ec.get("whatsapp", ""))); out["qr"] = ""
+    if wa:
+        try:
+            import segno
+            out["qr"] = segno.make(f"https://wa.me/{wa}", error="m").svg_inline(omitsize=True, border=0, dark="#0B0D12")
+        except ImportError:
+            print("WARNING: pip install segno to render the WhatsApp QR on the film end card")
+    return out
+
 def film(c):
     """Recording stage: fills the film template with this case's scenes and copy."""
     slug = c["slug"]; f = c.get("film", {}); th = c.get("theme", {})
@@ -370,7 +384,8 @@ def film(c):
     data = {"product": c["product"], "tagline": f.get("tagline", c["hero"]["headline"]),
             "logo": "../" + c["client"]["logo"] if c["client"].get("named_publicly", True) else "",
             "scenes": scenes, "social": f.get("social_scenes", [s["scene"] for s in scenes[:3]]),
-            "outroStats": f.get("outro_stats", []), "outroLine": f.get("outro_line", ""), "outroCta": f.get("outro_cta", "Book a free AI audit with Codech")}
+            "outroStats": f.get("outro_stats", []), "outroLine": f.get("outro_line", ""), "outroCta": f.get("outro_cta", "Book a free AI audit with Codech"),
+            "endCard": end_card(f.get("end_card"))}
     tpl = (SHARED / "film-template.html").read_text(encoding="utf-8")
     theme = ";".join(f"--th-{k}:{v}" for k, v in th.items() if k in ("deep", "mid", "end", "glow"))
     return tpl.replace("/*__FILM_DATA__*/null", json.dumps(data, ensure_ascii=False)).replace("/*__THEME__*/", theme)
