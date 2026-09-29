@@ -333,6 +333,7 @@
     ]
   },
   "delivery": {
+    "cta": "Get your FREE proposal now",
     "h2": "From proposal to production in 37 days.",
     "sub": "We pitched with a working proposal site. The client then clicked through a full prototype before we wrote any production code, and that approved prototype became the contract for every screen. Both are below: scroll and click around.",
     "tabs": [

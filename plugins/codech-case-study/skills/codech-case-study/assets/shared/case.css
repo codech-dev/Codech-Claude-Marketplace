@@ -358,3 +358,9 @@ body.deck-lock{overflow:hidden}
 .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .9s var(--ease)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+/* delivery section CTA (delivery.cta): opens the free-audit booking */
+.sec-cta{margin-top:8px}
+.sec-cta .btn .i{width:18px;height:18px;transition:transform .25s var(--ease)}
+.sec-cta .btn:hover{transform:translateY(-2px)}
+.sec-cta .btn:hover .i{transform:translateX(3px)}

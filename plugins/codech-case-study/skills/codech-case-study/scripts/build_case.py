@@ -300,7 +300,7 @@ def page(c):
   </div>"""
         W(f"""
 <section class="sec wrap" id="process">
-  <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(d.get('eyebrow','How we delivered'))}</p><h2 class="h-lg">{t(d['h2'])}</h2><p class="sub">{t(d.get('sub',''))}</p></div>{deck}
+  <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(d.get('eyebrow','How we delivered'))}</p><h2 class="h-lg">{t(d['h2'])}</h2><p class="sub">{t(d.get('sub',''))}</p>{('<div class="sec-cta"><button class="btn btn-dark" type="button" data-audit>' + t(d['cta']) + ico('arrow') + '</button></div>') if d.get('cta') else ''}</div>{deck}
   <div class="steps3" style="--n:{len(d.get('steps', []))}">
     <span class="track" aria-hidden="true"><i></i></span>
 {steps}
