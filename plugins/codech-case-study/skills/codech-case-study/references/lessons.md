@@ -7,7 +7,7 @@
 | Scene text indented / panel overflowing only in a test page | the test page's own `.c p` label style hit the scene's paragraphs | test harnesses need scoped class names too (preview_scenes.py uses `.c > .lbl`) |
 | Mobile content touching screen edges | `.hero{padding:56px 0 0}` shorthand wiped `.wrap`'s side padding | use `padding-top` on elements that also have `.wrap` |
 | Phone page scrolled sideways 522px | build wrote inline `grid-template-columns` (pipeline, deck tabs) that beat the mobile media query | pass counts as CSS variables (`style="--n:5"`); never inline layout that mobile CSS must override |
-| A diagonal box edge sweeps across a gradient panel | a rotating blob layer sized with `inset:-60%` is a rectangle; on wide panels its corners enter view | rotate a centred square bigger than the panel diagonal (`width:max(170%,170vh);aspect-ratio:1`) |
+| A diagonal box edge sweeps across a gradient panel | a rotating blob layer sized with `inset:-60%` is a rectangle; on wide panels its corners enter view | the case CTA now uses a static 90° gradient (user preference: no rotation); if you ever animate a blob layer, rotate a centred square bigger than the panel diagonal |
 | Hero blank for 1–2 s | reveal-on-scroll waited for IntersectionObserver | items already in the viewport get `.in` immediately (case.js) |
 | QA full-page shots with blank sections | harness scrolled before first paint, so reveal-on-scroll never saw the middle | qa_shots.py waits for networkidle + 1.5 s and scrolls at 350 ms steps; cross-origin iframes still render blank in full-page shots (check them with a viewport shot) |
 | First paint ~2.7 s in tests | Google Fonts download in the sandbox | not a page bug; landing has the same; verify by blocking fonts |
