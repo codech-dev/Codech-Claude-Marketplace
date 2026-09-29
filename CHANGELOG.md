@@ -17,6 +17,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Film text misplaced (e.g. @ai composer text jumping above the input): film-template layout classes (`.txt`, `.grp`, `.sub`, …) collided with scene classes; all film classes are now `fm-` prefixed
 - Film outro cut short: the screencast emits no frames while the outro is static; the recorder now uses the film's `end` marker for the true length
 - Larger Codech logo in the film's top-left corner (84 px, 72 px in the social cut)
+- Worked example: two new OTSO scenes, `drives` (home → shared drive with classified files) and `actions` (assistant Actions menu → Key facts)
+- `make_music.py`: clamp chapter marks that land just before frame 0
 - Film timeline couldn't be scrubbed on Cloudflare Pages (no Range support): the player now swaps to a fully downloaded copy in the background, keeping position
 
 ### [1.0.0] — 2026-09-29

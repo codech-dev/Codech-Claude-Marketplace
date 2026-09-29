@@ -53,7 +53,7 @@ def main():
     o = ap.parse_args()
     rng = np.random.default_rng(o.seed)
     D = o.duration; N = int(D * SR)
-    marks = [float(x) for x in o.marks.split(",") if x.strip()]
+    marks = [max(0.0, float(x)) for x in o.marks.split(",") if x.strip()]  # a mark can land a hair before frame 0
     first_scene = marks[1] if len(marks) > 1 else 4.0
     outro = o.outro if o.outro is not None else D - 6
     beat = 60 / o.bpm; bar = 4 * beat
