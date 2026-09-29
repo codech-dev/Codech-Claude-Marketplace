@@ -290,6 +290,7 @@ def page(c):
     W(f"""
 <div class="wrap">
   <section class="cta rv">
+    <span class="cta-tri" aria-hidden="true"></span>
     <div><h2 class="h-lg">{t(cta.get('h2','Want results like these?'))}</h2><p>{t(cta.get('body',''))}</p></div>
     <div class="acts"><a class="btn btn-light" href="../../#audit">Book a free AI audit</a><a class="btn btn-line" href="../../#stories">More results</a></div>
   </section>
