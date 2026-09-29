@@ -207,5 +207,122 @@
     }
   };
 
+  /* ---------- Drives: home → Brokerage Ops (shared drives with classified files) ---------- */
+  OV.icon('home', '<path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/>');
+  OV.icon('bank', '<path d="M3 10h18M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18M12 3l9 5H3z"/>');
+  OV.icon('chart', '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 15 3.5-4 3 2.5L17 9"/>');
+  OV.icon('scale', '<path d="M12 4v16M7 20h10M5 8h14M5 8l-2.5 6a3 3 0 0 0 5 0zM19 8l-2.5 6a3 3 0 0 0 5 0z"/>');
+  OV.icon('wallet', '<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M16 13h2M3 10h18"/>');
+  OV.icon('star', '<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8L3.5 9.7l5.9-.9z"/>', true);
+  OV.icon('img', '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="m21 16-5-5-9 9"/>');
+  const nav = (active) => `<div class="dv-side">
+    <div class="dv-new">${ic('plus')}New</div>
+    <div class="dv-it${active === 'home' ? ' act' : ''} n-home">${ic('home')}Home</div>
+    <div class="dv-it">${ic('folder')}My Drive</div>
+    <div class="ov-lbl">Shared drives</div>
+    <div class="dv-it n-ops">${ic('bank')}Brokerage Ops</div>
+    <div class="dv-it">${ic('bank')}Compliance</div>
+    <div class="dv-it">${ic('bank')}Finance</div>
+  </div>`;
+  const dcard = (cls, tint, icon, badge, name, meta, files) => `<div class="dv-card ${cls}"><div class="top"><span class="tile ${tint}">${ic(icon)}</span><span class="ov-badge priv">${badge}</span></div>
+    <b>${name}</b><small>${meta}</small><div class="ft">${ic('doc')}${files}</div></div>`;
+  const fcard = (cls, kind, badge, bcls, name, when, extra = '') => `<div class="dv-file ${cls} fx"><div class="pv ${kind}"><span class="ov-badge ${bcls}">${badge}</span>${extra}<span class="ft-ic">${kind === 'img' ? ic('img') : `<i>${kind.toUpperCase()}</i>`}</span></div>
+    <div class="nm"><b>${name}</b><small>Brokerage Ops · ${when}</small></div></div>`;
+
+  V.drives = {
+    cls:'v-drives', hold:2600,
+    html:`<div class="ov-win">${nav('home')}<div class="dv-main">
+      <div class="dv-home">
+        <div class="ov-h1">Home</div><p class="ov-sub">Your latest activity across every drive</p>
+        <div class="ov-lbl" style="margin:22px 0 10px">Your drives</div>
+        <div class="dv-grid">
+          ${dcard('pop c-my', 'amber', 'folder', 'Personal', 'My Drive', 'Only you', '15 files')}
+          ${dcard('pop c-ops', 'blue', 'chart', 'Team', 'Brokerage Ops', '9 members', '128 files')}
+          ${dcard('pop c-cr', 'rose', 'scale', 'Team', 'Compliance', '12 members', '96 files')}
+        </div>
+      </div>
+      <div class="dv-drive gone">
+        <div class="crumb">Shared drives › <b>Brokerage Ops</b></div>
+        <div class="dh"><span class="tile blue">${ic('chart')}</span><div><div class="ov-h1" style="font-size:19px">Brokerage Ops</div><p class="ov-sub" style="margin-top:2px">Shared drive · 128 documents · 9 members</p></div></div>
+        <div class="ov-lbl" style="margin:12px 0 6px">Folders</div>
+        <div class="dv-folders">
+          <div class="dv-fold fx">${ic('folder')}<div><b>Client Agreements</b><small>42 items</small></div></div>
+          <div class="dv-fold fx">${ic('folder')}<div><b>Account Opening</b><small>18 items</small></div></div>
+        </div>
+        <div class="ov-lbl" style="margin:12px 0 6px">Files</div>
+        <div class="dv-files">
+          ${fcard('f1', 'pdf', 'Confidential', 'conf', 'Acme – Brokerage Agreement', '2h ago', `<span class="st">${ic('star')}</span>`)}
+          ${fcard('f3', 'img', 'Confidential', 'conf', 'Signed mandate (scan)', '3 days ago', '<span class="ocr">OCR</span>')}
+        </div>
+      </div>
+    </div></div>${note('Every file carries its classification')}`,
+    async run(T) {
+      await T.wait(250); await T.stagger('.dv-grid .dv-card', 120);
+      T.cur(true, 520, 390); await T.wait(500);
+      await T.move('.c-ops', { fx:.5, fy:.45 }); T.add('.c-ops', 'hov'); await T.wait(350);
+      await T.click('.c-ops', { fx:.5, fy:.45 });
+      T.hide('.dv-home'); T.rm('.n-home', 'act'); T.add('.n-ops', 'act'); T.reveal('.dv-drive');
+      await T.wait(250); await T.stagger('.dv-fold', 110); await T.stagger('.dv-file', 140);
+      await T.wait(600); await T.move('.f3 .ocr', { dur:800 }); await T.wait(700);
+      await T.move('.f1', { fx:.5, fy:.35 }); T.add('.f1', 'hov'); await T.wait(500);
+      T.in('.v-drives .ov-note'); T.cur(false);
+    }
+  };
+
+  /* ---------- AI Actions: one-click actions on the open document ---------- */
+  OV.icon('list', '<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>');
+  OV.icon('keyf', '<circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2M14 9l2 2"/>');
+  OV.icon('msg', '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>');
+  OV.icon('cmp', '<rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/>');
+  OV.icon('file-in', '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="m10 13 2 2 3-4"/>');
+  OV.icon('eye', '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>');
+  OV.icon('chev', '<path d="m6 15 6-6 6 6"/>');
+  const act = (cls, icon, name, desc) => `<div class="ac-it ${cls}">${ic(icon)}<div><b>${name}</b><small>${desc}</small></div></div>`;
+
+  V.actions = {
+    cls:'v-actions', hold:2800,
+    html:`<div class="ov-win">
+      <div class="ac-doc">
+        <div class="crumb">Client Agreements</div>
+        <div class="ttl">${pdf()}<div><b>Acme Capital – Brokerage Agreement.pdf</b><small>PDF · v3 · 1.4 MB</small></div></div>
+        <div class="page"><div class="ph-h"></div><i></i><i style="width:84%"></i><i style="width:92%"></i><i style="width:70%"></i><i></i><i style="width:88%"></i><i style="width:60%"></i><i style="width:80%"></i></div>
+      </div>
+      <div class="ac-panel">
+        <div class="hd"><span class="tile">${ic('spark')}</span><div><b>OTSO Assistant</b><small>Private · sees only your documents</small></div></div>
+        <div class="body">
+          <div class="ctx">${ic('doc')}You are viewing <b>Acme Capital – Brokerage Agreement</b></div>
+          <div class="hi">Ask me in your own words, or pick an action for this document.</div>
+          <div class="me gone fx">${ic('keyf')}Key facts</div>
+          <div class="kf-card gone fx"><div class="k">${ic('check')}Key facts · from this document</div>
+            <div class="rw pop"><span>Parties</span><b>OTSO Markets · Acme Capital</b></div>
+            <div class="rw pop"><span>Account type</span><b>Corporate margin</b></div>
+            <div class="rw pop warn"><span>Expires</span><b>28 Feb 2027</b></div>
+            <div class="rw pop"><span>Commission</span><b>Revisable, 30 days' notice</b></div>
+            <div class="src fx">${ic('doc')}Sources: p.2, p.4</div></div>
+        </div>
+        <div class="menu fx"><div class="mh">With this document</div>
+          ${act('a1', 'list', 'Summarise', 'A short plain-language summary')}
+          ${act('a2', 'keyf', 'Key facts', 'Names, dates, amounts and references')}
+          ${act('a3', 'msg', 'Comments', 'What is still unresolved in the thread')}
+          ${act('a4', 'cmp', 'Compare', 'Set it beside another and explain what differs')}
+          ${act('a5', 'file-in', 'Where to file', 'Suggests a folder from what it contains')}
+          ${act('a6', 'eye', 'Who viewed', 'Everyone who opened or downloaded it')}
+        </div>
+        <div class="ft"><span class="acts-btn">${ic('list')}Actions ${ic('chev', 'cv')}</span>
+          <div class="comp">Ask or instruct the assistant…<span class="send">${ic('send')}</span></div>
+          <div class="lock">${ic('lock')}Changes always ask for your confirmation first.</div></div>
+      </div>
+    </div>${note('One click: summaries, key facts, comparisons')}`,
+    async run(T) {
+      T.cur(true, 300, 380); await T.wait(400);
+      await T.click('.acts-btn'); T.add('.acts-btn', 'on'); T.in('.menu'); await T.wait(500);
+      for (const a of ['.a1', '.a3', '.a4', '.a5', '.a2']) { await T.move(a, { fx:.3, dur:420 }); T.qa('.ac-it').forEach(e => e.classList.remove('hl')); T.add(a, 'hl'); await T.wait(a === '.a2' ? 350 : 260); }
+      await T.click('.a2', { fx:.3 }); T.rm('.menu', 'in'); T.rm('.acts-btn', 'on');
+      T.hide('.hi'); T.reveal('.me'); await T.wait(700);
+      T.reveal('.kf-card'); await T.wait(200); await T.stagger('.kf-card .rw', 160); T.in('.src');
+      await T.wait(300); T.cur(false); T.in('.v-actions .ov-note');
+    }
+  };
+
   for (const [name, scene] of Object.entries(V)) OV.define('otso-ai-hub', name, scene);
 })();

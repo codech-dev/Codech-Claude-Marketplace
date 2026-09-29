@@ -12,7 +12,14 @@
     "descriptor": "Online brokerage (FX/CFD) · Asia",
     "hero_detail": "130 staff on the hub"
   },
-  "theme": { "deep": "#061525", "mid": "#0b1f35", "end": "#12365f", "glow": "#2451b8", "soft": "#9cc2ff", "accent": "#2d7ff9" },
+  "theme": {
+    "deep": "#061525",
+    "mid": "#0b1f35",
+    "end": "#12365f",
+    "glow": "#2451b8",
+    "soft": "#9cc2ff",
+    "accent": "#2d7ff9"
+  },
   "seo": {
     "title": "OTSO AI Hub case study · Codech",
     "description": "How Codech built OTSO AI Hub: a private AI workspace for a regulated brokerage, with an AI document inventory and AI-powered team chat. Live in production in 37 days.",
@@ -24,66 +31,225 @@
     "sub": "We designed and built OTSO AI Hub for a regulated brokerage. Staff store and share documents in one place, find them by meaning, get AI summaries and ask an assistant. Next, team chat keeps shared files inside the same rules."
   },
   "stats": [
-    ["37 days", "from first commit to production"],
-    ["130", "staff accounts, signed in with Microsoft"],
-    ["4", "languages across the workspace"],
-    ["+58%", "faster downloads for staff in China"],
-    ["1,700+", "automated tests on every change"]
+    [
+      "37 days",
+      "from first commit to production"
+    ],
+    [
+      "130",
+      "staff accounts, signed in with Microsoft"
+    ],
+    [
+      "4",
+      "languages across the workspace"
+    ],
+    [
+      "+58%",
+      "faster downloads for staff in China"
+    ],
+    [
+      "1,700+",
+      "automated tests on every change"
+    ]
   ],
   "problem": {
     "h2": "Files everywhere. Answers nowhere.",
     "items": [
-      { "icon": "folder", "title": "Scattered storage", "body": "KYC files, client agreements, trade records and policies lived in personal drives and email threads. Nobody had the full picture." },
-      { "icon": "search", "title": "Search by filename only", "body": "Scanned PDFs and Chinese documents were effectively invisible. If you didn't know the file name, you didn't find the file." },
-      { "icon": "chat", "title": "Chat creates copies", "body": "A file sent in Teams is a detached copy: no classification, no version history, no access log, and no way to take it back." }
+      {
+        "icon": "folder",
+        "title": "Scattered storage",
+        "body": "KYC files, client agreements, trade records and policies lived in personal drives and email threads. Nobody had the full picture."
+      },
+      {
+        "icon": "search",
+        "title": "Search by filename only",
+        "body": "Scanned PDFs and Chinese documents were effectively invisible. If you didn't know the file name, you didn't find the file."
+      },
+      {
+        "icon": "chat",
+        "title": "Chat creates copies",
+        "body": "A file sent in Teams is a detached copy: no classification, no version history, no access log, and no way to take it back."
+      }
     ]
   },
   "groups": [
     {
-      "id": "docs", "name": "Document Inventory", "status": "live", "tint": "blue",
+      "id": "docs",
+      "name": "Document Inventory",
+      "status": "live",
+      "tint": "blue",
       "h2": "Every file, found and understood.",
       "sub": "Shared drives that work like the tools staff already know, with AI built into every file: it reads, summarises and answers, but only from documents the person is allowed to see.",
       "features": [
-        { "scene": "search", "k": "AI search", "title": "Search by meaning, not by file name",
+        {
+          "scene": "drives",
+          "wide": true,
+          "k": "Shared drives",
+          "title": "Drives that work like the tools staff already know",
+          "body": "Personal, team and company-wide drives with folders, grid and list views, stars and recents. Every file shows its classification, and scanned images are read with OCR so they're searchable too.",
+          "bullets": [
+            "Classification badge on every file: Public, Internal, Confidential, Restricted",
+            "Permissions follow the drive and folder, the way staff expect"
+          ],
+          "aria": "Animated demo: opening the Brokerage Ops shared drive shows its folders and classified files",
+          "reel": {
+            "tab": "Shared drives",
+            "sub": "Every file classified",
+            "cap": "Shared drives with a classification on every file",
+            "est": 11500
+          },
+          "film": {
+            "label": "Drives",
+            "cap": "Every team's files, in one place",
+            "sub": "Shared drives with a classification on every file, scans included."
+          }
+        },
+        {
+          "scene": "search",
+          "k": "AI search",
+          "title": "Search by meaning, not by file name",
           "body": "Keyword and semantic search run together, so \"passport expiring soon\" finds the KYC pack that never uses those words. Works on scanned PDFs, images and Chinese text.",
-          "bullets": ["Results ranked with a match score and highlighted passages", "Permissions are checked inside the search itself"],
+          "bullets": [
+            "Results ranked with a match score and highlighted passages",
+            "Permissions are checked inside the search itself"
+          ],
           "aria": "Animated demo: searching 'passport expiring soon' finds the Acme Capital KYC file with a 92% match",
-          "reel": { "tab": "Search by meaning", "sub": "Finds files by what they say", "cap": "Search by meaning, not by file name", "est": 9500 },
-          "film": { "label": "Search", "cap": "Search by meaning, not file names", "sub": "\"passport expiring soon\" finds the KYC pack that never uses those words." } },
-        { "scene": "summary", "k": "AI summaries", "title": "Every upload arrives already read",
+          "reel": {
+            "tab": "Search by meaning",
+            "sub": "Finds files by what they say",
+            "cap": "Search by meaning, not by file name",
+            "est": 9500
+          },
+          "film": {
+            "label": "Search",
+            "cap": "Search by meaning, not file names",
+            "sub": "\"passport expiring soon\" finds the KYC pack that never uses those words."
+          },
+          "wide": false
+        },
+        {
+          "scene": "summary",
+          "k": "AI summaries",
+          "title": "Every upload arrives already read",
           "body": "Each file gets a summary, category, tags and key facts such as client, owner and expiry dates, so you know what it is before you open it.",
           "aria": "Animated demo: an uploaded KYC file gets an AI summary, tags and key facts",
-          "reel": { "tab": "AI summaries", "sub": "Every upload read and tagged", "cap": "Every upload gets a summary, tags and key facts", "est": 12500 },
-          "film": { "label": "AI summaries", "cap": "Every upload arrives already read", "sub": "AI writes the summary, tags and key facts, including expiry dates." } },
-        { "scene": "assist", "k": "AI assistant", "title": "Ask, and it answers with sources",
+          "reel": {
+            "tab": "AI summaries",
+            "sub": "Every upload read and tagged",
+            "cap": "Every upload gets a summary, tags and key facts",
+            "est": 12500
+          },
+          "film": {
+            "label": "AI summaries",
+            "cap": "Every upload arrives already read",
+            "sub": "AI writes the summary, tags and key facts, including expiry dates."
+          }
+        },
+        {
+          "scene": "assist",
+          "k": "AI assistant",
+          "title": "Ask, and it answers with sources",
           "body": "The assistant finds and reads documents for you and cites what it used. It can suggest changes, like a new folder, but nothing happens until a person confirms.",
           "aria": "Animated demo: the assistant answers with its source, then proposes a new folder that the user confirms",
-          "reel": { "tab": "Assistant", "sub": "Answers with sources", "cap": "Ask the assistant. Changes wait for your confirmation", "est": 16500 },
-          "film": { "label": "Assistant", "cap": "An assistant that cites its sources", "sub": "It can suggest changes, but nothing happens until you confirm." } }
+          "reel": {
+            "tab": "Assistant",
+            "sub": "Answers with sources",
+            "cap": "Ask the assistant. Changes wait for your confirmation",
+            "est": 16500
+          },
+          "film": {
+            "label": "Assistant",
+            "cap": "An assistant that cites its sources",
+            "sub": "It can suggest changes, but nothing happens until you confirm."
+          }
+        },
+        {
+          "scene": "actions",
+          "k": "AI actions",
+          "title": "One-click AI actions on any document",
+          "body": "Open a document and pick an action: summarise it, pull out key facts, check unresolved comments, compare it with another version, or ask where it should be filed.",
+          "aria": "Animated demo: the assistant's Actions menu is opened and Key facts returns parties, expiry and commission terms with page sources",
+          "reel": {
+            "tab": "AI actions",
+            "sub": "Key facts in one click",
+            "cap": "Summaries, key facts and comparisons in one click",
+            "est": 12500
+          },
+          "film": {
+            "label": "AI actions",
+            "cap": "One-click AI actions",
+            "sub": "Summarise, extract key facts or compare, straight from the document."
+          }
+        }
       ]
     },
     {
-      "id": "chat", "name": "Team Chat", "status": "build", "tint": "teal",
+      "id": "chat",
+      "name": "Team Chat",
+      "status": "build",
+      "tint": "teal",
       "h2": "Talk where the files live.",
       "sub": "Channels and direct messages inside the same workspace. When someone shares a file, the message points to the real document, so it keeps its classification, permissions and latest version.",
       "note": "Team Chat is designed, approved by the client in the prototype, and now in build. It ships in four slices: messaging, files in chat, compliance, then voice and the assistant.",
       "features": [
-        { "scene": "chat", "k": "Channels &amp; DMs", "title": "A file in chat stays the real document",
+        {
+          "scene": "chat",
+          "k": "Channels &amp; DMs",
+          "title": "A file in chat stays the real document",
           "body": "Messages carry a live link to the hub file, not a copy. Rename it and every message updates. If someone can't open it, they see a locked card instead of the contents.",
-          "bullets": ["Classification badge on every shared file", "Per-channel Files tab, voice notes and search"],
+          "bullets": [
+            "Classification badge on every shared file",
+            "Per-channel Files tab, voice notes and search"
+          ],
           "aria": "Animated demo: a channel where shared files show classification badges and a restricted file stays locked",
-          "reel": { "tab": "Channels &amp; DMs", "sub": "Files stay the real document", "cap": "Share in chat without creating loose copies", "est": 12500 },
-          "film": { "label": "Channels", "cap": "A file in chat stays the real document", "sub": "Classification and permissions travel with it. No loose copies." } },
-        { "scene": "send", "k": "Quick Send", "title": "Share from anywhere, safely",
+          "reel": {
+            "tab": "Channels &amp; DMs",
+            "sub": "Files stay the real document",
+            "cap": "Share in chat without creating loose copies",
+            "est": 12500
+          },
+          "film": {
+            "label": "Channels",
+            "cap": "A file in chat stays the real document",
+            "sub": "Classification and permissions travel with it. No loose copies."
+          }
+        },
+        {
+          "scene": "send",
+          "k": "Quick Send",
+          "title": "Share from anywhere, safely",
           "body": "Send several files or whole folders from any screen. If some people in the channel can't open them, you're told who, and you can grant access on purpose rather than by accident.",
           "aria": "Animated demo: Quick Send warns that 4 people can't open the selected items and offers to grant access",
-          "reel": { "tab": "Quick Send", "sub": "Access granted on purpose", "cap": "Know who can open a file before you send it", "est": 12000 },
-          "film": { "label": "Quick Send", "cap": "Share safely, on purpose", "sub": "See who can't open a file before you send it, and grant access deliberately." } },
-        { "scene": "ai", "k": "@ai in any channel", "title": "The assistant joins the conversation",
+          "reel": {
+            "tab": "Quick Send",
+            "sub": "Access granted on purpose",
+            "cap": "Know who can open a file before you send it",
+            "est": 12000
+          },
+          "film": {
+            "label": "Quick Send",
+            "cap": "Share safely, on purpose",
+            "sub": "See who can't open a file before you send it, and grant access deliberately."
+          }
+        },
+        {
+          "scene": "ai",
+          "k": "@ai in any channel",
+          "title": "The assistant joins the conversation",
           "body": "Type @ai and the assistant answers for the whole channel, citing the documents it used. In chat it can only read, never change anything.",
           "aria": "Animated demo: typing @ai in a channel asks the assistant, which answers with a source document",
-          "reel": { "tab": "@ai in chat", "sub": "The assistant joins the channel", "cap": "Ask the assistant inside any conversation", "est": 16500 },
-          "film": { "label": "@ai in chat", "cap": "@ai joins the conversation", "sub": "Ask in any channel. It answers from documents everyone there can open." } }
+          "reel": {
+            "tab": "@ai in chat",
+            "sub": "The assistant joins the channel",
+            "cap": "Ask the assistant inside any conversation",
+            "est": 16500
+          },
+          "film": {
+            "label": "@ai in chat",
+            "cap": "@ai joins the conversation",
+            "sub": "Ask in any channel. It answers from documents everyone there can open."
+          }
+        }
       ]
     }
   ],
@@ -95,48 +261,135 @@
       "Instead, opening a file from chat runs the normal permission check against the document itself. Sharing stays the only way to grant access, so adding chat doesn't add a single new way for documents to leak."
     ],
     "flow": [
-      { "icon": "send", "title": "A file is sent to a channel", "body": "The message holds a pointer to the hub document, never a copy." },
-      { "icon": "shield", "title": "Someone clicks it", "body": "The same permission check as the rest of the hub runs on the document itself." },
-      { "icon": "lock", "title": "The answer is the same everywhere", "results": [["yes", "People with access open the live file"], ["no", "Everyone else sees a locked card"]] }
+      {
+        "icon": "send",
+        "title": "A file is sent to a channel",
+        "body": "The message holds a pointer to the hub document, never a copy."
+      },
+      {
+        "icon": "shield",
+        "title": "Someone clicks it",
+        "body": "The same permission check as the rest of the hub runs on the document itself."
+      },
+      {
+        "icon": "lock",
+        "title": "The answer is the same everywhere",
+        "results": [
+          [
+            "yes",
+            "People with access open the live file"
+          ],
+          [
+            "no",
+            "Everyone else sees a locked card"
+          ]
+        ]
+      }
     ]
   },
   "pipeline": {
     "h2": "One AI pipeline behind every file.",
     "sub": "Uploads never wait on the AI. A background worker picks each file up, reads it and makes it useful everywhere in the workspace.",
     "nodes": [
-      { "icon": "upload", "title": "Upload", "body": "Files and folders, into the right drive and permissions" },
-      { "icon": "doc", "title": "Extract", "body": "PDF, Word, Excel, PowerPoint, plus scans and images via vision" },
-      { "icon": "graph", "title": "Understand", "body": "Text becomes searchable by meaning, in English and Chinese", "ai": true },
-      { "icon": "spark", "title": "Analyse", "body": "Summary, category, tags and key facts", "ai": true },
-      { "icon": "chat", "title": "Use everywhere", "body": "Search, the assistant and team chat" }
+      {
+        "icon": "upload",
+        "title": "Upload",
+        "body": "Files and folders, into the right drive and permissions"
+      },
+      {
+        "icon": "doc",
+        "title": "Extract",
+        "body": "PDF, Word, Excel, PowerPoint, plus scans and images via vision"
+      },
+      {
+        "icon": "graph",
+        "title": "Understand",
+        "body": "Text becomes searchable by meaning, in English and Chinese",
+        "ai": true
+      },
+      {
+        "icon": "spark",
+        "title": "Analyse",
+        "body": "Summary, category, tags and key facts",
+        "ai": true
+      },
+      {
+        "icon": "chat",
+        "title": "Use everywhere",
+        "body": "Search, the assistant and team chat"
+      }
     ],
     "notes": [
-      ["Private by design.", "The workspace runs in the firm's own cloud (Tencent Cloud, Singapore). The assistant only ever sees documents the person asking is allowed to open."],
-      ["Signed in with Microsoft.", "128 staff were imported from the firm's Microsoft directory, with single sign-on and two-factor sign-in."]
+      [
+        "Private by design.",
+        "The workspace runs in the firm's own cloud (Tencent Cloud, Singapore). The assistant only ever sees documents the person asking is allowed to open."
+      ],
+      [
+        "Signed in with Microsoft.",
+        "128 staff were imported from the firm's Microsoft directory, with single sign-on and two-factor sign-in."
+      ]
     ]
   },
   "delivery": {
     "h2": "From proposal to production in 37 days.",
     "sub": "We pitched with a working proposal site. The client then clicked through a full prototype before we wrote any production code, and that approved prototype became the contract for every screen. Both are below: scroll and click around.",
     "tabs": [
-      { "title": "The proposal", "sub": "What we pitched, in English and Chinese", "src": "https://otso-ai-hub-proposal.pages.dev/", "label": "Proposal · OTSO AI Hub", "hint": "Scroll inside to explore" },
-      { "title": "Interactive prototype", "sub": "Approved screen by screen, then built to match", "src": "prototype/", "label": "Prototype · OTSO AI Hub", "hint": "Click around, it works like the real app" }
+      {
+        "title": "The proposal",
+        "sub": "What we pitched, in English and Chinese",
+        "src": "https://otso-ai-hub-proposal.pages.dev/",
+        "label": "Proposal · OTSO AI Hub",
+        "hint": "Scroll inside to explore"
+      },
+      {
+        "title": "Interactive prototype",
+        "sub": "Approved screen by screen, then built to match",
+        "src": "prototype/",
+        "label": "Prototype · OTSO AI Hub",
+        "hint": "Click around, it works like the real app"
+      }
     ],
     "foot": "The real files from the engagement. The prototype uses demo data and includes the Team Chat screens.",
     "steps": [
-      ["Requirements &amp; prototype", "Specs, then a clickable prototype of every screen that the client reviewed and approved."],
-      ["Build to the pixel", "Each production screen is screenshot-tested against the approved design. More than 0.1% drift fails the build."],
-      ["Launch &amp; keep improving", "Staging in week 4, production on day 37, and new modules like Team Chat added in slices."]
+      [
+        "Requirements &amp; prototype",
+        "Specs, then a clickable prototype of every screen that the client reviewed and approved."
+      ],
+      [
+        "Build to the pixel",
+        "Each production screen is screenshot-tested against the approved design. More than 0.1% drift fails the build."
+      ],
+      [
+        "Launch &amp; keep improving",
+        "Staging in week 4, production on day 37, and new modules like Team Chat added in slices."
+      ]
     ]
   },
   "engineering": {
     "h2": "Built for a regulated business.",
     "cards": [
-      ["An assistant that can't be talked into a change", "It can only propose actions; a person confirms each one. Sharing and downloading are outside what it can do at all, because document text is treated as untrusted input."],
-      ["Fast for staff in China", "A 26 MB download took 14 attempts from Beijing. Resumable downloads fixed it, and an accelerated route measured 58% more throughput from China."],
-      ["Every action on record", "Every change writes an audit entry in the same database transaction, and the log is append-only at the database level, not just in code."]
+      [
+        "An assistant that can't be talked into a change",
+        "It can only propose actions; a person confirms each one. Sharing and downloading are outside what it can do at all, because document text is treated as untrusted input."
+      ],
+      [
+        "Fast for staff in China",
+        "A 26 MB download took 14 attempts from Beijing. Resumable downloads fixed it, and an accelerated route measured 58% more throughput from China."
+      ],
+      [
+        "Every action on record",
+        "Every change writes an audit entry in the same database transaction, and the log is append-only at the database level, not just in code."
+      ]
     ],
-    "stack": ["Next.js · React", "PostgreSQL + pgvector", "OpenAI", "Redis · BullMQ", "Microsoft Entra SSO", "Tencent Cloud", "Playwright visual tests"]
+    "stack": [
+      "Next.js · React",
+      "PostgreSQL + pgvector",
+      "OpenAI",
+      "Redis · BullMQ",
+      "Microsoft Entra SSO",
+      "Tencent Cloud",
+      "Playwright visual tests"
+    ]
   },
   "cta": {
     "h2": "Have files your team can't find?",
@@ -145,15 +398,48 @@
   "footer_note": "Screens show demo data, not client documents. Team Chat is in build; its screens come from the client-approved prototype.",
   "film": {
     "tagline": "A private AI workspace for every file and every conversation",
-    "duration_label": "70-second product tour",
-    "social_scenes": ["search", "chat", "ai"],
-    "outro_stats": [["37 days", "to production"], ["130", "staff on the workspace"], ["4", "languages"]],
+    "duration_label": "93-second product tour, with music",
+    "social_scenes": [
+      "search",
+      "chat",
+      "ai"
+    ],
+    "outro_stats": [
+      [
+        "37 days",
+        "to production"
+      ],
+      [
+        "130",
+        "staff on the workspace"
+      ],
+      [
+        "4",
+        "languages"
+      ]
+    ],
     "outro_line": "Want an AI workspace like this for your team?",
     "outro_cta": "Book a free AI audit with Codech"
   },
   "card": {
     "headline": "A private AI workspace for every file and every conversation",
-    "kpis": [["37 days", "first commit to production"], ["130", "staff on the workspace"], ["4", "languages, incl. Chinese"]],
-    "demos": ["search", "chat"]
+    "kpis": [
+      [
+        "37 days",
+        "first commit to production"
+      ],
+      [
+        "130",
+        "staff on the workspace"
+      ],
+      [
+        "4",
+        "languages, incl. Chinese"
+      ]
+    ],
+    "demos": [
+      "search",
+      "chat"
+    ]
   }
 }

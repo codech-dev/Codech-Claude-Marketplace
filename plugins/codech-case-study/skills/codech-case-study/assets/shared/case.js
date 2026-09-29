@@ -66,9 +66,22 @@
   })();
 
   // product film
+  // Cloudflare Pages ignores HTTP Range requests, so a streamed MP4 can't be scrubbed. Play it streamed
+  // straight away, fetch the whole file in the background, then swap to the local copy at the same
+  // position; from then on the timeline can be dragged anywhere.
   const fd = $('#filmDlg'), fv = $('#filmVid');
+  let seekable = false;
+  function makeSeekable() {
+    if (seekable) return; seekable = true;
+    const src = (fv.querySelector('source') || fv).src;
+    fetch(src).then(r => r.ok ? r.blob() : Promise.reject()).then(blob => {
+      const t = fv.currentTime, playing = !fv.paused;
+      fv.addEventListener('loadedmetadata', () => { fv.currentTime = t; if (playing) fv.play().catch(() => {}); }, { once:true });
+      fv.src = URL.createObjectURL(blob);
+    }).catch(() => { seekable = false; });
+  }
   if (fd) {
-    $('#filmBtn').addEventListener('click', () => { fd.showModal(); fv.play().catch(() => {}); });
+    $('#filmBtn').addEventListener('click', () => { fd.showModal(); fv.play().catch(() => {}); makeSeekable(); });
     $('#filmX').addEventListener('click', () => fd.close());
     fd.addEventListener('click', e => { if (e.target === fd) fd.close(); });
     fd.addEventListener('close', () => fv.pause());

@@ -1,6 +1,6 @@
 # Product film
 
-A captioned tour recorded from the vignettes, so it always matches the page. Captions only (no voiceover) unless the user asks otherwise.
+A captioned tour recorded from the vignettes, so it always matches the page. Captions plus a quiet music bed; no voiceover unless the user asks.
 
 ## Structure (film-template.html, generated into work/<slug>/_film/film.html)
 1. Intro, ~3.6 s: client logo chip, product name (first word plain, rest highlighted), tagline, "Designed & built by Codech".
@@ -13,6 +13,7 @@ Social cut (1080×1350): only `film.social_scenes`, stacked layout, speed 1.3.
 python scripts/record_film.py <site> <slug> [--fmt wide|social|both] [--poster-at 10]
 ```
 Chrome's screencast streams timestamped JPEG frames while the page plays in real time (~55 fps); they're resampled to 30 fps and encoded H.264 (crf 20, faststart). About 6 MB per minute at 1080p. Playwright's own video recorder is deliberately not used: text comes out soft and blocky.
+Soundtrack: `--music auto` (default) runs `make_music.py`, an original ambient bed timed to the film's chapter marks (bell per new scene, pulse stops at the outro, about -17 dB mean so captions stay the focus). `--music path/to/licensed.mp3` uses a track the user supplies (looped/trimmed, faded); `--music none` for silence. Don't pull music from the web: licensing is unclear. Higgsfield's music model is restricted to its game pipeline.
 Outputs: `assets/film.mp4`, `assets/film-poster.jpg`, `assets/og-cover.jpg` (1200×630 crop), `_film/social.mp4`, `_film/social-poster.jpg`.
 
 ## Check before shipping

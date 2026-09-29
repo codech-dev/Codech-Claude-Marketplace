@@ -8,6 +8,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## codech-case-study
 
+### [1.0.1] — 2026-09-30
+
+**Added:**
+- Film soundtrack: `scripts/make_music.py` composes an original, royalty-free ambient bed (pad, sub, soft pulse, a bell on every chapter change, fades); `record_film.py --music auto|none|<file>` muxes it as AAC (default `auto`, timed to the film's real chapter marks)
+
+**Fixed:**
+- Film text misplaced (e.g. @ai composer text jumping above the input): film-template layout classes (`.txt`, `.grp`, `.sub`, …) collided with scene classes; all film classes are now `fm-` prefixed
+- Film outro cut short: the screencast emits no frames while the outro is static; the recorder now uses the film's `end` marker for the true length
+- Larger Codech logo in the film's top-left corner (84 px, 72 px in the social cut)
+- Worked example: two new OTSO scenes, `drives` (home → shared drive with classified files) and `actions` (assistant Actions menu → Key facts)
+- `make_music.py`: clamp chapter marks that land just before frame 0
+- Film timeline couldn't be scrubbed on Cloudflare Pages (no Range support): the player now swaps to a fully downloaded copy in the background, keeping position
+
 ### [1.0.0] — 2026-09-29
 
 Initial release. Productizes the OTSO AI Hub portfolio build (landing Results card, case-study page, product film) into a reusable two-mode workflow.

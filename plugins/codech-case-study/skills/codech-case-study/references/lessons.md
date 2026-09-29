@@ -13,6 +13,9 @@
 | Screenshot frames unreadable in cards | full screens scaled to ~400 px | vignettes instead of screenshots |
 | Callout pill covering the channel's "Private" badge | note placed inside the window | put notes over window margins (`top:-4px` etc.) |
 | Dialog content clipped; cursor clicked empty space | vignette height over budget | remove a row; re-check with preview_scenes.py |
+| Film text jumped out of place (composer text above the input, odd labels) | film-template classes (`.txt`, `.grp`, `.sub`) matched class names inside scenes | film classes are `fm-*`; any page that hosts vignettes must use scoped class names |
+| Can't drag the film's timeline to fast-forward | Cloudflare Pages ignores HTTP Range requests (returns 200 + whole file), so browsers can't seek a streamed MP4 | case.js plays it streamed, fetches the full file in the background, then swaps to a blob URL at the same time; scrubbing works once downloaded (a few seconds) |
+| Film outro cut to ~1.7 s | CDP screencast only sends frames on change, so a static outro ends the stream early | recorder takes length from the film's `end` marker and holds the last frame |
 | Progress bars not filling in the film | inline width overrode the `.done` class | set `bar.style.width='100%'` on completion |
 | Poster caught mid-fade | poster timestamp during a caption swap | pick `--poster-at` inside a scene; check the still |
 | Embedded proposal wouldn't scroll | "Loading…" placeholder overlaid the iframe until `load` | placeholder behind, `pointer-events:none` |
