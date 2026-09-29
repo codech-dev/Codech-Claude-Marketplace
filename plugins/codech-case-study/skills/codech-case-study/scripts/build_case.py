@@ -205,7 +205,7 @@ def page(c):
             body = f'<span>{t(s["body"])}</span>' if s.get("body") else ""
             if s.get("results"):
                 body += '<div class="res">' + "".join(f'<i{"" if k == "yes" else " class=\"no\""}>{t(v)}</i>' for k, v in s["results"]) + "</div>"
-            steps.append(f'      <div class="st"><span class="ic">{ico(s["icon"])}</span><b>{t(s["title"])}</b>{body}</div>')
+            steps.append(f'      <div class="st glow"><span class="ic">{ico(s["icon"])}</span><b>{t(s["title"])}</b>{body}</div>')
         cols = "\n".join(f"      <p>{t(p)}</p>" for p in d.get("paras", []))
         flow = f'\n    <div class="flow">\n{chr(10).join(steps)}\n    </div>' if steps else ""
         W(f"""
@@ -223,7 +223,7 @@ def page(c):
     if c.get("pipeline"):
         p = c["pipeline"]; n = next(num)
         nodes = "\n".join(f'    <div class="n{" ai" if x.get("ai") else ""}"><span class="ic">{ico(x["icon"])}</span><b>{t(x["title"])}</b><span>{t(x["body"])}</span></div>' for x in p["nodes"])
-        notes = "\n".join(f"    <div><b>{t(h)}</b> {t(b)}</div>" for h, b in p.get("notes", []))
+        notes = "\n".join(f'    <div class="glow"><b>{t(h)}</b> {t(b)}</div>' for h, b in p.get("notes", []))
         W(f"""
 <section class="sec wrap" id="how">
   <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(p.get('eyebrow','How it works'))}</p><h2 class="h-lg">{t(p['h2'])}</h2><p class="sub">{t(p.get('sub',''))}</p></div>
