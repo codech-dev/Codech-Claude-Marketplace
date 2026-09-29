@@ -112,7 +112,7 @@ def page(c):
     film_btn = ""
     if has_film:
         film_btn = f"""
-    <button class="film-btn" type="button" id="filmBtn"><span class="pl"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span><span><b>Watch the film</b><small>{t(c.get('film', {}).get('duration_label', 'Product tour'))}</small></span></button>"""
+    <button class="film-btn" type="button" id="filmBtn"><span class="pl"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span><span><b>{t(c.get('film', {}).get('button_label', 'Play the showcase demo'))}</b><small>{t(c.get('film', {}).get('duration_label', 'Product tour video'))}</small></span></button>"""
     W(f"""  <div class="hero-row rv"><div class="client">{logo}<div><b>{who}</b><span>{t(detail)}</span></div></div>{film_btn}</div>
 """)
 
