@@ -15,6 +15,7 @@ A Claude Code [marketplace](https://docs.claude.com/en/docs/claude-code/plugin-m
 | [`codech-client-proposal`](./plugins/codech-client-proposal) | `1.0.0` | Packages a Codech engagement into a deployed, client-shareable HTML proposal. Applies a per-client design system to the canonical proposal anatomy, captures prototype screenshots via Playwright, deploys to Cloudflare Pages with a `*.pages.dev` URL |
 | [`codech-web-builder`](./plugins/codech-web-builder) | `0.1.0` | Turn reference website(s) + a brand logo into a deployed site: vision-extracted palette, taste-skill design system + HTML prototype, then convert to WordPress or static and deploy |
 | [`fintech-compliance-copy`](./plugins/fintech-compliance-copy) | `1.0.0` | Design, build, and keep regulator-safe a crypto / digital-asset / payment / fintech marketing website. Compliance baked in — disclaimers, unlaunched-service tagging, lawyer-approved wording |
+| [`codech-case-study`](./plugins/codech-case-study) | `1.0.0` | Portfolio workflow for shipped engagements: gather a portfolio asset pack (stats, brief, screenshots, prototype) from the finished project, then build a case study on the Codech landing site from one `case.json` — animated product demos, Results card, case-study page with embedded proposal + prototype, captioned film, guarded Cloudflare deploy |
 
 More plugins will be added over time.
 
@@ -102,6 +103,16 @@ Requires the `ui-ux-pro-max` skill for the Phase 1 design intelligence queries.
 
 See [`plugins/codech-mockup-design/README.md`](./plugins/codech-mockup-design/README.md) for the full skill documentation.
 
+### `codech-case-study` triggers on:
+
+- _"The project is done, gather the portfolio assets / screenshots / prototype"_
+- _"Add <client> to our Results"_ / _"make a case study for this project"_
+- _"Update the case study, <feature> is live now"_ / _"re-film the demo video"_
+
+Or when you hand Claude an `AI Portfolio Assets/...` pack folder.
+
+See [`plugins/codech-case-study/README.md`](./plugins/codech-case-study/README.md) for the full skill documentation.
+
 ### Composing plugins across an engagement
 
 The typical Codech engagement chains three plugins in sequence — each takes the previous plugin's output as its input:
@@ -115,6 +126,8 @@ Requirements → FSD/SRS         design-system.md +             design-system + 
 ```
 
 Or, for a full website deliverable rather than a proposal, `codech-web-builder` replaces the final step by turning references + logo into a deployed WordPress or static site.
+
+After the project ships, `codech-case-study` closes the loop: it gathers the finished project into a portfolio asset pack, then turns that pack into a case study (demos, page, film) on the Codech landing site.
 
 ---
 
