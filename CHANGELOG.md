@@ -6,6 +6,21 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## codech-case-study
+
+### [1.0.0] — 2026-09-29
+
+Initial release. Productizes the OTSO AI Hub portfolio build (landing Results card, case-study page, product film) into a reusable two-mode workflow.
+
+**Added:**
+- Mode A · Gather: `references/gather.md`, `assets/pack-template/` (PROJECT_BRIEF + README), `scripts/gather_stats.py` (measured git/code stats), `scripts/capture_screens.py` (plan-driven 2x/mobile/crop screenshots), `scripts/scan_pack.py` (secrets, public IPs, client hostnames, confidential labels)
+- Mode B · Build: one `work/<slug>/case.json` per project; `build_case.py` (page + film stage), `upsert_story.py` (landing card via marked blocks), `host_embed.py` (sanitised proposal/prototype copies), `preview_scenes.py`, `record_film.py` (CDP screencast → H.264), `qa_shots.py`, `stage_deploy.py` (guarded deploy + content-type verification)
+- Shared vignette engine (`assets/shared/ov.js/css`) with per-project namespaced scenes, case-page styles/script, film template
+- References: intake & accuracy rules, case.json schema, vignette authoring, embeds + phone-layout shell, film, deploy protocol, lessons (bugs already hit)
+- Worked example: `examples/otso-ai-hub/` (case.json, six scenes)
+
+---
+
 ## codech-mockup-design
 
 ### [1.4.2] — 2026-06-28
