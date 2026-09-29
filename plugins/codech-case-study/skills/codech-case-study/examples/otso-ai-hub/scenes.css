@@ -222,17 +222,17 @@
 .ovp-otso-ai-hub.v-summary .s1.in .shim i{animation-play-state:running}
 
 /* ---------- Drives ---------- */
-.ovp-otso-ai-hub.v-drives .ov-win{inset:18px 22px;display:grid;grid-template-columns:132px 1fr}
-.ovp-otso-ai-hub.v-drives .dv-side{background:var(--navy-deep);padding:12px 8px;color:rgba(255,255,255,.82)}
-.ovp-otso-ai-hub.v-drives .dv-new{display:flex;align-items:center;justify-content:center;gap:5px;height:28px;border-radius:999px;background:var(--acc);color:#fff;font-size:11px;font-weight:700;margin-bottom:10px}
+.ovp-otso-ai-hub.v-drives .ov-win{inset:22px 30px;display:grid;grid-template-columns:118px 1fr}
+.ovp-otso-ai-hub.v-drives .dv-side{background:var(--navy-deep);padding:16px 9px;color:rgba(255,255,255,.82)}
+.ovp-otso-ai-hub.v-drives .dv-new{display:flex;align-items:center;justify-content:center;gap:5px;height:28px;border-radius:999px;background:var(--acc);color:#fff;font-size:10.5px;font-weight:700;margin-bottom:14px}
 .ovp-otso-ai-hub.v-drives .dv-new .ovi{width:12px;height:12px}
 .ovp-otso-ai-hub.v-drives .dv-side .ov-lbl{color:rgba(255,255,255,.45);font-size:8px;padding:0 6px;margin:10px 0 4px}
-.ovp-otso-ai-hub.v-drives .dv-it{display:flex;align-items:center;gap:7px;height:25px;padding:0 7px;border-radius:7px;font-size:10.5px;font-weight:600;white-space:nowrap;transition:background .3s}
+.ovp-otso-ai-hub.v-drives .dv-it{display:flex;align-items:center;gap:7px;height:27px;padding:0 7px;border-radius:7px;font-size:10.5px;font-weight:600;white-space:nowrap;transition:background .3s}
 .ovp-otso-ai-hub.v-drives .dv-it .ovi{width:12px;height:12px;opacity:.75}
 .ovp-otso-ai-hub.v-drives .dv-it.act{background:rgba(255,255,255,.1);color:#fff}
-.ovp-otso-ai-hub.v-drives .dv-main{position:relative;padding:16px 18px;background:#f7f9fc;min-width:0;overflow:hidden}
-.ovp-otso-ai-hub.v-drives .dv-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.ovp-otso-ai-hub.v-drives .dv-card{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 11px;transition:box-shadow .3s,border-color .3s,transform .3s}
+.ovp-otso-ai-hub.v-drives .dv-main{position:relative;padding:24px 26px;background:#f7f9fc;min-width:0;overflow:hidden}
+.ovp-otso-ai-hub.v-drives .dv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ovp-otso-ai-hub.v-drives .dv-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;transition:box-shadow .3s,border-color .3s,transform .3s}
 .ovp-otso-ai-hub.v-drives .dv-card.hov{border-color:#bfdbfe;box-shadow:0 8px 20px -10px rgba(29,78,216,.45);transform:translateY(-2px)}
 .ovp-otso-ai-hub.v-drives .dv-card .top{display:flex;justify-content:space-between;align-items:center}
 .ovp-otso-ai-hub.v-drives .tile{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:none}
@@ -240,23 +240,23 @@
 .ovp-otso-ai-hub.v-drives .tile.amber{background:#fffbeb;color:#d97706}.ovp-otso-ai-hub.v-drives .tile.blue{background:#eff6ff;color:#1d4ed8}
 .ovp-otso-ai-hub.v-drives .tile.rose{background:#fef2f2;color:#dc2626}.ovp-otso-ai-hub.v-drives .tile.green{background:#ecfdf5;color:#059669}
 .ovp-otso-ai-hub.v-drives .dv-card .ov-badge{height:16px;font-size:7.5px}
-.ovp-otso-ai-hub.v-drives .dv-card b{display:block;margin-top:8px;font-size:12.5px;font-weight:800}
+.ovp-otso-ai-hub.v-drives .dv-card b{display:block;margin-top:12px;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ovp-otso-ai-hub.v-drives .dv-card small{display:block;font-size:10px;color:var(--mut-2);margin-top:1px}
-.ovp-otso-ai-hub.v-drives .dv-card .ft{display:flex;align-items:center;gap:4px;margin-top:8px;padding-top:7px;border-top:1px solid var(--line-2);font-size:9.5px;color:var(--mut-2);justify-content:flex-end}
+.ovp-otso-ai-hub.v-drives .dv-card .ft{display:flex;align-items:center;gap:4px;margin-top:12px;padding-top:9px;border-top:1px solid var(--line-2);font-size:9.5px;color:var(--mut-2);justify-content:flex-end}
 .ovp-otso-ai-hub.v-drives .dv-card .ft .ovi{width:10px;height:10px}
 .ovp-otso-ai-hub.v-drives .crumb{font-size:10px;color:var(--mut-2)}
 .ovp-otso-ai-hub.v-drives .crumb b{color:var(--ink)}
-.ovp-otso-ai-hub.v-drives .dh{display:flex;align-items:center;gap:10px;margin-top:8px}
+.ovp-otso-ai-hub.v-drives .dh{display:flex;align-items:center;gap:10px;margin-top:10px}
 .ovp-otso-ai-hub.v-drives .dh .tile{width:32px;height:32px;border-radius:9px}
-.ovp-otso-ai-hub.v-drives .dv-folders{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.ovp-otso-ai-hub.v-drives .dv-fold{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 8px;min-width:0}
+.ovp-otso-ai-hub.v-drives .dv-folders{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ovp-otso-ai-hub.v-drives .dv-fold{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;min-width:0}
 .ovp-otso-ai-hub.v-drives .dv-fold .ovi{width:15px;height:15px;color:var(--acc-strong);flex:none}
 .ovp-otso-ai-hub.v-drives .dv-fold b{display:block;font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ovp-otso-ai-hub.v-drives .dv-fold small{display:block;font-size:8.5px;color:var(--mut-2)}
-.ovp-otso-ai-hub.v-drives .dv-files{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.ovp-otso-ai-hub.v-drives .dv-files{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .ovp-otso-ai-hub.v-drives .dv-file{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:box-shadow .3s,border-color .3s}
 .ovp-otso-ai-hub.v-drives .dv-file.hov{border-color:#bfdbfe;box-shadow:0 8px 20px -10px rgba(29,78,216,.45)}
-.ovp-otso-ai-hub.v-drives .dv-file .pv{position:relative;height:62px;display:grid;place-items:center}
+.ovp-otso-ai-hub.v-drives .dv-file .pv{position:relative;height:66px;display:grid;place-items:center}
 .ovp-otso-ai-hub.v-drives .dv-file .pv.pdf{background:#fdf4f3}.ovp-otso-ai-hub.v-drives .dv-file .pv.doc{background:#eff4fb}.ovp-otso-ai-hub.v-drives .dv-file .pv.img{background:#f7f2fb}
 .ovp-otso-ai-hub.v-drives .dv-file .pv .ov-badge{position:absolute;left:6px;top:6px;height:15px;font-size:7px;padding:0 4px}
 .ovp-otso-ai-hub.v-drives .dv-file .ft-ic i{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.02em}
@@ -265,10 +265,10 @@
 .ovp-otso-ai-hub.v-drives .dv-file .st{position:absolute;right:6px;top:5px;color:#f59e0b}
 .ovp-otso-ai-hub.v-drives .dv-file .st .ovi{width:11px;height:11px}
 .ovp-otso-ai-hub.v-drives .dv-file .ocr{position:absolute;right:6px;bottom:5px;height:13px;padding:0 4px;border-radius:4px;border:1px solid #bfdbfe;background:#eff6ff;color:var(--acc-strong);font-size:7px;font-weight:800;display:grid;place-items:center}
-.ovp-otso-ai-hub.v-drives .dv-file .nm{padding:6px 8px 7px}
-.ovp-otso-ai-hub.v-drives .dv-file .nm b{display:block;font-size:9.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ovp-otso-ai-hub.v-drives .dv-file .nm{padding:8px 11px 9px}
+.ovp-otso-ai-hub.v-drives .dv-file .nm b{display:block;font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ovp-otso-ai-hub.v-drives .dv-file .nm small{display:block;font-size:8px;color:var(--mut-2);margin-top:1px}
-.ovp-otso-ai-hub.v-drives .ov-note{right:16px;bottom:8px}
+.ovp-otso-ai-hub.v-drives .ov-note{right:18px;bottom:6px}
 
 /* ---------- AI Actions ---------- */
 .ovp-otso-ai-hub.v-actions .ov-win{inset:16px 22px;display:grid;grid-template-columns:1fr 300px;background:#f7f9fc}

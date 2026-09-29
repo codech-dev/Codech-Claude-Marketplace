@@ -220,9 +220,8 @@
     <div class="dv-it${active === 'home' ? ' act' : ''} n-home">${ic('home')}Home</div>
     <div class="dv-it">${ic('folder')}My Drive</div>
     <div class="ov-lbl">Shared drives</div>
-    <div class="dv-it">${ic('bank')}Compliance &amp; Risk</div>
     <div class="dv-it n-ops">${ic('bank')}Brokerage Ops</div>
-    <div class="dv-it">${ic('bank')}Research</div>
+    <div class="dv-it">${ic('bank')}Compliance</div>
     <div class="dv-it">${ic('bank')}Finance</div>
   </div>`;
   const dcard = (cls, tint, icon, badge, name, meta, files) => `<div class="dv-card ${cls}"><div class="top"><span class="tile ${tint}">${ic(icon)}</span><span class="ov-badge priv">${badge}</span></div>
@@ -235,12 +234,11 @@
     html:`<div class="ov-win">${nav('home')}<div class="dv-main">
       <div class="dv-home">
         <div class="ov-h1">Home</div><p class="ov-sub">Your latest activity across every drive</p>
-        <div class="ov-lbl" style="margin:14px 0 8px">Your drives · 7</div>
+        <div class="ov-lbl" style="margin:22px 0 10px">Your drives</div>
         <div class="dv-grid">
-          ${dcard('pop c-my', 'amber', 'folder', 'Personal', 'My Drive', 'Private · only you', '15 files')}
-          ${dcard('pop c-ops', 'blue', 'chart', 'Department', 'Brokerage Ops', '9 members', '128 files')}
-          ${dcard('pop c-cr', 'rose', 'scale', 'Department', 'Compliance &amp; Risk', '12 members', '96 files')}
-          ${dcard('pop c-fin', 'green', 'wallet', 'Department', 'Finance', '7 members', '54 files')}
+          ${dcard('pop c-my', 'amber', 'folder', 'Personal', 'My Drive', 'Only you', '15 files')}
+          ${dcard('pop c-ops', 'blue', 'chart', 'Team', 'Brokerage Ops', '9 members', '128 files')}
+          ${dcard('pop c-cr', 'rose', 'scale', 'Team', 'Compliance', '12 members', '96 files')}
         </div>
       </div>
       <div class="dv-drive gone">
@@ -249,14 +247,12 @@
         <div class="ov-lbl" style="margin:12px 0 6px">Folders</div>
         <div class="dv-folders">
           <div class="dv-fold fx">${ic('folder')}<div><b>Client Agreements</b><small>42 items</small></div></div>
-          <div class="dv-fold fx">${ic('folder')}<div><b>Trade Confirmations</b><small>61 items</small></div></div>
           <div class="dv-fold fx">${ic('folder')}<div><b>Account Opening</b><small>18 items</small></div></div>
         </div>
         <div class="ov-lbl" style="margin:12px 0 6px">Files</div>
         <div class="dv-files">
-          ${fcard('f1', 'pdf', 'Confidential', 'conf', 'Acme Capital – Brokerage Agreement', '2h ago', `<span class="st">${ic('star')}</span>`)}
-          ${fcard('f2', 'doc', 'Internal', 'int', 'Institutional Client T&amp;Cs 2026', '2 days ago')}
-          ${fcard('f3', 'img', 'Confidential', 'conf', 'Signed mandate (scanned).jpg', '3 days ago', '<span class="ocr">OCR</span>')}
+          ${fcard('f1', 'pdf', 'Confidential', 'conf', 'Acme – Brokerage Agreement', '2h ago', `<span class="st">${ic('star')}</span>`)}
+          ${fcard('f3', 'img', 'Confidential', 'conf', 'Signed mandate (scan)', '3 days ago', '<span class="ocr">OCR</span>')}
         </div>
       </div>
     </div></div>${note('Every file carries its classification')}`,
@@ -268,7 +264,7 @@
       T.hide('.dv-home'); T.rm('.n-home', 'act'); T.add('.n-ops', 'act'); T.reveal('.dv-drive');
       await T.wait(250); await T.stagger('.dv-fold', 110); await T.stagger('.dv-file', 140);
       await T.wait(600); await T.move('.f3 .ocr', { dur:800 }); await T.wait(700);
-      await T.move('.f2', { fx:.5, fy:.35 }); T.add('.f2', 'hov'); await T.wait(500);
+      await T.move('.f1', { fx:.5, fy:.35 }); T.add('.f1', 'hov'); await T.wait(500);
       T.in('.v-drives .ov-note'); T.cur(false);
     }
   };
