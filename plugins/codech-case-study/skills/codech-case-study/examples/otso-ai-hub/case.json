@@ -403,6 +403,7 @@
   },
   "footer_note": "Screens show demo data, not client documents. Team Chat is in build; its screens come from the client-approved prototype.",
   "film": {
+    "music_style": "drive",
     "tagline": "A private AI workspace for every file and every conversation",
     "duration_label": "Product tour video",
     "social_scenes": [
