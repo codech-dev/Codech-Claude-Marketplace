@@ -9,8 +9,7 @@
     "named_publicly": true,
     "consent_confirmed": false,
     "logo": "assets/otso-logo.png",
-    "descriptor": "Online brokerage (FX/CFD) · Asia",
-    "hero_detail": "130 staff on the hub"
+    "descriptor": "Online brokerage (FX/CFD)"
   },
   "theme": {
     "deep": "#061525",
@@ -37,19 +36,23 @@
     ],
     [
       "130",
-      "staff accounts, signed in with Microsoft"
+      "staff accounts, signed in with Microsoft",
+      "users"
     ],
     [
       "4",
-      "languages across the workspace"
+      "languages across the workspace",
+      "globe"
     ],
     [
       "+58%",
-      "faster downloads for staff in China"
+      "faster downloads for staff in China",
+      "download"
     ],
     [
       "1,700+",
-      "automated tests on every change"
+      "automated tests on every change",
+      "test"
     ]
   ],
   "problem": {
@@ -93,7 +96,7 @@
           ],
           "aria": "Animated demo: opening the Brokerage Ops shared drive shows its folders and classified files",
           "reel": {
-            "tab": "Shared drives",
+            "tab": "Drives",
             "sub": "Every file classified",
             "cap": "Shared drives with a classification on every file",
             "est": 11500
@@ -115,7 +118,7 @@
           ],
           "aria": "Animated demo: searching 'passport expiring soon' finds the Acme Capital KYC file with a 92% match",
           "reel": {
-            "tab": "Search by meaning",
+            "tab": "Search",
             "sub": "Finds files by what they say",
             "cap": "Search by meaning, not by file name",
             "est": 9500
@@ -134,7 +137,7 @@
           "body": "Each file gets a summary, category, tags and key facts such as client, owner and expiry dates, so you know what it is before you open it.",
           "aria": "Animated demo: an uploaded KYC file gets an AI summary, tags and key facts",
           "reel": {
-            "tab": "AI summaries",
+            "tab": "Summaries",
             "sub": "Every upload read and tagged",
             "cap": "Every upload gets a summary, tags and key facts",
             "est": 12500
@@ -190,7 +193,6 @@
       "tint": "teal",
       "h2": "Talk where the files live.",
       "sub": "Channels and direct messages inside the same workspace. When someone shares a file, the message points to the real document, so it keeps its classification, permissions and latest version.",
-      "note": "Team Chat is designed, approved by the client in the prototype, and now in build. It ships in four slices: messaging, files in chat, compliance, then voice and the assistant.",
       "features": [
         {
           "scene": "chat",
@@ -203,7 +205,7 @@
           ],
           "aria": "Animated demo: a channel where shared files show classification badges and a restricted file stays locked",
           "reel": {
-            "tab": "Channels &amp; DMs",
+            "tab": "Channels",
             "sub": "Files stay the real document",
             "cap": "Share in chat without creating loose copies",
             "est": 12500
@@ -331,6 +333,7 @@
     ]
   },
   "delivery": {
+    "cta": "Get your FREE proposal now",
     "h2": "From proposal to production in 37 days.",
     "sub": "We pitched with a working proposal site. The client then clicked through a full prototype before we wrote any production code, and that approved prototype became the contract for every screen. Both are below: scroll and click around.",
     "tabs": [
@@ -370,15 +373,18 @@
     "cards": [
       [
         "An assistant that can't be talked into a change",
-        "It can only propose actions; a person confirms each one. Sharing and downloading are outside what it can do at all, because document text is treated as untrusted input."
+        "It can only propose actions; a person confirms each one. Sharing and downloading are outside what it can do at all, because document text is treated as untrusted input.",
+        "shield"
       ],
       [
         "Fast for staff in China",
-        "A 26 MB download took 14 attempts from Beijing. Resumable downloads fixed it, and an accelerated route measured 58% more throughput from China."
+        "A 26 MB download took 14 attempts from Beijing. Resumable downloads fixed it, and an accelerated route measured 58% more throughput from China.",
+        "download"
       ],
       [
         "Every action on record",
-        "Every change writes an audit entry in the same database transaction, and the log is append-only at the database level, not just in code."
+        "Every change writes an audit entry in the same database transaction, and the log is append-only at the database level, not just in code.",
+        "database"
       ]
     ],
     "stack": [
@@ -395,10 +401,10 @@
     "h2": "Have files your team can't find?",
     "body": "We'll look at where your documents and conversations live today and show you what an AI workspace would change, in a free 45-minute audit."
   },
-  "footer_note": "Screens show demo data, not client documents. Team Chat is in build; its screens come from the client-approved prototype.",
   "film": {
+    "music_style": "drive",
     "tagline": "A private AI workspace for every file and every conversation",
-    "duration_label": "93-second product tour, with music",
+    "duration_label": "Product tour video",
     "social_scenes": [
       "search",
       "chat",
@@ -441,5 +447,20 @@
       "search",
       "chat"
     ]
-  }
+  },
+  "stats_eyebrow": "Delivery",
+  "stats_timeline": [
+    [
+      "29 Jun",
+      "First commit"
+    ],
+    [
+      "22 Jul",
+      "Staging live"
+    ],
+    [
+      "5 Aug",
+      "Production live"
+    ]
+  ]
 }

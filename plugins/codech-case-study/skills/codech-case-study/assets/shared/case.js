@@ -7,14 +7,38 @@
   const C = window.CASE || { reel:[], deckHints:[] };
 
   // sticky nav shadow
-  const nav = $('#nav'); const onScroll = () => nav.classList.toggle('stuck', scrollY > 10);
-  addEventListener('scroll', onScroll, { passive:true }); onScroll();
+  const nav = $('#nav.cnav');
+  if (nav) { const onScroll = () => nav.classList.toggle('stuck', scrollY > 10); addEventListener('scroll', onScroll, { passive:true }); onScroll(); }
 
   // reveal on scroll; anything already on screen shows at once (no blank hero)
   if ('IntersectionObserver' in window && !RM) {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold:.12, rootMargin:'0px 0px -40px' });
     $$('.rv').forEach(el => el.getBoundingClientRect().top < innerHeight ? requestAnimationFrame(() => el.classList.add('in')) : io.observe(el));
   } else $$('.rv').forEach(el => el.classList.add('in'));
+
+  // cursor-following glow on .glow cards
+  if (!RM && matchMedia('(hover:hover)').matches) {
+    document.addEventListener('pointermove', e => {
+      const c = e.target.closest && e.target.closest('.glow'); if (!c) return;
+      const r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive:true });
+  }
+
+  // stats: count numbers up once when they scroll into view (text stays correct without JS)
+  (() => {
+    const els = $$('[data-count]'); if (!els.length || RM || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; io.unobserve(e.target);
+      const el = e.target, m = el.textContent.match(/^(\D*)([\d,.]+)(.*)$/); if (!m) return;
+      const [, pre, num, suf] = m, end = parseFloat(num.replace(/,/g, '')), dec = (num.split('.')[1] || '').length, comma = num.includes(',');
+      const fmt = v => { let s = v.toFixed(dec); if (comma) s = Number(s).toLocaleString('en-US', { minimumFractionDigits:dec, maximumFractionDigits:dec }); return pre + s + suf; };
+      const t0 = performance.now(), dur = 1100;
+      const tick = now => { const p = Math.min(1, (now - t0) / dur), k = 1 - Math.pow(1 - p, 3); el.textContent = fmt(end * k); if (p < 1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    }), { threshold:.6 });
+    els.forEach(el => io.observe(el));
+  })();
 
   // delivery deck: embeds the proposal / prototype, rendered at desktop width and scaled to fit.
   // Phones get the embedded page's own mobile layout (native width) unless a pane sets data-minw.
@@ -97,7 +121,7 @@
     view.insertAdjacentHTML('beforeend', `<div data-ov="${r.ov}" aria-hidden="true"></div>`);
     const b = document.createElement('button');
     b.className = 'rtab'; b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.k = k;
-    b.innerHTML = `<b>${r.tab}</b><small>${r.sub}</small>`;
+    b.innerHTML = `<i>${String(k + 1).padStart(2, '0')}</i><b>${r.tab}</b>`; b.title = r.sub.replace(/<[^>]+>/g, '');
     (slots[r.group] || slots[0]).append(b);
   });
   const panes = $$('[data-ov]', view).map(el => (OV.mount(el), el));
@@ -106,14 +130,15 @@
   function show(k) {
     const my = ++token;
     panes.forEach((p, n) => { p.classList.toggle('on', n === k); if (n !== k && p._ov) p._ov.stop(); });
-    tabEls.forEach((t, n) => { t.setAttribute('aria-selected', n === k); t.style.setProperty('--p', '0%'); });
-    cap.textContent = C.reel[k].cap; cur = k;
-    if (!inView || RM || !panes[k]._ov) { tabEls[k].style.setProperty('--p', '100%'); return; }
+    tabEls.forEach((t, n) => { t.setAttribute('aria-selected', n === k); t.style.setProperty('--pf', n < k ? 1 : 0); });
+    cap.innerHTML = ''; cap.append(C.reel[k].cap); const sm = document.createElement('small'); sm.innerHTML = C.reel[k].sub; cap.append(sm); cur = k;
+    if (tabs.scrollWidth > tabs.clientWidth) { const t = tabEls[k]; tabs.scrollTo({ left: t.offsetLeft - (tabs.clientWidth - t.offsetWidth) / 2, behavior: RM ? 'auto' : 'smooth' }); }
+    if (!inView || RM || !panes[k]._ov) { tabEls[k].style.setProperty('--pf', 1); return; }
     const t0 = performance.now(), est = C.reel[k].est || 12000;
     cancelAnimationFrame(prog);
-    const tick = now => { if (my !== token) return; tabEls[k].style.setProperty('--p', Math.min(96, (now - t0) / est * 100) + '%'); prog = requestAnimationFrame(tick); };
+    const tick = now => { if (my !== token) return; tabEls[k].style.setProperty('--pf', Math.min(.96, (now - t0) / est)); prog = requestAnimationFrame(tick); };
     prog = requestAnimationFrame(tick);
-    panes[k]._ov.once().then(() => { if (my !== token) return; tabEls[k].style.setProperty('--p', '100%'); show((k + 1) % C.reel.length); });
+    panes[k]._ov.once().then(() => { if (my !== token) return; tabEls[k].style.setProperty('--pf', 1); show((k + 1) % C.reel.length); });
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('.rtab'); if (b) show(+b.dataset.k); });
   if ('IntersectionObserver' in window) {

@@ -7,7 +7,9 @@ wide   -> work/<slug>/assets/film.mp4, film-poster.jpg, og-cover.jpg (1200x630) 
 social -> work/<slug>/_film/social.mp4 + social-poster.jpg                        (for LinkedIn/IG; not deployed)
 
 --music auto (default): make_music.py composes an original bed timed to the film's real chapter
-         changes (bells on each new scene, pulse stops for the outro). Royalty-free by construction.
+         changes (bells on each new scene, rhythm stops for the outro). Royalty-free by construction.
+         The style comes from case.json film.music_style (ambient | bright | cinematic | lofi | drive; default ambient).
+--music <style>: same, but force that make_music.py style.
 --music <file.mp3|wav>: use a licensed track instead; it is trimmed/looped to length with fades.
 --music none: silent film.
 
@@ -75,17 +77,19 @@ async def record(port, slug, fmt, out_mp4, poster_at, music):
     # poster: first scene with its results on screen (default 10 s in; adjust with --poster-at)
     return frames[max(0, bisect.bisect_right(ts, poster_at) - 1)][1], dur
 
+GEN_STYLES = ("ambient", "bright", "cinematic", "lofi", "drive")  # make_music.py --style choices
+
 def add_audio(ff, silent, out_mp4, dur, music, rel, kinds):
     """Mux a soundtrack onto the silent video (or just rename it when music is 'none')."""
     out_mp4 = pathlib.Path(out_mp4)
     if music == "none":
         silent.replace(out_mp4); return
     wav = pathlib.Path(str(out_mp4) + ".music.wav")
-    if music == "auto":
+    if music in GEN_STYLES:
         chapters = [t for t, k in zip(rel, kinds) if k in ("intro", "scene")]
         outro = next((t for t, k in zip(rel, kinds) if k == "outro"), dur - 6)
         subprocess.run([sys.executable, str(pathlib.Path(__file__).with_name("make_music.py")), str(wav), "--duration", f"{dur:.2f}",
-                        "--marks", ",".join(f"{t:.2f}" for t in chapters), "--outro", f"{outro:.2f}"], check=True)
+                        "--marks", ",".join(f"{t:.2f}" for t in chapters), "--outro", f"{outro:.2f}", "--style", music], check=True)
         audio_in = ["-i", str(wav)]; af = "anull"
     else:
         audio_in = ["-stream_loop", "-1", "-i", music]
@@ -97,8 +101,13 @@ def add_audio(ff, silent, out_mp4, dur, music, rel, kinds):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("site"); ap.add_argument("slug")
     ap.add_argument("--fmt", default="both", choices=["wide", "social", "both"]); ap.add_argument("--poster-at", type=float, default=10.0)
-    ap.add_argument("--music", default="auto", help="auto | none | path to a licensed audio file")
+    ap.add_argument("--music", default="auto", help="auto | ambient | bright | cinematic | lofi | drive | none | path to a licensed audio file")
     o = ap.parse_args()
+    if o.music == "auto":
+        import json
+        cj = pathlib.Path(o.site) / "work" / o.slug / "case.json"
+        o.music = (json.loads(cj.read_text(encoding="utf-8")).get("film", {}).get("music_style") if cj.exists() else None) or "ambient"
+        if o.music not in GEN_STYLES: raise SystemExit(f"film.music_style must be one of {GEN_STYLES}")
     from PIL import Image
     import io
     root = pathlib.Path(o.site); base = root / "work" / o.slug
