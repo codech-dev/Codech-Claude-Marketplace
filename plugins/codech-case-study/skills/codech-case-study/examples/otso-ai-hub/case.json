@@ -193,7 +193,6 @@
       "tint": "teal",
       "h2": "Talk where the files live.",
       "sub": "Channels and direct messages inside the same workspace. When someone shares a file, the message points to the real document, so it keeps its classification, permissions and latest version.",
-      "note": "Team Chat is designed, approved by the client in the prototype, and now in build. It ships in four slices: messaging, files in chat, compliance, then voice and the assistant.",
       "features": [
         {
           "scene": "chat",
