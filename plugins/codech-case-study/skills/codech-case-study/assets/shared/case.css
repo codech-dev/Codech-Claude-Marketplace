@@ -195,6 +195,15 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .feat.m-teal{--m1:#CFF1EA;--m2:#EFFBF8;--m3:#8FE0D4;--m4:#BFE3F7}
 .feat.m-violet{--m1:#E3DCFF;--m2:#F6F3FF;--m3:#C9BCFF;--m4:#F4CFEA}
 .feat.m-sky{--m1:#D6E6FF;--m2:#F2F7FF;--m3:#A9C8FF;--m4:#CFF1EA}
+/* calm variant for supporting cards: neutral card, faint wash behind the demo, full mesh fades in on hover */
+.feat.soft{background:var(--card-2,#FDFCFA);border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .3s}
+.feat.soft::before{inset:0;filter:none;opacity:0;transition:opacity .6s var(--ease);background:radial-gradient(42% 55% at 82% 18%,var(--m3),transparent 70%),radial-gradient(40% 50% at 12% 92%,var(--m4),transparent 70%),linear-gradient(135deg,var(--m1),var(--m2))}
+.feat.soft::after{opacity:0;transition:opacity .6s}
+.feat.soft .art{background:radial-gradient(70% 75% at 55% 42%,var(--m1),transparent 72%)}
+.feat.soft:hover{transform:translateY(-4px);box-shadow:0 26px 50px -30px rgba(11,13,18,.35);border-color:transparent}
+.feat.soft:hover::before{opacity:.9}
+.feat.soft:hover::after{opacity:1}
+@media (hover:none){.feat.soft:hover{transform:none}}
 .bul{display:grid;gap:8px;margin-top:10px;padding:0;list-style:none}
 .bul li{display:flex;gap:10px;font-size:15px;line-height:1.45}
 .bul li svg{width:18px;height:18px;color:var(--green);margin-top:2px}

@@ -167,12 +167,12 @@ def page(c):
         next(num)
 
     chk = ico("check")
-    # Each feature card gets a design-system mesh set; rotate so neighbours differ. Override per feature with "mesh".
+    # One design-system mesh per product area (group "mesh", default rotates by group): the wide lead card shows
+    # the full mesh; the other cards stay neutral with a faint wash behind the demo, and the mesh rises on hover.
     MESHES = ["sky", "teal", "violet", "gold"]
-    mesh_i = iter(range(10 ** 6))
-    def mesh(f):
-        return "m-" + (f.get("mesh") or MESHES[next(mesh_i) % len(MESHES)])
-    for g in groups:
+    def mesh(f, g, gi, wide):
+        return "m-" + (f.get("mesh") or g.get("mesh") or MESHES[gi % len(MESHES)]) + ("" if wide else " soft")
+    for gi, g in enumerate(groups):
         n = next(num)
         arts = []
         for fi, f in enumerate(g["features"]):
@@ -183,9 +183,9 @@ def page(c):
                 bul = '\n      <ul class="bul">' + "".join(f"<li>{chk}{t(b)}</li>" for b in f["bullets"]) + "</ul>"
             txt = f'<div class="txt"><p class="k">{t(f["k"])}</p><h3>{t(f["title"])}</h3><p>{t(f["body"])}</p>{bul}</div>'
             if wide:
-                arts.append(f'    <article class="feat wide {mesh(f)} rv">{txt}\n      {art}</article>')
+                arts.append(f'    <article class="feat wide {mesh(f, g, gi, True)} rv">{txt}\n      {art}</article>')
             else:
-                arts.append(f'    <article class="feat {mesh(f)} rv">{art}\n      {txt}</article>')
+                arts.append(f'    <article class="feat {mesh(f, g, gi, False)} rv">{art}\n      {txt}</article>')
         note = ""
         if g.get("note"):
             note = f'\n  <p class="build-note rv">{ico("warn")}{t(g["note"])}</p>'
