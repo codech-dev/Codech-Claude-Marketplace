@@ -373,3 +373,20 @@ body.deck-lock{overflow:hidden}
 .sec-cta .btn{background:linear-gradient(135deg,#D4B895 0%,#F6D2BE 55%,#F2B48C 100%) 0 0/200% 200%;color:var(--ink);box-shadow:0 0 0 1px rgba(122,95,55,.35);transition:transform .3s var(--ease),background-position .6s var(--ease),box-shadow .3s}
 .sec-cta .btn:hover,.sec-cta .btn.btn-dark:hover{background:linear-gradient(135deg,#D4B895 0%,#F6D2BE 55%,#F2B48C 100%) 100% 100%/200% 200%;color:var(--ink);transform:translateY(-2px);box-shadow:0 0 0 1px rgba(122,95,55,.45),0 14px 30px -14px rgba(122,95,55,.6)}
 .sec-cta .btn:hover .i{transform:translateX(3px)}
+
+/* ---------- integrations (case.json "integrations"): grouped brand-logo cards ---------- */
+.intg{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:18px;align-items:start}
+.ig-g{--glow-c:rgba(212,184,149,.22);padding:18px;border-radius:24px;background:#fff;border:1px solid var(--line);display:grid;gap:10px;transition-delay:calc(var(--i,0) * 80ms)}
+.ig-h{display:flex;align-items:center;justify-content:space-between;margin:2px 4px 6px;font:600 12px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.ig-h em{font:500 12px/1 var(--f-mono);font-style:normal;color:var(--muted)}
+.ig-it{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:16px;background:var(--bg);border:1px solid transparent;transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease),background .3s}
+.ig-it:hover{transform:translateY(-3px);background:#fff;border-color:var(--gold-soft);box-shadow:0 18px 36px -24px rgba(11,13,18,.35)}
+.ig-logo{width:48px;height:48px;flex:none;border-radius:14px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 1px 2px rgba(11,13,18,.05)}
+.ig-logo img{width:26px;height:26px;object-fit:contain;display:block}
+.ig-logo img[src$=".png"]{width:40px;height:auto;max-height:28px}
+.ig-logo i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;font:800 14px/1 var(--f-display);font-style:normal}
+.ig-tx{min-width:0;display:grid;gap:3px}
+.ig-tx b{font:700 16px/1.2 var(--f-display);color:var(--ink)}
+.ig-tx span{font-size:14px;line-height:1.4;color:var(--muted)}
+.ig-foot{margin-top:18px;font-size:14px;color:var(--muted);text-align:center}
+@media (max-width:900px){.intg{grid-template-columns:1fr}}
