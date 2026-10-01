@@ -29,6 +29,13 @@ List of `[value, label]` or `[value, label, icon]`, 3–5 items. Exact numbers f
 - `stats_eyebrow`: small label on the lead tile (default "Delivery").
 - `stats_timeline`: optional `[date, label]` ×2–4 milestones under the lead stat, e.g. `[["29 Jun","First commit"],["22 Jul","Staging live"],["5 Aug","Production live"]]`; dates must come from the brief/delivery log.
 
+## overview (optional; recommended)
+The project at a glance, right after the stats: the client and the project on the left, the story on the right.
+`eyebrow` (default "Project overview"), `h2`, `intro` (2–3 sentences: who the client is, what Codech did, the headline result), `facts`: `[label, value]` ×4–6 (client, industry, users, scope, timeline, status; facts from the brief only), then three story cards, each `{title, body, label?, icon?, points?, link?}`:
+- `challenge` (default label "The challenge"): the client's pain in their terms, one short paragraph.
+- `approach` (default label "Our proposal"): how Codech proposed to solve it (proposal, prototype, phasing).
+- `solution` (default label "The solution", highlighted): a short introduction to what was built; `points` (2–4 one-line highlights) and `link` `[text, "#section-id"]` to jump to the product.
+
 ## problem (optional)
 `h2`, `eyebrow` (default "The problem"), `items`: `{icon, title, body}` ×3. Icons: folder, search, chat, upload, doc, graph, spark, send, shield, lock, clock, users, chart, cart, calendar, mail, bolt, database, warn, check, arrow (add more in `build_case.py` ICONS).
 

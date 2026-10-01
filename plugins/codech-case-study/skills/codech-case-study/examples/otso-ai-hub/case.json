@@ -469,5 +469,57 @@
       "5 Aug",
       "Production live"
     ]
-  ]
+  ],
+  "overview": {
+    "eyebrow": "Project overview",
+    "h2": "A regulated brokerage, with its files everywhere.",
+    "intro": "OTSO Markets is an online FX/CFD brokerage operating in several Asian markets. Codech took the project from requirements to a live system: design, prototype, build, deployment and operations. Phase 1 went live in 37 days.",
+    "facts": [
+      [
+        "Client",
+        "OTSO Markets"
+      ],
+      [
+        "Industry",
+        "Online brokerage (FX/CFD)"
+      ],
+      [
+        "Users",
+        "130 staff, signed in with Microsoft"
+      ],
+      [
+        "Scope",
+        "Requirements, prototype, build and operations"
+      ],
+      [
+        "Timeline",
+        "29 Jun to 5 Aug 2026 (37 days)"
+      ],
+      [
+        "Status",
+        "Document Inventory live · Team Chat in build"
+      ]
+    ],
+    "challenge": {
+      "title": "Critical files, and no way to find them",
+      "body": "KYC files, client agreements, trade records, compliance policies and research were spread across personal drives and email. Search only matched filenames, scans and Chinese documents were invisible, and a regulated firm needed every change on record."
+    },
+    "approach": {
+      "title": "Prove it before we build it",
+      "body": "We wrote an interactive proposal that mapped the workflow and the AI design, then built a clickable prototype the client approved screen by screen. Phase 1 focused on the document workspace, and Team Chat was scoped as a later phase so the core could ship fast."
+    },
+    "solution": {
+      "title": "OTSO AI Hub: one private AI workspace",
+      "body": "A workspace that works like Google Drive, running in the firm's own cloud. AI reads every upload so staff can find files by meaning, in English and Chinese.",
+      "points": [
+        "Summaries, tags and key facts on every file, scans included",
+        "An assistant that proposes changes; a person confirms each one",
+        "Append-only audit trail, legal hold and per-document AI controls"
+      ],
+      "link": [
+        "See the product",
+        "#docs"
+      ]
+    }
+  }
 }

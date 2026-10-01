@@ -225,6 +225,38 @@ def page(c):
 </section>
 """)
 
+    if c.get("overview"):
+        # Project overview: the client and the project on the left (intro + facts card), and the story on the
+        # right as three linked cards: the challenge -> our proposal -> the solution (highlighted, with points).
+        ov = c["overview"]; n = next(num)
+        facts = "".join(f'<div><dt>{t(k)}</dt><dd>{t(v)}</dd></div>' for k, v in ov.get("facts", []))
+        facts_html = f'<dl class="pov-facts rv">{facts}</dl>' if facts else ""
+        kinds = [("challenge", "The challenge", "warn"), ("approach", "Our proposal", "doc"), ("solution", "The solution", "spark")]
+        cards = []
+        for k, (key, label, icon) in enumerate(kinds):
+            st = ov.get(key)
+            if not st: continue
+            pts = "".join(f"<li>{ico('check')}<span>{t(x)}</span></li>" for x in st.get("points", []))
+            link = st.get("link")
+            more = (f'<a class="pov-more" href="{a(link[1])}">{t(link[0])}{ico("arrow")}</a>') if link else ""
+            cards.append(f'    <article class="pov-c pov-{key} rv glow" style="--i:{k}"><span class="pov-node">{ico(st.get("icon", icon))}</span>'
+                         f'<p class="pov-k">{t(st.get("label", label))}</p><h3>{t(st["title"])}</h3><p>{t(st["body"])}</p>'
+                         + (f'<ul>{pts}</ul>' if pts else "") + more + '</article>')
+        W(f"""
+<section class="sec wrap" id="overview">
+  <div class="pov">
+    <div class="pov-l">
+      <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(ov.get('eyebrow', 'Project overview'))}</p><h2 class="h-lg">{t(ov['h2'])}</h2><p class="sub">{t(ov.get('intro', ''))}</p></div>
+      {facts_html}
+    </div>
+    <div class="pov-story">
+      <span class="pov-track" aria-hidden="true"></span>
+{chr(10).join(cards)}
+    </div>
+  </div>
+</section>
+""")
+
     ig_early = bool(c.get("integrations")) and c["integrations"].get("position") == "before_problem"
     if ig_early:
         integrations_section()
