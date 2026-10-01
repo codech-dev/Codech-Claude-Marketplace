@@ -58,6 +58,13 @@ The single design decision that shows judgement. `eyebrow`, `quote` (short, punc
 `h2`, `sub`, `foot`, `steps`: `[title, text]` ×3, `tabs`: `{title, sub, src, label, hint, minw}`.
 `src`: `proposal/` or `prototype/` (hosted copies, preferred) or an absolute URL. `label` is what the fake address bar shows; never the real client-facing URL. `minw`: force a desktop-width render on phones (only for embeds with no phone layout).
 
+**Staged layout (recommended when there is a proposal and prototypes).** Give each tab `"stage": "proposal"` or `"stage": "prototype"`. The section then renders, in order: a journey ribbon (`flow`), Step 01 with the proposal in its own viewer, an arrow connector, Step 02 with the prototypes (tabbed) in a second viewer, `foot`, and the `steps` timeline. Extra fields:
+- `flow`: 3 nodes `[title, text, href?, tag?]`, e.g. `["AI proposal", "We map the workflow…", "", "Free"]`, `["Production system", "…", "#whatsapp", "Live"]` (href may jump to a product section). The first node is highlighted gold.
+- `stages`: `{"proposal": {label, title, sub}, "prototype": {label, title, sub}}` (labels default to "Step 01"/"Step 02").
+- `promo`: the **Free AI proposal** offer shown above the proposal viewer: `{tag, h, p, cta, note}`. Its button opens the landing audit form (`data-audit`). Keep `p` factual (what the visitor gets), no invented turnaround times.
+- `connector`: text on the arrow between the two viewers (default "Approved, then prototyped").
+Several viewers can sit on one page; `case.js` scopes each to its own `.deck`.
+
 ## integrations (optional; recommended whenever the project connects to named tools)
 Grouped brand-logo cards: which tools the project plugs into and what each one does there. Rendered after the pipeline.
 `eyebrow` (default "Integrations"), `h2`, `sub`, `foot` (optional line under the grid), `groups`: 2–4 of `{name, items}`, each item `{logo, name, role}`:

@@ -311,36 +311,74 @@ def page(c):
 
     if c.get("delivery"):
         d = c["delivery"]; n = next(num)
-        tabs, panes = [], []
-        for i, tb in enumerate(d.get("tabs", [])):
-            tabs.append(f'      <button class="dtab" type="button" role="tab" aria-selected="{"true" if i == 0 else "false"}" data-k="{i}"><span class="n">{i+1:02d}</span><b>{t(tb["title"])}</b><small>{t(tb["sub"])}</small></button>')
-            minw = f' data-minw="{tb["minw"]}"' if tb.get("minw") else ""
-            panes.append(f'        <div class="pane{" on" if i == 0 else ""}"{minw} data-src="{a(tb["src"])}" data-url="{a(tb["label"])}"><span class="ld">Loading…</span></div>')
-            deck_hints.append(re.sub(r"<[^>]+>", "", tb.get("hint", "Scroll inside to explore")))
-        steps = "\n".join(f'    <div class="step rv" style="--i:{i}"><span class="node">{i+1:02d}</span><div class="card"><span class="lb">Step {i+1:02d}</span><b>{t(h)}</b><p>{t(b)}</p></div></div>' for i, (h, b) in enumerate(d.get("steps", [])))
-        deck = ""
-        if tabs:
-            deck = f"""
-  <div class="deck rv" id="deck">
-    <div class="deck-tabs" role="tablist" aria-label="Delivery artefacts" style="--n:{len(tabs)}">
-{chr(10).join(tabs)}
-    </div>
+        all_tabs = d.get("tabs", [])
+
+        def deck_html(tbs, label):
+            """One browser-style viewer. Several can live on a page (case.js scopes everything to .deck)."""
+            if not tbs:
+                return ""
+            tabs, panes = [], []
+            for i, tb in enumerate(tbs):
+                tabs.append(f'      <button class="dtab" type="button" role="tab" aria-selected="{"true" if i == 0 else "false"}" data-k="{i}"><span class="n">{i+1:02d}</span><b>{t(tb["title"])}</b><small>{t(tb["sub"])}</small></button>')
+                minw = f' data-minw="{tb["minw"]}"' if tb.get("minw") else ""
+                hint = a(re.sub(r"<[^>]+>", "", tb.get("hint", "Scroll inside to explore")))
+                panes.append(f'        <div class="pane{" on" if i == 0 else ""}"{minw} data-src="{a(tb["src"])}" data-url="{a(tb["label"])}" data-hint="{hint}"><span class="ld">Loading…</span></div>')
+                deck_hints.append(re.sub(r"<[^>]+>", "", tb.get("hint", "Scroll inside to explore")))
+            tablist = (f'\n    <div class="deck-tabs" role="tablist" aria-label="{a(label)}" style="--n:{len(tabs)}">\n' + "\n".join(tabs) + "\n    </div>") if len(tabs) > 1 else ""
+            return f"""
+  <div class="deck rv">{tablist}
     <div class="deck-win">
-      <div class="deck-bar"><i></i><i></i><i></i><span class="url">{ico('lock')}<span id="deckUrl"></span></span><button class="deck-full" id="deckFull" type="button" aria-pressed="false"><span>Full screen</span><svg class="i ex" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="i co" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-      <div class="deck-view" id="deckView">
+      <div class="deck-bar"><i></i><i></i><i></i><span class="url">{ico('lock')}<span class="deck-url"></span></span><button class="deck-full" type="button" aria-pressed="false"><span>Full screen</span><svg class="i ex" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="i co" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="deck-view">
 {chr(10).join(panes)}
-        <div class="deck-hint" id="deckHint"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 7v3"/></svg><span></span></div>
+        <div class="deck-hint"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 7v3"/></svg><span></span></div>
       </div>
     </div>
-    <p class="deck-foot">{t(d.get('foot',''))}</p>
   </div>"""
-        W(f"""
-<section class="sec wrap" id="process">
-  <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(d.get('eyebrow','How we delivered'))}</p><h2 class="h-lg">{t(d['h2'])}</h2><p class="sub">{t(d.get('sub',''))}</p>{('<div class="sec-cta"><button class="btn btn-dark" type="button" data-audit>' + t(d['cta']) + ico('arrow') + '</button></div>') if d.get('cta') else ''}</div>{deck}
+
+        steps = "\n".join(f'    <div class="step rv" style="--i:{i}"><span class="node">{i+1:02d}</span><div class="card"><span class="lb">Step {i+1:02d}</span><b>{t(h)}</b><p>{t(b)}</p></div></div>' for i, (h, b) in enumerate(d.get("steps", [])))
+        steps_html = f"""
   <div class="steps3" style="--n:{len(d.get('steps', []))}">
     <span class="track" aria-hidden="true"><i></i></span>
 {steps}
-  </div>
+  </div>""" if steps else ""
+        foot = f'\n  <p class="deck-foot rv">{t(d["foot"])}</p>' if d.get("foot") else ""
+        head_cta = ('<div class="sec-cta"><button class="btn btn-dark" type="button" data-audit>' + t(d['cta']) + ico('arrow') + '</button></div>') if d.get('cta') else ''
+        head = f"""  <div class="sec-head rv"><p class="eyebrow"><span class="n">{n}</span>{t(d.get('eyebrow','How we delivered'))}</p><h2 class="h-lg">{t(d['h2'])}</h2><p class="sub">{t(d.get('sub',''))}</p>{head_cta}</div>"""
+
+        if any(tb.get("stage") for tb in all_tabs):
+            # staged layout: proposal viewer -> arrow -> prototype viewer, with a journey ribbon and a promo card
+            ribbon = ""
+            if d.get("flow"):
+                nodes = []
+                for k, f in enumerate(d["flow"]):
+                    if k:
+                        nodes.append(f'    <span class="dflow-ar" aria-hidden="true">{ico("arrow")}</span>')
+                    tag = f'<em>{t(f[3])}</em>' if len(f) > 3 and f[3] else ""
+                    inner = f'<span class="no">{k+1:02d}</span><div><b>{t(f[0])}{tag}</b><span>{t(f[1])}</span></div>'
+                    href = f[2] if len(f) > 2 and f[2] else ""
+                    nodes.append(f'    <a class="dflow-n{" first" if k == 0 else ""}" href="{a(href)}">{inner}</a>' if href else f'    <div class="dflow-n{" first" if k == 0 else ""}">{inner}</div>')
+                ribbon = '\n  <div class="dflow rv">\n' + "\n".join(nodes) + "\n  </div>"
+            st = d.get("stages", {})
+            def stage_head(key, num_default):
+                h = st.get(key, {})
+                return f'\n  <div class="dstage-h rv"><span class="lb">{t(h.get("label", num_default))}</span><h3>{t(h.get("title", ""))}</h3><p>{t(h.get("sub", ""))}</p></div>'
+            promo = ""
+            if d.get("promo"):
+                pr = d["promo"]
+                promo = f"""
+  <div class="dpromo rv"><div class="tx"><span class="tag">{ico('spark')}{t(pr.get('tag','Free AI proposal'))}</span><h3>{t(pr['h'])}</h3><p>{t(pr.get('p',''))}</p></div><div class="go"><button class="btn btn-dark" type="button" data-audit>{t(pr.get('cta','Get your free AI proposal'))}{ico('arrow')}</button><small>{t(pr.get('note','No obligation'))}</small></div></div>"""
+            conn = f"""
+  <div class="dconn rv" aria-hidden="true"><span class="ln"></span><span class="dconn-pill">{ico('arrow')}{t(d.get('connector','Approved, then prototyped'))}</span><span class="ln"></span></div>"""
+            props = [tb for tb in all_tabs if tb.get("stage") == "proposal"]
+            protos = [tb for tb in all_tabs if tb.get("stage") != "proposal"]
+            body = (ribbon + stage_head("proposal", "Step 01") + promo + deck_html(props, "Proposal")
+                    + conn + stage_head("prototype", "Step 02") + deck_html(protos, "Prototypes") + foot + steps_html)
+        else:
+            body = deck_html(all_tabs, "Delivery artefacts") + foot + steps_html
+        W(f"""
+<section class="sec wrap" id="process">
+{head}{body}
 </section>
 """)
 

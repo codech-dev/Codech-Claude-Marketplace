@@ -390,3 +390,46 @@ body.deck-lock{overflow:hidden}
 .ig-tx span{font-size:14px;line-height:1.4;color:var(--muted)}
 .ig-foot{margin-top:18px;font-size:14px;color:var(--muted);text-align:center}
 @media (max-width:900px){.intg{grid-template-columns:1fr}}
+
+/* ---------- delivery, staged layout (tabs with "stage"): journey ribbon, promo, proposal deck -> arrow -> prototype deck ---------- */
+.dflow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:10px;margin-bottom:52px}
+.dflow-n{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:20px;background:#fff;border:1px solid var(--line);color:inherit;text-decoration:none;transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .3s}
+a.dflow-n:hover{transform:translateY(-3px);border-color:var(--gold-soft);box-shadow:0 18px 36px -24px rgba(11,13,18,.35)}
+.dflow-n .no{width:36px;height:36px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--bg-2);font:600 12.5px/1 var(--f-mono);color:var(--muted)}
+.dflow-n b{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font:700 17px/1.25 var(--f-display);color:var(--ink)}
+.dflow-n b em{font:700 10.5px/1 var(--f-display);font-style:normal;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:var(--ink);color:#fff}
+.dflow-n span{display:block;margin-top:4px;font-size:14px;line-height:1.45;color:var(--muted)}
+.dflow-n.first{background:linear-gradient(135deg,#FBF3E6,#F6E3CF);border-color:var(--gold-soft)}
+.dflow-n.first .no{background:var(--ink);color:#fff}
+.dflow-ar{display:grid;place-items:center;color:var(--gold-text)}
+.dflow-ar .i{width:26px;height:26px;animation:dflowNudge 1.6s var(--ease) infinite}
+@keyframes dflowNudge{0%,100%{transform:translateX(-3px);opacity:.6}50%{transform:translateX(4px);opacity:1}}
+.dstage-h{display:grid;gap:6px;margin:0 0 18px}
+.dstage-h .lb{font:500 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-text)}
+.dstage-h h3{font:700 clamp(22px,2.4vw,28px)/1.15 var(--f-display);letter-spacing:-.02em;color:var(--ink)}
+.dstage-h p{font-size:16px;line-height:1.55;color:var(--muted);max-width:62ch}
+.dpromo{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:28px;margin:0 0 18px;padding:26px 30px;border-radius:24px;background:linear-gradient(120deg,#F3E2C4 0%,#F6D2BE 55%,#F2C29C 100%);box-shadow:0 0 0 1px rgba(122,95,55,.25),0 24px 50px -30px rgba(122,95,55,.6)}
+.dpromo::after{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),transparent 65%);pointer-events:none}
+.dpromo .tx{position:relative;z-index:1;display:grid;gap:8px;max-width:640px}
+.dpromo .tag{display:inline-flex;align-items:center;gap:6px;width:max-content;padding:6px 11px;border-radius:999px;background:var(--ink);color:#fff;font:700 11.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.dpromo .tag .i{width:13px;height:13px;color:#F5C26B}
+.dpromo h3{font:800 clamp(22px,2.4vw,30px)/1.15 var(--f-display);letter-spacing:-.02em;color:var(--ink)}
+.dpromo p{font-size:16px;line-height:1.55;color:#4a3e30}
+.dpromo .go{position:relative;z-index:1;display:grid;justify-items:center;gap:8px;flex:none}
+.dpromo .go .btn{white-space:nowrap}
+.dpromo .go .btn .i{width:18px;height:18px;transition:transform .25s var(--ease)}
+.dpromo .go .btn:hover .i{transform:translateX(3px)}
+.dpromo .go small{font-size:12.5px;color:#6b5a45}
+.dconn{display:grid;justify-items:center;gap:0;margin:26px 0 30px}
+.dconn .ln{width:2px;height:34px;background:repeating-linear-gradient(180deg,var(--gold) 0 6px,transparent 6px 11px);background-size:2px 22px;animation:dconnFlow 1s linear infinite}
+@keyframes dconnFlow{to{background-position:0 22px}}
+.dconn-pill{display:inline-flex;align-items:center;gap:8px;max-width:100%;text-align:center;padding:10px 16px;border-radius:999px;background:#fff;border:1px solid var(--gold-soft);font:600 14px/1 var(--f-display);color:var(--ink);box-shadow:0 10px 24px -16px rgba(11,13,18,.3)}
+.dconn-pill .i{flex:none;width:16px;height:16px;transform:rotate(90deg);color:var(--gold-text)}
+.deck + .deck-foot{margin-top:12px}
+@media (max-width:860px){
+  .dflow{grid-template-columns:1fr;gap:6px;margin-bottom:40px}
+  .dflow-ar .i{transform:rotate(90deg);animation:none}
+  .dpromo{flex-direction:column;align-items:flex-start;padding:22px 20px}
+  .dpromo .go{justify-items:start}
+}
+@media (prefers-reduced-motion:reduce){.dflow-ar .i,.dconn .ln{animation:none}}
