@@ -10,6 +10,8 @@ Styles (all synthesised from scratch with numpy, so there is nothing to license)
   lofi       warm lo-fi in F: electric-piano chords, swung hats, soft kick/snare, vinyl crackle, rolled-off highs
   drive      energetic future-house in A minor, 124 bpm: pumping supersaw chords, offbeat bass, four-on-the-floor,
              16th hats and plucks; builds (snare roll + riser) into every chapter change and drops on it
+  anthem     upbeat feel-good pop-house in E major, 128 bpm: off-beat piano stabs, octave-bounce disco bass,
+             kick + clap/snare, off-beat open hats, a quiet synth hook; tom fill + cymbal swell into each chapter
 Every style: a bell at each chapter change (--marks, seconds), rhythm only between the first scene and the outro,
 fade in/out, and a quiet level (peak about -6 dBFS) that sits under captions without a melody competing with reading.
 record_film.py calls this automatically with the film's real chapter times (film.music_style in case.json, or --music-style).
@@ -75,6 +77,8 @@ STYLES = {
                  crackle=True, swing=.30, master_cut=5200),
     # energetic: everything comes from drive_layer(); the shared loop only adds the chapter bells
     "drive": dict(bpm=124, prog=[(45, [57])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.03, drive=True, sat=3.0, peak=.68),
+    # energetic and major-key: everything comes from anthem_layer(); distinct from drive (minor, pads)
+    "anthem": dict(bpm=128, prog=[(40, [64])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.03, anthem=True, sat=2.6, peak=.66),
 }
 
 def drive_layer(rng, D, N, beat, first, outro, marks):
@@ -138,6 +142,82 @@ def drive_layer(rng, D, N, beat, first, outro, marks):
         if n <= 0: continue
         put(int(m * SR) - n, lowpass(rng.standard_normal(n), 6000) * np.linspace(0, 1, n) ** 2, .06)
         put(int(m * SR), noise_hit(rng, int(1.5 * SR), 3000, 12000, 3), .05)
+    return L, R
+
+def anthem_layer(rng, D, N, beat, first, outro, marks):
+    """Upbeat pop-house in E major (I-V-vi-IV, one chord per bar): off-beat piano stabs, octave-bounce
+    disco bass, kick + clap/snare backbeat, off-beat open hats and shaker, a quiet 2-bar synth hook every
+    4 bars, and a tom fill + cymbal swell into every chapter change with a crash on the downbeat.
+    Major-key and groove-led, so it reads clearly different from the minor, pad-driven `drive`."""
+    L = np.zeros(N); R = np.zeros(N)
+    def put(s, sig, gl, gr=None):
+        if s < 0 or s >= N: return
+        e = min(N, s + len(sig)) - s
+        L[s:s + e] += gl * sig[:e]; R[s:s + e] += (gl if gr is None else gr) * sig[:e]
+    prog = [(40, [64, 68, 71, 76]), (35, [63, 66, 71, 75]), (37, [61, 64, 68, 73]), (33, [61, 64, 69, 73])]  # E  B  C#m  A
+    bar = 4 * beat; clen = bar
+    t = np.arange(N) / SR
+    on = (t >= first) & (t < outro)
+    # soft pad underneath everything (gives the intro and outro their harmony), lightly pumped in the groove
+    pad = np.zeros(N); k = 0; t0 = 0.0
+    while t0 < D:
+        _, notes = prog[k % 4]; n = int(min(clen + .4, D - t0) * SR); s = int(t0 * SR)
+        if n <= 0: break
+        ch = sum(pad_voice(midi(m - 12), n, rng) for m in notes) / len(notes)
+        e = min(N, s + n) - s; pad[s:s + e] += (ch * env_adsr(n, .08, .35, 1.0))[:e]
+        k += 1; t0 += clen
+    pad = lowpass(pad, 1500) * np.where(on, 1 - .45 * np.exp(-((t - first) % beat) * 9), 1.0)
+    put(0, pad, .12, .11)
+    # cached voices
+    def stab(notes):
+        n = int(.26 * SR); x = np.arange(n) / SR
+        return sum(sum(a * np.sin(2 * np.pi * midi(m) * r * x) for r, a in ((1, 1), (2, .45), (3, .2), (4, .08))) for m in notes) / len(notes) * np.exp(-x * 11)
+    stabs = [stab(nt) for _, nt in prog]
+    def bass_note(m):
+        n = int(beat * .48 * SR); x = np.arange(n) / SR; f = midi(m)
+        return (np.sin(2 * np.pi * f * x) + .4 * np.sin(4 * np.pi * f * x) + .15 * np.sign(np.sin(2 * np.pi * f * x))) * np.exp(-x * 6)
+    basses = [(bass_note(r), bass_note(r + 12)) for r, _ in prog]
+    kick = kick_hit(int(.38 * SR))
+    def lead(m):
+        n = int(beat * .9 * SR); x = np.arange(n) / SR; ph = 2 * np.pi * midi(m) * x
+        vib = 1 + .004 * np.sin(2 * np.pi * 5.5 * x)
+        return (np.sin(ph * vib) + .25 * np.sign(np.sin(ph * vib)) + .2 * np.sin(2 * ph)) * env_adsr(n, .01, .12, 1.0) * np.exp(-x * 2.5)
+    hook = [(0, 0), (1, 2), (2, 3), (3, 2), (4, 1), (5, 2), (6, 3), (7, 3)]   # (eighth index, chord-tone index), over 2 bars
+    # 16th-note grid
+    st = beat / 4; i = 0; tt0 = first
+    nxt_marks = [m for m in marks if m > first + 1] + [outro]
+    while tt0 < outro - .05:
+        s = int(tt0 * SR); pos = i % 16; ci = int(tt0 // clen) % 4
+        fill_at = next((m for m in nxt_marks if m > tt0), None)
+        in_fill = fill_at is not None and fill_at - beat * 2 <= tt0
+        if pos % 4 == 0 and not (in_fill and pos >= 8): put(s, kick, .30)
+        if pos in (4, 12):
+            put(s, noise_hit(rng, int(.22 * SR), 1000, 5200, 18), .12)                     # clap
+            x = np.arange(int(.18 * SR)) / SR
+            put(s, .5 * np.sin(2 * np.pi * 190 * x) * np.exp(-x * 25) + noise_hit(rng, len(x), 1800, 8000, 24), .07)   # snare body
+        if pos % 4 == 2: put(s, noise_hit(rng, int(.16 * SR), 5500, 12000, 14), .05, .06)   # open hat on the off-beat
+        put(s, noise_hit(rng, int(.035 * SR), 6000, 12000, 90), .018 if pos % 2 else .012, .012 if pos % 2 else .018)  # shaker
+        if pos % 4 == 2: put(s, stabs[ci], .13 * (.85 if pos % 8 == 2 else 1.0))           # piano stab on each off-beat
+        if pos % 2 == 0:
+            lo, hi = basses[ci]; put(s, hi if (pos // 2) % 2 else lo, .20)                   # octave bounce on eighths
+        bar_in_cycle = int((tt0 - first) // bar) % 4
+        if bar_in_cycle in (0, 1) and pos % 2 == 0 and not in_fill:
+            e8 = (bar_in_cycle * 8 + pos // 2)
+            for idx, tone in hook:
+                if e8 == idx:
+                    m = prog[ci][1][tone] + 12; pan = .5 + .25 * np.sin(e8)
+                    put(s, lead(m), .05 * (1 - pan) + .02, .05 * pan + .02)
+        if in_fill and pos % 2 == 0 and fill_at - tt0 <= beat * 2:                            # tom fill, falling
+            k2 = int((fill_at - tt0) / (beat / 2)); f = 95 + 22 * k2
+            x = np.arange(int(.3 * SR)) / SR
+            put(s, np.sin(2 * np.pi * (f * x + f * .6 * (1 - np.exp(-x * 20)) / 20)) * np.exp(-x * 9), .16)
+        tt0 += st; i += 1
+    for m in [first] + nxt_marks[:-1]:
+        n = int(min(bar, m) * SR)
+        if n <= 0: continue
+        put(int(m * SR) - n, lowpass(rng.standard_normal(n), 9000) * np.linspace(0, 1, n) ** 3, .045)  # cymbal swell
+        put(int(m * SR), noise_hit(rng, int(1.8 * SR), 2500, 13000, 2.6), .06)                          # crash
+        put(int(m * SR), kick, .26)
     return L, R
 
 def main():
@@ -248,6 +328,8 @@ def main():
         L += .05 * c + .4 * hiss; R += .05 * np.roll(c, 97) + .4 * hiss
     if S.get("drive"):
         dl, dr_ = drive_layer(rng, D, N, beat, first_scene, outro, marks); L += dl; R += dr_
+    if S.get("anthem"):
+        al, ar = anthem_layer(rng, D, N, beat, first_scene, outro, marks); L += al; R += ar
 
     # simple ambience: a few feedback-free echoes (longer and wetter for cinematic)
     taps = ((0.19, 0.28), (0.31, 0.22), (0.47, 0.16), (0.63, 0.1)) if o.style == "cinematic" else ((0.113, 0.22), (0.187, 0.16), (0.271, 0.11))
