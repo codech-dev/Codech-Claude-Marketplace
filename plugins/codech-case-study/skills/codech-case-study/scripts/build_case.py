@@ -367,7 +367,7 @@ def page(c):
             if d.get("promo"):
                 pr = d["promo"]
                 promo = f"""
-  <div class="dpromo rv"><div class="tx"><span class="tag">{ico('spark')}{t(pr.get('tag','Free AI proposal'))}</span><h3>{t(pr['h'])}</h3><p>{t(pr.get('p',''))}</p></div><div class="go"><button class="btn btn-dark" type="button" data-audit>{t(pr.get('cta','Get your free AI proposal'))}{ico('arrow')}</button><small>{t(pr.get('note','No obligation'))}</small></div></div>"""
+  <div class="dpromo rv"><div class="tx"><span class="tag">{ico('spark')}{t(pr.get('tag','Free AI proposal'))}</span><h3>{t(pr['h'])}</h3><p>{t(pr.get('p',''))}</p></div><div class="go"><button class="btn btn-dark" type="button" data-audit>{t(pr.get('cta','Get your free AI proposal'))}{ico('arrow')}</button>{('<small>' + t(pr['note']) + '</small>') if pr.get('note') else ''}</div></div>"""
             conn = f"""
   <div class="dconn rv" aria-hidden="true"><span class="ln"></span><span class="dconn-pill">{ico('arrow')}{t(d.get('connector','Approved, then prototyped'))}</span><span class="ln"></span></div>"""
             props = [tb for tb in all_tabs if tb.get("stage") == "proposal"]
