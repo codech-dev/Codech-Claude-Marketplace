@@ -433,3 +433,42 @@ a.dflow-n:hover{transform:translateY(-3px);border-color:var(--gold-soft);box-sha
   .dpromo .go{justify-items:start}
 }
 @media (prefers-reduced-motion:reduce){.dflow-ar .i,.dconn .ln{animation:none}}
+
+/* Project overview (case.json "overview"): intro + facts on the left, challenge -> proposal -> solution on the right */
+.pov{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,72px);align-items:start}
+.pov-l{position:sticky;top:calc(var(--ann-h,0px) + var(--nav-h,76px) + 24px)}
+.pov-l .sec-head{margin-bottom:28px}
+.pov-facts{margin:0;padding:6px 22px;border-radius:24px;background:#fff;border:1px solid var(--line)}
+.pov-facts div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.pov-facts div:first-child{border-top:0}
+.pov-facts dt{font:500 12px/1.5 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pov-facts dd{margin:0;font:600 15px/1.45 var(--f-display);color:var(--ink)}
+.pov-story{position:relative;display:grid;gap:18px;padding-left:64px}
+.pov-track{position:absolute;left:21px;top:30px;bottom:30px;width:2px;border-radius:2px;background:linear-gradient(180deg,var(--line-2),var(--gold) 55%,var(--gold-text))}
+.pov-c{--glow-c:rgba(212,184,149,.22);position:relative;overflow:visible;padding:24px 26px 26px;border-radius:24px;background:#fff;border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .3s;transition-delay:calc(var(--i,0) * 90ms)}
+.pov-c:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--line-2)}
+.pov-node{position:absolute;left:-64px;top:22px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line-2);color:var(--ink);box-shadow:0 0 0 6px var(--bg)}
+.pov-node .i{width:20px;height:20px}
+.pov-k{font:500 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pov-c h3{margin-top:10px;font:700 22px/1.2 var(--f-display);letter-spacing:-.02em;color:var(--ink)}
+.pov-c > p:not(.pov-k){margin-top:10px;font-size:15.5px;line-height:1.6;color:var(--text)}
+.pov-challenge .pov-node{color:var(--amber);background:var(--amber-tint);border-color:#FCD9A0}
+.pov-approach .pov-node{color:var(--gold-text);background:var(--gold-tint);border-color:var(--gold-soft)}
+.pov-solution{border-color:var(--gold-soft);background:linear-gradient(135deg,#FFF8EE 0%,#fff 55%,#FFF4E9 100%)}
+.pov-solution .pov-node{color:var(--ink);background:linear-gradient(135deg,#D4B895,#F6D2BE 55%,#F2B48C);border-color:rgba(122,95,55,.35)}
+.pov-solution .pov-k{color:var(--gold-text)}
+.pov-c ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.pov-c li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.pov-c li .i{flex:none;width:18px;height:18px;margin-top:2px;padding:3px;border-radius:50%;background:var(--green-tint);color:var(--green)}
+.pov-more{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font:600 15px/1 var(--f-display);color:var(--ink);border-bottom:1.5px solid var(--gold);padding-bottom:4px}
+.pov-more .i{width:16px;height:16px;transition:transform .25s var(--ease)}
+.pov-more:hover .i{transform:translateX(3px)}
+@media (max-width:900px){
+  .pov{grid-template-columns:minmax(0,1fr)}
+  .pov-l{position:static}
+  .pov-story{padding-left:52px}
+  .pov-track{left:17px}
+  .pov-node{left:-52px;width:36px;height:36px}
+  .pov-node .i{width:17px;height:17px}
+  .pov-facts div{grid-template-columns:92px minmax(0,1fr)}
+}
