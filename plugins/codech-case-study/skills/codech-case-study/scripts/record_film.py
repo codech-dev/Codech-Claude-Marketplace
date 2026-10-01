@@ -8,7 +8,7 @@ social -> work/<slug>/_film/social.mp4 + social-poster.jpg                      
 
 --music auto (default): make_music.py composes an original bed timed to the film's real chapter
          changes (bells on each new scene, rhythm stops for the outro). Royalty-free by construction.
-         The style comes from case.json film.music_style (ambient | bright | cinematic | lofi | drive | anthem; default ambient).
+         The style comes from case.json film.music_style (ambient | bright | cinematic | lofi | drive | anthem | afro | synthwave | disco; default ambient).
 --music <style>: same, but force that make_music.py style.
 --music <file.mp3|wav>: use a licensed track instead; it is trimmed/looped to length with fades.
 --music none: silent film.
@@ -77,7 +77,7 @@ async def record(port, slug, fmt, out_mp4, poster_at, music):
     # poster: first scene with its results on screen (default 10 s in; adjust with --poster-at)
     return frames[max(0, bisect.bisect_right(ts, poster_at) - 1)][1], dur
 
-GEN_STYLES = ("ambient", "bright", "cinematic", "lofi", "drive", "anthem")  # make_music.py --style choices
+GEN_STYLES = ("ambient", "bright", "cinematic", "lofi", "drive", "anthem", "afro", "synthwave", "disco")  # make_music.py --style choices
 
 def add_audio(ff, silent, out_mp4, dur, music, rel, kinds):
     """Mux a soundtrack onto the silent video (or just rename it when music is 'none')."""
@@ -101,7 +101,7 @@ def add_audio(ff, silent, out_mp4, dur, music, rel, kinds):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("site"); ap.add_argument("slug")
     ap.add_argument("--fmt", default="both", choices=["wide", "social", "both"]); ap.add_argument("--poster-at", type=float, default=10.0)
-    ap.add_argument("--music", default="auto", help="auto | ambient | bright | cinematic | lofi | drive | anthem | none | path to a licensed audio file")
+    ap.add_argument("--music", default="auto", help="auto | ambient | bright | cinematic | lofi | drive | anthem | afro | synthwave | disco | none | path to a licensed audio file")
     o = ap.parse_args()
     if o.music == "auto":
         import json
