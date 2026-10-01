@@ -1,0 +1,49 @@
+<title>@TITLE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column of track cards; each card = film preview left, audio + details right; stacks on phones. */
+:root{--bg:#FAF8F4;--surface:#FFFFFF;--soft:#F3F0EA;--line:#E4DFD5;--fg:#0B0D12;--fg2:#4A4F5C;--mute:#7B8191;--gold:#D4B895;--goldtext:#7A5F37;--goldtint:#F6ECDC;
+--display:'Manrope',ui-sans-serif,system-ui,sans-serif;--body:'Inter',ui-sans-serif,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0E1014;--surface:#161920;--soft:#1C2028;--line:#2A2F39;--fg:#F2F0EC;--fg2:#B9BDC7;--mute:#8A909C;--goldtext:#D4B895;--goldtint:#2A241B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1014;--surface:#161920;--soft:#1C2028;--line:#2A2F39;--fg:#F2F0EC;--fg2:#B9BDC7;--mute:#8A909C;--goldtext:#D4B895;--goldtint:#2A241B;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--body);margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);padding-block:48px 64px}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+h1{font:800 clamp(34px,5vw,56px)/1.05 var(--display);letter-spacing:-.03em;margin:10px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--goldtext)}
+.lede{color:var(--fg2);max-width:64ch;margin:0 0 28px}
+.note{border-left:3px solid var(--gold);background:var(--goldtint);border-radius:0 12px 12px 0;padding:12px 16px;color:var(--fg2);font-size:15px;margin-bottom:28px}
+.track{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:18px}
+.track.nofilm{grid-template-columns:1fr}
+.track video{width:100%;height:auto;display:block;aspect-ratio:16/9;background:#000}
+.info{padding:22px 24px;display:grid;gap:10px;align-content:start;min-width:0}
+.num{font:600 13px var(--mono);color:var(--goldtext)}
+.info h2{font:800 26px/1.15 var(--display);letter-spacing:-.02em;margin:0}
+.meta{color:var(--mute);font-size:14px}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font:600 12px var(--body);padding:4px 10px;border-radius:99px;background:var(--soft);color:var(--fg2)}
+.lbl{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+audio{width:100%}
+footer{color:var(--mute);font-size:13px;margin-top:28px}
+@media (max-width:820px){.track{grid-template-columns:1fr}}
+</style>
+<main class="wrap">
+  <span class="eyebrow">Codech marketing film · Music</span>
+  <h1>Soundtrack <em>shortlist</em></h1>
+  <p class="lede" id="lede"></p>
+  <p class="note">All tracks are from Mixkit under the Mixkit Stock Music Free License: free for commercial video, no attribution required. Tracks shorter than the film get a seamless bar-exact edit.</p>
+  <div id="list"></div>
+  <footer>Pick one by name, or describe a reference ("like an Apple keynote", "like a Notion launch") and we'll search toward it.</footer>
+</main>
+<script>
+const T=/*@DATA*/, FILM=@FILM, SECS=@SECS;
+document.getElementById('lede').textContent=`${T.length} royalty-free tracks, listed by measured energy, highest first. `+(FILM?`Each has a film preview (the first ${SECS} s of the cut, scored with that track from its start) and a 25 s audition from its most energetic section.`:'Each has a 25 s audition from its most energetic section.');
+document.getElementById('list').innerHTML=T.map((r,i)=>`<section class="track${FILM?'':' nofilm'}">
+  ${FILM?`<video controls preload="metadata" src="${r[0]}-${r[1]}-film.mp4"></video>`:''}
+  <div class="info"><span class="num">#${i+1} · Mixkit ${r[0]}</span><h2>${r[2]}</h2>
+    <span class="meta">${r[3]} · ${r[4]} · ${r[5]}</span>
+    <div class="tags">${r[6].map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <span class="lbl">Peak audition (25 s)</span><audio controls preload="none" src="${r[0]}-${r[1]}.mp3"></audio></div></section>`).join('');
+</script>

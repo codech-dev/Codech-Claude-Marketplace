@@ -1,14 +1,15 @@
 ---
 name: codech-case-study
 description: >-
-  End-to-end Codech portfolio workflow in two modes. (A) Gather: when a client project is finished or hits a milestone, collect its resources into a portfolio asset pack (measured project stats, factual PROJECT_BRIEF, brand assets, app/prototype screenshots, the clickable prototype and proposal, redacted specs) saved to the Codech Marketing 'AI Portfolio Assets' folder. (B) Build: turn such a pack into a case study on the Codech AI landing site: animated code-built product demos ("vignettes"), a Results-carousel card, a case-study page built from case.json, embedded proposal + prototype, a captioned product film, and a Cloudflare Pages deploy. Use this whenever the user says a project is done and wants its assets, screenshots, prototype or project details gathered/collected/packaged/saved for the portfolio; or wants to add a project or client work to the landing page, Results section, portfolio or case studies ("case study", "showcase this project", "add <client> to our results", "portfolio pack", "portfolio assets", "demo video of the project"); or uploads an asset pack folder; or wants to update, re-film or redeploy an existing case study (a feature went live, new numbers, client consent changed).
+  Codech portfolio workflow in three modes. (A) Gather a finished client project's resources into a portfolio asset pack (measured stats, factual brief, brand, screenshots, prototype, proposal). (B) Build a case study on the Codech AI landing site from case.json: animated product demos, Results card, case page, product film, Cloudflare deploy. (C) Make a motion-graphic marketing film: a ClickUp-style animated product showcase in Remotion with storyboard, fitted royalty-free music and sound effects. Use when a project is done and its assets should be gathered or packaged; when adding a project or client to the landing page, Results, portfolio or case studies ("case study", "showcase this project", "portfolio pack"); when updating, re-filming or redeploying a case study; or when the user wants a marketing video, product showcase video, motion graphic, launch or promo video, or its storyboard, soundtrack or SFX for a client project.
 ---
 
 # Codech case study
 
-Two modes; pick by where you are and what the user asked:
+Three modes; pick by where you are and what the user asked:
 - **Mode A: Gather** (run inside a finished client project): collect everything a case study needs into a portfolio asset pack. Read `references/gather.md` and follow it; templates are in `assets/pack-template/`, helpers are `scripts/gather_stats.py`, `scripts/capture_screens.py`, `scripts/scan_pack.py`. Stop after the pack is saved and reported, unless the user also wants the case study built.
-- **Mode B: Build** (run in the Codech Marketing project): turn a pack into a live case study. Everything below this line.
+- **Mode B: Build** (run in the Codech Marketing project): turn a pack into a live case study. Everything from "Mode B: Build the case study" down.
+- **Mode C: Marketing film** (run in the Codech Marketing project): a motion-graphic, ClickUp-style product-showcase film that sells what Codech builds, with the client project as proof. Storyboard first, built in Remotion, scored with a fitted royalty-free track and synced SFX. Read `references/marketing-film.md` and follow it. The Remotion starter, storyboard generator, music shortlist page and cue-sheet template are in `assets/marketing-film/`; the helpers are `scripts/mf_music.py`, `scripts/mf_sfx.py`, `scripts/mf_mix.py` and `scripts/mf_encode.py`; the worked example is `examples/shingtik-marketing-film/`. This is separate from the Mode B product film (step 6), which is recorded from the vignettes.
 
 ## Mode B: Build the case study
 
@@ -90,5 +91,8 @@ Edit `work/<slug>/case.json` (e.g. flip a group's `"status"` to `"live"`, change
 - `references/film.md`: film structure, recording, posters, social cut
 - `references/deploy.md`: staging, multi-session protocol, verification, caching
 - `references/lessons.md`: bugs already hit and their fixes; read before QA
+- `references/marketing-film.md`: Mode C, the motion-graphic marketing film (rules, motion language, workflow, gotchas)
 - `examples/otso-ai-hub/`: complete worked example (case.json, scenes.js, scenes.css); its source pack is `AI Portfolio Assets/OTSO AI Portal- portfolio-assets/` in the marketing project
 - `assets/pack-template/`: PROJECT_BRIEF.md and README.md templates for Mode A
+- `assets/marketing-film/`: Mode C Remotion starter (`remotion/`), storyboard generator (`storyboard/`), `music-shortlist.html`, `cues-template.py`
+- `examples/shingtik-marketing-film/`: the ShingTik marketing film's scenes (`src/`), 231-cue `cues.py` and storyboard data
