@@ -1,11 +1,12 @@
 # codech-case-study
 
-Turn finished Codech client work into portfolio case studies, in two modes:
+Turn finished Codech client work into portfolio case studies and marketing films, in three modes:
 
 | Mode | Run it in | Produces |
 |---|---|---|
 | **A · Gather** | the finished client project (repo, specs, prototype, running app) | a portfolio asset pack: `PROJECT_BRIEF.md`, `README.md`, `stats.json`, `brand/`, `screenshots/` (2x desktop, mobile, UI crops), `prototype/`, `proposal/`, redacted `docs/` |
 | **B · Build** | the Codech Marketing project (`site/codech-ai-landing`) | a live case study: animated product demos, Results-carousel card, `work/<slug>/` page, embedded proposal + prototype, product film, deploy |
+| **C · Marketing film** | the Codech Marketing project (`video/<slug>-marketing/`) | a ClickUp-style motion-graphic product showcase: storyboard artifact, Remotion film, fitted royalty-free soundtrack + synced SFX, MP4 master + preview |
 
 The typical flow: **ship a project → Gather → Build → keep the case study updated** (edit `case.json`, rebuild).
 
@@ -14,6 +15,7 @@ The typical flow: **ship a project → Gather → Build → keep the case study 
 - _"The project is done, gather the portfolio assets / screenshots / prototype and save them"_
 - _"Add <client> to our Results" / "make a case study for <project>" / "showcase this project"_
 - _"Team Chat is live now, update the OTSO case study"_ / _"re-film the demo video"_
+- _"Make a marketing / product showcase / motion graphic video for <client>"_ / _"change the soundtrack"_ / _"add sound effects"_
 - Uploading an `AI Portfolio Assets/...` pack folder
 
 ## What's inside
@@ -29,7 +31,8 @@ skills/codech-case-study/
 │   ├── embeds.md                 hosting proposal/prototype, phone-layout shell
 │   ├── film.md                   captioned film + social cut, posters, OG image
 │   ├── deploy.md                 staging, multi-session protocol, verification
-│   └── lessons.md                every bug hit so far, with fixes
+│   ├── lessons.md                every bug hit so far, with fixes
+│   └── marketing-film.md         Mode C: rules, motion language, workflow, gotchas
 ├── scripts/
 │   ├── gather_stats.py           measured "By the numbers" from git + code
 │   ├── capture_screens.py        plan-driven Playwright screenshots (2x, mobile, crops)
@@ -40,17 +43,25 @@ skills/codech-case-study/
 │   ├── preview_scenes.py         timed screenshots of each product demo
 │   ├── record_film.py            CDP screencast → H.264 MP4, poster, OG cover
 │   ├── qa_shots.py               desktop + phone QA screenshots, overflow/errors
-│   └── stage_deploy.py           guarded Cloudflare Pages deploy + content-type check
+│   ├── stage_deploy.py           guarded Cloudflare Pages deploy + content-type check
+│   ├── mf_music.py               Mode C: find/rank Mixkit tracks, analyse tempo + drop, bar-exact fit
+│   ├── mf_sfx.py                 Mode C: fetch the SFX palette as trimmed .npy
+│   ├── mf_mix.py                 Mode C: cue sheet + music → final mix
+│   └── mf_encode.py              Mode C: JPEG sequence + mix → MP4, previews, contact sheets
 ├── assets/
 │   ├── shared/                   vignette engine (ov.js/css), page styles/script, film template
-│   └── pack-template/            PROJECT_BRIEF.md and README.md templates
-└── examples/otso-ai-hub/         worked example: case.json, scenes.js, scenes.css
+│   ├── pack-template/            PROJECT_BRIEF.md and README.md templates
+│   └── marketing-film/           Remotion starter, storyboard generator, music shortlist page, cue template
+└── examples/
+    ├── otso-ai-hub/              worked example: case.json, scenes.js, scenes.css
+    └── shingtik-marketing-film/  worked Mode C example: Remotion scenes, 231-cue sheet, storyboard data
 ```
 
 ## Requirements
 
 - Python 3.10+ with `playwright` (+ `python -m playwright install chromium`), `pillow`, `imageio-ffmpeg`
 - `git` (Gather stats), `npx wrangler` authenticated to the Codech Cloudflare account (deploy)
+- Mode C: Node 18+ (`npm i` in the copied Remotion starter), `numpy`, optional `segno` (WhatsApp QR)
 
 ## Principles baked in
 
