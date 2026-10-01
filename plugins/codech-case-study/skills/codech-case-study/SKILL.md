@@ -17,7 +17,7 @@ Turn a Codech project's asset pack into a case study on `site/codech-ai-landing`
 What a finished case study has:
 - **Vignettes**: small animated recreations of the real product screens (cursor, typing, reveal), built in HTML/CSS on the shared engine. Not AI-generated images: image models garble UI text and invent screens, which misrepresents real client work.
 - **Landing card** in the Results carousel: headline, 3 KPIs, client logo, two live demos labelled Live / In build, link to the page.
-- **Case-study page** `work/<slug>/`: hero + showreel of every demo, stats, problem, one section per product area with Arcade-style feature cards, optional design-decision band, pipeline, "How we delivered" viewer embedding the proposal and prototype, engineering notes, CTA.
+- **Case-study page** `work/<slug>/`: hero + showreel of every demo, stats, problem, one section per product area with Arcade-style feature cards, optional design-decision band, pipeline, integrations (brand-logo cards for the tools it plugs into), "How we delivered" viewer embedding the proposal and prototype, engineering notes, CTA.
 - **Film**: 60–90 s widescreen tour (captions only) embedded on the page, a 20–35 s portrait social cut, poster and OG image, all recorded from the vignettes.
 
 ## Site layout

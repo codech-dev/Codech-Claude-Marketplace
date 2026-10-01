@@ -40,11 +40,16 @@
     els.forEach(el => io.observe(el));
   })();
 
-  // delivery deck: embeds the proposal / prototype, rendered at desktop width and scaled to fit.
+  // delivery decks: embed the proposal / prototypes, rendered at desktop width and scaled to fit.
+  // A page may have several decks (staged layout); every lookup is scoped to its own .deck.
   // Phones get the embedded page's own mobile layout (native width) unless a pane sets data-minw.
-  (() => {
-    const view = $('#deckView'); if (!view) return;
-    const panes = $$('.pane', view), tabs = $$('.dtab'), hint = $('#deckHint');
+  const shade = document.createElement('div'); shade.className = 'deck-shade';
+  let closeFull = null;
+  $$('.deck').forEach(deck => {
+    const view = $('.deck-view', deck); if (!view) return;
+    if (!shade.isConnected) { document.body.append(shade); shade.addEventListener('click', () => closeFull && closeFull()); }
+    const panes = $$('.pane', view), tabs = $$('.dtab', deck), hint = $('.deck-hint', deck);
+    const urlEl = $('.deck-url', deck) || $('#deckUrl', deck);
     let cur = 0, seen = false, ht;
     const fit = f => {
       const w = view.clientWidth, h = view.clientHeight, W = w >= 900 ? 1440 : Math.max(w, +(f.parentElement.dataset.minw || 0)), k = w / W;
@@ -61,33 +66,34 @@
       cur = k;
       tabs.forEach((t, n) => t.setAttribute('aria-selected', n === k));
       panes.forEach((p, n) => p.classList.toggle('on', n === k));
-      $('#deckUrl').textContent = panes[k].dataset.url;
+      if (urlEl) urlEl.textContent = panes[k].dataset.url;
       if (seen) load(panes[k]);
-      hint.querySelector('span').textContent = (C.deckHints || [])[k] || 'Scroll inside to explore';
-      hint.classList.remove('off'); clearTimeout(ht); ht = setTimeout(() => hint.classList.add('off'), 4500);
+      if (hint) {
+        hint.querySelector('span').textContent = panes[k].dataset.hint || (C.deckHints || [])[k] || 'Scroll inside to explore';
+        hint.classList.remove('off'); clearTimeout(ht); ht = setTimeout(() => hint.classList.add('off'), 4500);
+      }
     }
     tabs.forEach(t => t.addEventListener('click', () => show(+t.dataset.k)));
     // full screen pins the same window as a fixed overlay; it is never moved in the DOM, so frames don't reload
-    const win = view.closest('.deck-win'), btn = $('#deckFull'), shade = document.createElement('div');
-    shade.className = 'deck-shade'; document.body.append(shade);
+    const win = view.closest('.deck-win'), btn = $('.deck-full', deck);
     let full = false;
     const refit = () => requestAnimationFrame(() => $$('iframe', view).forEach(fit));
     function setFull(on) {
       if (on === full) return; full = on;
       win.classList.toggle('full', on); shade.classList.toggle('on', on); document.body.classList.toggle('deck-lock', on);
-      btn.setAttribute('aria-pressed', on); btn.querySelector('span').textContent = on ? 'Close' : 'Full screen';
+      if (btn) { btn.setAttribute('aria-pressed', on); btn.querySelector('span').textContent = on ? 'Close' : 'Full screen'; }
+      closeFull = on ? () => setFull(false) : null;
       refit();
     }
-    btn.addEventListener('click', () => setFull(!full));
-    shade.addEventListener('click', () => setFull(false));
+    if (btn) btn.addEventListener('click', () => setFull(!full));
     addEventListener('keydown', e => { if (e.key === 'Escape') setFull(false); });
-    view.addEventListener('pointerenter', () => hint.classList.add('off'));
+    if (hint) view.addEventListener('pointerenter', () => hint.classList.add('off'));
     addEventListener('resize', () => $$('iframe', view).forEach(fit));
     show(0);
     const start = () => { if (seen) return; seen = true; show(cur); };
     if ('IntersectionObserver' in window) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { start(); o.disconnect(); } }, { rootMargin:'400px 0px' }).observe(view);
     else start();
-  })();
+  });
 
   // product film
   // Cloudflare Pages ignores HTTP Range requests, so a streamed MP4 can't be scrubbed. Play it streamed
