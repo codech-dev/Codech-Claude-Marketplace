@@ -10,6 +10,9 @@ Styles (all synthesised from scratch with numpy, so there is nothing to license)
   lofi       warm lo-fi in F: electric-piano chords, swung hats, soft kick/snare, vinyl crackle, rolled-off highs
   drive      energetic future-house in A minor, 124 bpm: pumping supersaw chords, offbeat bass, four-on-the-floor,
              16th hats and plucks; builds (snare roll + riser) into every chapter change and drops on it
+  afro       warm afro-house in A minor, 122 bpm: congas, 3-2 clave, shaker, deep kick, syncopated sub bass, kalimba
+  synthwave  retro synthwave in E minor, 118 bpm: lush pad, pulsing 16th saw bass, square arpeggio, gated snare
+  disco      funky disco-house in G, 122 bpm: disco strings, funk bass, muted-guitar chops, brass stabs, tambourine
   anthem     upbeat feel-good pop-house in E major, 128 bpm: off-beat piano stabs, octave-bounce disco bass,
              kick + clap/snare, off-beat open hats, a quiet synth hook; tom fill + cymbal swell into each chapter
 Every style: a bell at each chapter change (--marks, seconds), rhythm only between the first scene and the outro,
@@ -78,6 +81,9 @@ STYLES = {
     # energetic: everything comes from drive_layer(); the shared loop only adds the chapter bells
     "drive": dict(bpm=124, prog=[(45, [57])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.03, drive=True, sat=3.0, peak=.68),
     # energetic and major-key: everything comes from anthem_layer(); distinct from drive (minor, pads)
+    "afro": dict(bpm=122, prog=[(45, [57])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.025, layer="afro", sat=2.4, peak=.64),
+    "synthwave": dict(bpm=118, prog=[(40, [64])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.025, layer="synthwave", sat=3.6, peak=.65),
+    "disco": dict(bpm=122, prog=[(43, [59])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.025, layer="disco", sat=2.5, peak=.65),
     "anthem": dict(bpm=128, prog=[(40, [64])] * 4, pad="none", pad_lvl=0, bass="none", arp=0, drums="none", bell=88, bell_lvl=.03, anthem=True, sat=2.6, peak=.66),
 }
 
@@ -220,6 +226,157 @@ def anthem_layer(rng, D, N, beat, first, outro, marks):
         put(int(m * SR), kick, .26)
     return L, R
 
+def _layer_tools(N):
+    L = np.zeros(N); R = np.zeros(N)
+    def put(s, sig, gl, gr=None):
+        if s < 0 or s >= N: return
+        e = min(N, s + len(sig)) - s
+        L[s:s + e] += gl * sig[:e]; R[s:s + e] += (gl if gr is None else gr) * sig[:e]
+    return L, R, put
+
+def _pad_bed(prog, clen, D, N, rng, cut, att, shift=-12):
+    """A soft pad under the whole film (one chord per clen), so the intro and outro have harmony."""
+    pad = np.zeros(N); k = 0; t0 = 0.0
+    while t0 < D:
+        _, notes = prog[k % len(prog)]; n = int(min(clen + .4, D - t0) * SR); s = int(t0 * SR)
+        if n <= 0: break
+        ch = sum(pad_voice(midi(m + shift), n, rng) for m in notes) / len(notes)
+        e = min(N, s + n) - s; pad[s:s + e] += (ch * env_adsr(n, att, .4, 1.0))[:e]
+        k += 1; t0 += clen
+    return lowpass(pad, cut)
+
+def _tone(f, dur, decay, harms=((1, 1),), drop=0.0):
+    x = np.arange(int(dur * SR)) / SR
+    ph = 2 * np.pi * (f * x + (f * drop * (1 - np.exp(-x * 25)) / 25 if drop else 0))
+    return sum(a * np.sin(ph * r) for r, a in harms) * np.exp(-x * decay)
+
+def _transitions(put, rng, kick, first, marks, outro, bar, swell_cut, swell_lvl, crash_lvl):
+    nxt = [m for m in marks if m > first + 1]
+    for m in [first] + nxt:
+        n = int(min(bar, m) * SR)
+        if n <= 0: continue
+        put(int(m * SR) - n, lowpass(rng.standard_normal(n), swell_cut) * np.linspace(0, 1, n) ** 3, swell_lvl)
+        put(int(m * SR), noise_hit(rng, int(1.6 * SR), 2500, 12000, 2.8), crash_lvl)
+        put(int(m * SR), kick, .24)
+    return nxt + [outro]
+
+def afro_layer(rng, D, N, beat, first, outro, marks):
+    """Warm afro-house in A minor (Am7 D9 Fmaj7 Em7, two bars each): deep four-on-the-floor kick, 3-2 clave,
+    high/low congas, 16th shaker, syncopated sub bass and a kalimba/marimba figure; conga roll and shaker
+    swell into every chapter change."""
+    L, R, put = _layer_tools(N)
+    prog = [(45, [57, 60, 64, 67]), (38, [57, 60, 62, 66]), (41, [57, 60, 64, 65]), (40, [55, 59, 62, 67])]
+    bar = 4 * beat; clen = 2 * bar; t = np.arange(N) / SR; on = (t >= first) & (t < outro)
+    put(0, _pad_bed(prog, clen, D, N, rng, 1100, .4) * np.where(on, 1 - .35 * np.exp(-((t - first) % beat) * 8), 1.0), .11, .10)
+    kick = kick_hit(int(.42 * SR))
+    hi_c = _tone(340, .22, 16, ((1, 1), (2.1, .25)), drop=.35); lo_c = _tone(230, .26, 13, ((1, 1), (2.1, .2)), drop=.35)
+    clave = _tone(1750, .07, 45, ((1, 1), (2.4, .3)))
+    def bass(m):
+        return _tone(midi(m), beat * .7, 4.5, ((1, 1), (2, .3)))
+    basses = [{o: bass(r + o) for o in (0, 7, 10)} for r, _ in prog]
+    def mar(m):
+        return _tone(midi(m), .6, 7, ((1, 1), (4, .25), (10, .05)))
+    nxt_marks = _transitions(put, rng, kick, first, marks, outro, bar, 7000, .04, .04)
+    st = beat / 4; i = 0; tt0 = first
+    while tt0 < outro - .05:
+        s = int(tt0 * SR); pos = i % 16; p32 = i % 32; ci = int(tt0 // clen) % 4
+        fill_at = next((m for m in nxt_marks if m > tt0), None); in_fill = fill_at is not None and fill_at - beat <= tt0
+        if pos % 4 == 0: put(s, kick, .29)
+        if p32 in (0, 6, 12, 20, 24): put(s, clave, .045, .03)
+        if in_fill:
+            put(s, hi_c if i % 2 else lo_c, .06 + .06 * (1 - (fill_at - tt0) / beat), .08)
+        else:
+            if pos in (3, 7, 11, 14): put(s, hi_c, .055, .085)
+            if pos in (6, 10, 15): put(s, lo_c, .085, .06)
+        put(s, noise_hit(rng, int(.04 * SR), 4500, 11500, 85), .022 if pos % 2 else .013, .014 if pos % 2 else .022)
+        if pos in (4, 12): put(s, noise_hit(rng, int(.16 * SR), 1200, 5200, 22), .06)
+        for q, off in ((0, 0), (3, 0), (6, 7), (10, 0), (12, 10), (14, 7)):
+            if pos == q: put(s, basses[ci][off], .24)
+        for q, ix in ((0, 0), (3, 2), (6, 1), (8, 3), (11, 2), (14, 1)):
+            if pos == q:
+                pan = .5 + .35 * np.sin(i * .7); put(s, mar(prog[ci][1][ix] + 12), .075 * (1 - pan) + .01, .075 * pan + .01)
+        tt0 += st; i += 1
+    return L, R
+
+def synthwave_layer(rng, D, N, beat, first, outro, marks):
+    """Retro synthwave in E minor (Em C G D, a bar each): lush detuned pad, pulsing 16th saw bass,
+    16th square arpeggio, four-on-the-floor kick, big gated snare on 2 and 4, 8th hats; snare roll and
+    swell into every chapter change."""
+    L, R, put = _layer_tools(N)
+    prog = [(40, [64, 67, 71]), (36, [64, 67, 72]), (43, [62, 67, 71]), (38, [62, 66, 69])]
+    bar = 4 * beat; clen = bar
+    pad = _pad_bed(prog, clen, D, N, rng, 2600, .3, shift=0)
+    put(0, pad, .15, 0); put(int(.013 * SR), pad, 0, .15)
+    kick = kick_hit(int(.4 * SR))
+    def sbass(m):
+        n = int(beat / 4 * .92 * SR); x = np.arange(n) / SR; f = midi(m - 12)
+        return lowpass(2 * ((x * f) % 1) - 1, 1100) * np.exp(-x * 7)
+    basses = [sbass(r) for r, _ in prog]
+    def snare():
+        n = int(.32 * SR); x = np.arange(n) / SR
+        body = .5 * np.sin(2 * np.pi * 185 * x) * np.exp(-x * 20) + noise_hit(rng, n, 900, 7000, 4)
+        gate = np.where(x < .22, 1.0, np.clip(1 - (x - .22) / .05, 0, 1))
+        return body * gate
+    sn = snare()
+    def arp(m):
+        n = int(beat / 4 * 1.6 * SR); x = np.arange(n) / SR; ph = 2 * np.pi * midi(m) * x
+        return (np.sin(ph) + .35 * np.sign(np.sin(ph))) * np.exp(-x * 11)
+    nxt_marks = _transitions(put, rng, kick, first, marks, outro, bar, 5000, .05, .05)
+    st = beat / 4; i = 0; tt0 = first
+    while tt0 < outro - .05:
+        s = int(tt0 * SR); pos = i % 16; ci = int(tt0 // clen) % 4
+        fill_at = next((m for m in nxt_marks if m > tt0), None); in_fill = fill_at is not None and fill_at - beat <= tt0
+        if pos % 4 == 0: put(s, kick, .29)
+        if pos in (4, 12) and not in_fill: put(s, sn, .13)
+        if in_fill: put(s, sn, .04 + .08 * (1 - (fill_at - tt0) / beat))
+        if pos % 2 == 0: put(s, noise_hit(rng, int(.04 * SR), 6000, 12000, 80), .02 if pos % 4 else .012)
+        put(s, basses[ci], .17 if pos % 4 == 0 else .12)
+        notes = prog[ci][1]; m = notes[[0, 1, 2, 1][i % 4]] + 12 + (12 if (i // 4) % 2 else 0)
+        pan = .5 + .45 * (1 if i % 2 else -1) * .8
+        put(s, arp(m), .045 * (1 - pan) + .005, .045 * pan + .005)
+        tt0 += st; i += 1
+    return L, R
+
+def disco_layer(rng, D, N, beat, first, outro, marks):
+    """Funky disco-house in G (Gmaj7 Em7 Am7 D7, a bar each): disco strings, brass stab on the 'and' of 4,
+    syncopated funk bass, muted-guitar 16th chops, four-on-the-floor kick, claps, off-beat open hats and
+    tambourine; clap roll and string swell into every chapter change."""
+    L, R, put = _layer_tools(N)
+    prog = [(43, [59, 62, 66, 69]), (40, [59, 62, 67, 71]), (45, [60, 64, 67, 72]), (38, [60, 62, 66, 69])]
+    bar = 4 * beat; clen = bar
+    put(0, _pad_bed(prog, clen, D, N, rng, 3000, .45, shift=0), .09, .1)
+    kick = kick_hit(int(.38 * SR))
+    def bass(m):
+        n = int(beat * .3 * SR); x = np.arange(n) / SR; ph = 2 * np.pi * midi(m) * x
+        return (np.sin(ph) + .3 * np.sign(np.sin(ph)) + .25 * np.sin(2 * ph)) * np.exp(-x * 9)
+    basses = [{o: bass(r + o) for o in (0, 7, 10, 12)} for r, _ in prog]
+    def chop(notes):
+        return sum(_tone(midi(m), .07, 45, ((1, 1), (2, .5), (3, .3))) for m in notes) / len(notes)
+    chops = [chop(n) for _, n in prog]
+    def stab(notes):
+        n = int(.2 * SR); x = np.arange(n) / SR
+        return lowpass(sum(2 * ((x * midi(m) + .3 * j) % 1) - 1 for j, m in enumerate(notes)) / len(notes), 3200) * np.exp(-x * 9)
+    stabs = [stab(n) for _, n in prog]
+    clap = lambda: noise_hit(rng, int(.2 * SR), 1100, 5600, 20)
+    nxt_marks = _transitions(put, rng, kick, first, marks, outro, bar, 6000, .045, .045)
+    st = beat / 4; i = 0; tt0 = first
+    while tt0 < outro - .05:
+        s = int(tt0 * SR); pos = i % 16; ci = int(tt0 // clen) % 4
+        fill_at = next((m for m in nxt_marks if m > tt0), None); in_fill = fill_at is not None and fill_at - beat <= tt0
+        if pos % 4 == 0: put(s, kick, .29)
+        if pos in (4, 12) and not in_fill: c = clap(); put(s, c, .11); put(s + int(.011 * SR), c, .04)
+        if in_fill: put(s, clap(), .03 + .08 * (1 - (fill_at - tt0) / beat))
+        if pos % 4 == 2: put(s, noise_hit(rng, int(.17 * SR), 5500, 12000, 13), .05, .055)
+        put(s, noise_hit(rng, int(.05 * SR), 6500, 12500, 60), .014, .02)                      # tambourine
+        for q, off in ((0, 0), (3, 0), (4, 12), (7, 10), (8, 0), (10, 7), (11, 0), (14, 12)):
+            if pos == q: put(s, basses[ci][off], .2)
+        put(s, chops[ci], .02 if pos % 4 != 2 else .05, .035 if pos % 4 != 2 else .075)       # guitar chops, right
+        if pos == 14: put(s, stabs[ci], .09, .08)
+        tt0 += st; i += 1
+    return L, R
+
+LAYERS = {'afro': afro_layer, 'synthwave': synthwave_layer, 'disco': disco_layer}
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("out"); ap.add_argument("--duration", type=float, required=True)
@@ -330,6 +487,8 @@ def main():
         dl, dr_ = drive_layer(rng, D, N, beat, first_scene, outro, marks); L += dl; R += dr_
     if S.get("anthem"):
         al, ar = anthem_layer(rng, D, N, beat, first_scene, outro, marks); L += al; R += ar
+    if S.get("layer"):
+        al, ar = LAYERS[S["layer"]](rng, D, N, beat, first_scene, outro, marks); L += al; R += ar
 
     # simple ambience: a few feedback-free echoes (longer and wetter for cinematic)
     taps = ((0.19, 0.28), (0.31, 0.22), (0.47, 0.16), (0.63, 0.1)) if o.style == "cinematic" else ((0.113, 0.22), (0.187, 0.16), (0.271, 0.11))
