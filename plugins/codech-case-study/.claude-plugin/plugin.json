@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "codech-case-study",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "Codech portfolio workflow in three modes. Gather: when a client project ships, collect a portfolio asset pack (measured stats, factual project brief, brand assets, 2x screenshots, prototype, proposal, redacted specs) with a sensitive-content scan. Build: turn the pack into a case study on the Codech AI landing site from one case.json: animated code-built product demos, a Results-carousel card, a case-study page with embedded proposal and prototype, a captioned product film, and a guarded Cloudflare Pages deploy. Marketing film: a ClickUp-style motion-graphic product showcase built in Remotion from a storyboard, with a bar-fitted royalty-free soundtrack and synced sound effects.",
   "author": {
     "name": "Codech",
