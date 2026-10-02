@@ -63,7 +63,7 @@ export const VHead: React.FC<{lines: (string | {key: string})[][]; start: number
             const p = sp(ws, {damping: 13, stiffness: 190});
             const sweep = clamp01((t - ws - 0.3) / 0.9);
             return (
-              <span key={wi} style={{display: 'inline-block', marginRight: wi < line.length - 1 ? '0.24em' : 0, transform: `translateY(${(1 - p) * 115}%) rotate(${(1 - p) * 6}deg)`,
+              <span key={wi} style={{display: 'inline-block', marginRight: wi < line.length - 1 ? '0.24em' : 0, transform: `translateY(${(1 - p) * 115}%) rotate(${(1 - p) * 6}deg)`, transformOrigin: '0% 100%', opacity: p > 0.01 ? 1 : 0,
                 ...(isKey ? {background: `linear-gradient(100deg,#7FA8FF 0%,#7FA8FF ${sweep * 100 - 18}%,#FFFFFF ${sweep * 100}%,#7FA8FF ${sweep * 100 + 18}%,#3D7BFF 100%)`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', filter: 'drop-shadow(0 0 26px rgba(61,123,255,.55))', textShadow: 'none'} : {})}}>{text}</span>
             );
           })}

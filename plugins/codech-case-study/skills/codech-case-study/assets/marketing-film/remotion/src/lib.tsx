@@ -49,7 +49,7 @@ export const Headline: React.FC<{lines: (string | {gold: string})[][]; start: nu
               <span key={wi} style={{display: 'inline-block', position: 'relative', marginRight: wi < line.length - 1 ? '0.24em' : 0, color: isGold ? goldColor : undefined}}>
                 {chars.map((ch, ci) => {
                   const p = sp(ws + ci * 0.035, {damping: 13, stiffness: 190});
-                  return <span key={ci} style={{display: 'inline-block', transform: `translateY(${(1 - p) * 115}%) rotate(${(1 - p) * 6}deg)`, whiteSpace: 'pre'}}>{ch}</span>;
+                  return <span key={ci} style={{display: 'inline-block', transform: `translateY(${(1 - p) * 115}%) rotate(${(1 - p) * 6}deg)`, transformOrigin: '0% 100%', opacity: p > 0.01 ? 1 : 0, whiteSpace: 'pre'}}>{ch}</span>;
                 })}
                 {isGold && <span style={{position: 'absolute', left: 0, bottom: '0.04em', height: '0.15em', width: `${expo(ws + 0.35, ws + 0.85) * 100}%`, background: C.gold, opacity: 0.6, zIndex: -1, borderRadius: 4}} />}
               </span>
