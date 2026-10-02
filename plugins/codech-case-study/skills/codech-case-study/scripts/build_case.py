@@ -370,11 +370,13 @@ def page(c):
                 else:
                     panes.append(f'        <div class="pane{" on" if i == 0 else ""}"{minw} data-src="{a(tb["src"])}" data-url="{a(tb["label"])}" data-hint="{hint}"><span class="ld">Loading…</span></div>')
                 deck_hints.append(re.sub(r"<[^>]+>", "", tb.get("hint", "Scroll inside to explore")))
+            # slider-only viewers open slides in their own lightbox, so they skip the frame's Full screen button
+            full_btn = "" if all(tb.get("slides") for tb in tbs) else '<button class="deck-full" type="button" aria-pressed="false"><span>Full screen</span><svg class="i ex" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="i co" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>'
             tablist = (f'\n    <div class="deck-tabs" role="tablist" aria-label="{a(label)}" style="--n:{len(tabs)}">\n' + "\n".join(tabs) + "\n    </div>") if len(tabs) > 1 else ""
             return f"""
   <div class="deck rv">{tablist}
     <div class="deck-win">
-      <div class="deck-bar"><i></i><i></i><i></i><span class="url">{ico('lock')}<span class="deck-url"></span></span><button class="deck-full" type="button" aria-pressed="false"><span>Full screen</span><svg class="i ex" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="i co" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="deck-bar"><i></i><i></i><i></i><span class="url">{ico('lock')}<span class="deck-url"></span></span>{full_btn}</div>
       <div class="deck-view{" deck-slides" if all(tb.get("slides") for tb in tbs) else ""}">
 {chr(10).join(panes)}
         <div class="deck-hint"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 7v3"/></svg><span></span></div>
