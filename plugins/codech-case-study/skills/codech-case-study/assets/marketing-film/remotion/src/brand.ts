@@ -1,7 +1,7 @@
 /* Per-film settings: the opener and end card read everything from here. */
 export const CLIENT = {
-  name: 'Acme Trading',            // "Built for <name>" credit + opener title
-  title: ['Acme', 'Trading'],      // opener title: first word ink, rest gold
+  name: 'Acme Trading',            // opener subtitle "Proposed for <logo> <name>" + "Built by Codech · for <name>"
+  solution: [[{gold: 'AI-powered'}], ['ordering', 'agent']] as (string | {gold: string})[][],  // opener TITLE = the solution's name (lines of words); wrap the key word as {gold: 'word'}
   logo: null as string | null,     // e.g. 'client-logo.png' in public/ (trimmed, transparent); null = no logo in the lockup
   pillars: ['AI ordering agent', 'System integration', 'Company AI portal'],  // 3 short solution names
   pillarDots: ['#D4B895', '#F59443', '#0B0D12'],  // dot per pillar: use each solution's signature colour (ShingTik: WhatsApp green, gold, blue)
