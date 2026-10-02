@@ -61,6 +61,7 @@ Write `work/<slug>/assets/scenes.js` + `scenes.css`: typically 2–4 scenes per 
 Host sanitised copies of the proposal and prototype with `scripts/host_embed.py` (keeps the client-facing proposal URL out of our page, adds noindex, reports sensitive strings). Give the prototype a phone layout if it lacks one. Point `delivery.tabs[].src` at `proposal/` and `prototype/`. If the user wants to keep embedding the live proposal URL for now, that's their call; record it.
 
 ### 5. Build the page and landing card
+Before any build: run the scripts from the **newest installed** version (`~/.claude/plugins/cache/codech-marketplace/codech-case-study/<latest>`), and check that no open PR touches `assets/shared`. `build_case.py` re-syncs `work/_shared/` for **every** case, so building from an older copy or a branch silently strips newer CSS/JS from the other case pages.
 ```
 python scripts/build_case.py   <site> <slug>     # page + film stage; syncs work/_shared
 python scripts/upsert_story.py <site> <slug>     # landing card + engine/scene includes
