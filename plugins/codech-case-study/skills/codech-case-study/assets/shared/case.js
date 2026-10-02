@@ -95,6 +95,58 @@
     else start();
   });
 
+  // slide lightbox: tap/click a slide (or Enlarge) to see it full screen; tap the image to zoom 2x and pan
+  const LB = (() => {
+    let el = null, figs = [], i = 0, onClose = null;
+    const build = () => {
+      el = document.createElement('div'); el.className = 'dsl-lb'; el.hidden = true;
+      el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Slide viewer');
+      const ar = d => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d < 0 ? 'm15 6-6 6 6 6' : 'm9 6 6 6-6 6'}"/></svg>`;
+      el.innerHTML = `<div class="dsl-lb-sc"><img alt=""></div>
+        <button class="dsl-lb-x" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <button class="dsl-lb-nav dsl-lb-prev" type="button" aria-label="Previous slide">${ar(-1)}</button>
+        <button class="dsl-lb-nav dsl-lb-next" type="button" aria-label="Next slide">${ar(1)}</button>
+        <div class="dsl-lb-bar"><span class="dsl-lb-cap"></span><span class="dsl-lb-n"></span><small>Tap the image to zoom</small></div>`;
+      document.body.append(el);
+      const sc = $('.dsl-lb-sc', el), img = $('img', sc);
+      const zoom = (on, cx, cy) => {
+        if (on === el.classList.contains('zoomed')) return;
+        const fx = cx != null ? (cx - img.getBoundingClientRect().left) / img.getBoundingClientRect().width : .5;
+        const fy = cy != null ? (cy - img.getBoundingClientRect().top) / img.getBoundingClientRect().height : .3;
+        el.classList.toggle('zoomed', on);
+        if (on) requestAnimationFrame(() => { sc.scrollLeft = img.offsetWidth * fx - sc.clientWidth / 2; sc.scrollTop = img.offsetHeight * fy - sc.clientHeight / 2; });
+      };
+      img.addEventListener('click', e => { e.stopPropagation(); if (!moved) zoom(!el.classList.contains('zoomed'), e.clientX, e.clientY); });
+      sc.addEventListener('click', e => { if (e.target === sc && !el.classList.contains('zoomed')) close(); });
+      $('.dsl-lb-x', el).addEventListener('click', close);
+      $('.dsl-lb-prev', el).addEventListener('click', () => show(i - 1));
+      $('.dsl-lb-next', el).addEventListener('click', () => show(i + 1));
+      addEventListener('keydown', e => {
+        if (el.hidden) return;
+        if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') show(i - 1); if (e.key === 'ArrowRight') show(i + 1);
+      });
+      // swipe between slides when not zoomed (when zoomed, touch pans the image instead)
+      let x0 = null, y0 = 0, moved = false;
+      sc.addEventListener('touchstart', e => { moved = false; if (!el.classList.contains('zoomed') && e.touches.length === 1) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; } }, { passive:true });
+      sc.addEventListener('touchend', e => {
+        if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { moved = true; show(i + (dx < 0 ? 1 : -1)); setTimeout(() => moved = false, 350); }
+      });
+    };
+    function show(k) {
+      i = (k + figs.length) % figs.length; el.classList.remove('zoomed');
+      const im = figs[i].querySelector('img'), img = $('.dsl-lb-sc img', el);
+      img.src = im.currentSrc || im.src; img.alt = im.alt;
+      $('.dsl-lb-cap', el).textContent = figs[i].dataset.cap || ''; $('.dsl-lb-n', el).textContent = `${i + 1} / ${figs.length}`;
+      const nx = figs[(i + 1) % figs.length].querySelector('img'); if (nx) nx.loading = 'eager';
+    }
+    function close() {
+      if (!el || el.hidden) return; el.hidden = true; el.classList.remove('zoomed'); document.body.classList.remove('deck-lock');
+      if (onClose) onClose(i);
+    }
+    return { open(f, k, cb) { if (!el) build(); figs = f; onClose = cb; show(k); el.hidden = false; document.body.classList.add('deck-lock'); $('.dsl-lb-x', el).focus({ preventScroll:true }); } };
+  })();
+
   // image slider panes (delivery tabs with "slides"): arrows, dots, keys, swipe, gentle autoplay until touched
   $$('.dsl').forEach(sl => {
     const track = $('.dsl-track', sl), figs = $$('.dsl-s', sl), dots = $$('.dsl-dots button', sl);
@@ -113,9 +165,13 @@
     dots.forEach((d, n) => d.addEventListener('click', () => user(n)));
     sl.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') user(i - 1); if (e.key === 'ArrowRight') user(i + 1); });
     // swipe: touch events on phones (reliable with touch-action:pan-y), mouse drag on desktop
-    let x0 = null, y0 = null;
+    let x0 = null, y0 = null, swiped = false;
     const start = (x, y, t) => { if (!t.closest('button')) { x0 = x; y0 = y; } };
-    const end = (x, y) => { if (x0 === null) return; const dx = x - x0, dy = y - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) user(i + (dx < 0 ? 1 : -1)); };
+    const end = (x, y) => { if (x0 === null) return; const dx = x - x0, dy = y - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { swiped = true; setTimeout(() => swiped = false, 350); user(i + (dx < 0 ? 1 : -1)); } };
+    // tap/click a slide, or the Enlarge button, opens the lightbox (a swipe never counts as a tap)
+    const enlarge = () => { touched = true; LB.open(figs, i, k => { go(k); sl.focus({ preventScroll:true }); }); };
+    $('.dsl-track', sl).addEventListener('click', () => { if (!swiped) enlarge(); });
+    const zb = $('.dsl-zoom', sl); if (zb) zb.addEventListener('click', enlarge);
     sl.addEventListener('touchstart', e => start(e.touches[0].clientX, e.touches[0].clientY, e.target), { passive:true });
     sl.addEventListener('touchend', e => end(e.changedTouches[0].clientX, e.changedTouches[0].clientY));
     sl.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') start(e.clientX, e.clientY, e.target); });
