@@ -9,7 +9,7 @@ description: >-
 Three modes; pick by where you are and what the user asked:
 - **Mode A: Gather** (run inside a finished client project): collect everything a case study needs into a portfolio asset pack. Read `references/gather.md` and follow it; templates are in `assets/pack-template/`, helpers are `scripts/gather_stats.py`, `scripts/capture_screens.py`, `scripts/scan_pack.py`. Stop after the pack is saved and reported, unless the user also wants the case study built.
 - **Mode B: Build** (run in the Codech Marketing project): turn a pack into a live case study. Everything from "Mode B: Build the case study" down.
-- **Mode C: Marketing film** (run in the Codech Marketing project): a motion-graphic, ClickUp-style product-showcase film that sells what Codech builds, with the client project as proof. Storyboard first, built in Remotion, scored with a fitted royalty-free track and synced SFX. Read `references/marketing-film.md` and follow it. The Remotion starter, storyboard generator, music shortlist page and cue-sheet template are in `assets/marketing-film/`; the helpers are `scripts/mf_music.py`, `scripts/mf_sfx.py`, `scripts/mf_mix.py` and `scripts/mf_encode.py`; the worked example is `examples/shingtik-marketing-film/`. This is separate from the Mode B product film (step 6), which is recorded from the vignettes.
+- **Mode C: Marketing film** (run in the Codech Marketing project): a motion-graphic, ClickUp-style product-showcase film that sells what Codech builds, with the client project as proof. Pitch three new visual concepts first (rendered stills on one comparison page) and let the user pick, then storyboard, built in Remotion, scored with a fitted royalty-free track and synced SFX. Read `references/marketing-film.md` and follow it. The Remotion starter, storyboard generator, music shortlist page and cue-sheet template are in `assets/marketing-film/`; the helpers are `scripts/mf_music.py`, `scripts/mf_sfx.py`, `scripts/mf_mix.py` and `scripts/mf_encode.py`; the worked example is `examples/shingtik-marketing-film/`. This is separate from the Mode B product film (step 6), which is recorded from the vignettes.
 
 ## Mode B: Build the case study
 
@@ -95,5 +95,5 @@ Edit `work/<slug>/case.json` (e.g. flip a group's `"status"` to `"live"`, change
 - `references/marketing-film.md`: Mode C, the motion-graphic marketing film (rules, motion language, workflow, gotchas)
 - `examples/otso-ai-hub/`: complete worked example (case.json, scenes.js, scenes.css); its source pack is `AI Portfolio Assets/OTSO AI Portal- portfolio-assets/` in the marketing project
 - `assets/pack-template/`: PROJECT_BRIEF.md and README.md templates for Mode A
-- `assets/marketing-film/`: Mode C Remotion starter (`remotion/`), storyboard generator (`storyboard/`), `music-shortlist.html`, `cues-template.py`
+- `assets/marketing-film/`: Mode C Remotion starter (`remotion/`, with `stills.mjs`), concept pitch kit (`concepts/`), storyboard generator (`storyboard/`), `music-shortlist.html`, `cues-template.py`
 - `examples/shingtik-marketing-film/`: the ShingTik marketing film's scenes (`src/`), 231-cue `cues.py` and storyboard data

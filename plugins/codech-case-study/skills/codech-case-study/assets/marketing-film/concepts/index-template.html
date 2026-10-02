@@ -1,0 +1,91 @@
+<!-- Mode C concept pitch page. Copy to concepts/index.html, replace every OTSO-specific line, keep the structure:
+     one .concept per look (two frames + World / Camera / Music / Colour), exactly one "Recommended" tag with a client-specific reason.
+     Publish with the six JPGs as files. Worked example: the OTSO pitch, 2026-10-03. -->
+<title>OTSO Film Looks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column of three concept "reels" — two frames side by side, the treatment notes underneath. */
+:root {
+  --bg: #F4F5F8; --surface: #FFFFFF; --fg: #12151C; --mute: #5F6675; --line: #DDE1E8; --accent: #2F5BEA;
+  --display: 'Manrope', system-ui, sans-serif; --body: 'Inter', system-ui, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0D0F14; --surface: #161922; --fg: #ECEEF3; --mute: #9AA1B0; --line: #272B36; --accent: #7EA0FF; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0D0F14; --surface: #161922; --fg: #ECEEF3; --mute: #9AA1B0; --line: #272B36; --accent: #7EA0FF; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); margin: 0 }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 72px }
+header { display: grid; gap: 10px; margin-bottom: 40px }
+.eyebrow { font: 500 12px var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--mute) }
+h1 { font: 800 clamp(30px, 5vw, 48px)/1.05 var(--display); letter-spacing: -0.03em; margin: 0; text-wrap: balance }
+.lede { max-width: 62ch; color: var(--mute); margin: 0 }
+.concept { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 18px; margin-bottom: 28px }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px }
+.head h2 { font: 800 28px/1.1 var(--display); letter-spacing: -0.02em; margin: 0 }
+.tag { font: 500 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: 3px 10px }
+.frames { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.frames figure { margin: 0; display: grid; gap: 6px }
+.frames img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; display: block; border: 1px solid var(--line) }
+figcaption { font: 500 12px var(--mono); color: var(--mute) }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0 }
+dt { font: 500 12px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute) }
+dd { margin: 0; min-width: 0 }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px }
+.sw { display: inline-flex; align-items: center; gap: 6px; font: 500 12px var(--mono); color: var(--mute) }
+.sw i { width: 16px; height: 16px; border-radius: 5px; display: block; border: 1px solid var(--line) }
+.note { color: var(--mute); font-size: 14px; max-width: 70ch }
+@media (max-width: 720px) { .frames { grid-template-columns: 1fr } dl { grid-template-columns: 1fr } dt { line-height: 1.4 } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Codech × OTSO Markets · marketing film · pick a look</span>
+    <h1>Three looks for the OTSO film</h1>
+    <p class="lede">Each look gets two frames rendered in Remotion, the same engine as the final film: the hero reveal, plus one beat on a real OTSO screen. The story stays the same (problem, then the fix). Only the visual world changes, and none of them reuse ShingTik's cream and gold.</p>
+  </header>
+
+  <section class="concept" id="vault">
+    <div class="head"><h2>A · Midnight Vault</h2><span class="tag">Recommended</span></div>
+    <div class="frames">
+      <figure><img src="VaultHero.jpg" alt="Glass document slabs floating in dark navy space, a cobalt scan beam lighting one; headline Meet your AI workspace"><figcaption>Hero · the AI as a scan beam</figcaption></figure>
+      <figure><img src="VaultProduct.jpg" alt="The real OTSO search screen tilted in dark space, the meaning match glowing cobalt"><figcaption>Product · Search by meaning</figcaption></figure>
+    </div>
+    <dl>
+      <dt>World</dt><dd>A dark archive in deep space. Documents are frosted-glass slabs, and the AI is a cobalt light beam that lights up whatever it reads. Compliance becomes a vault door closing. Fintech launch film.</dd>
+      <dt>Camera</dt><dd>Slow fly-throughs between the slabs, rim-lit product windows, floor reflections.</dd>
+      <dt>Music</dt><dd>Dark cinematic electronic pulse.</dd>
+      <dt>Colour</dt><dd><span class="swatches"><span class="sw"><i style="background:#070B18"></i>#070B18</span><span class="sw"><i style="background:#0D1836"></i>#0D1836</span><span class="sw"><i style="background:#3D7BFF"></i>#3D7BFF</span><span class="sw"><i style="background:#9DBBFF"></i>#9DBBFF</span></span></dd>
+    </dl>
+    <p class="note">Why I recommend it: OTSO is a regulated brokerage, and this look reads as secure and premium. It sits naturally next to OTSO's own navy product, and it's the furthest from the light ShingTik film.</p>
+  </section>
+
+  <section class="concept" id="ink">
+    <div class="head"><h2>B · Ink &amp; Paper</h2></div>
+    <div class="frames">
+      <figure><img src="InkHero.jpg" alt="Pencil-sketched documents on white paper, one flooded with cobalt ink; headline Meet your AI workspace"><figcaption>Hero · the AI as ink</figcaption></figure>
+      <figure><img src="InkProduct.jpg" alt="Greyscale OTSO viewer screen with only the AI summary panel in colour, circled in cobalt ink"><figcaption>Product · Every file, understood</figcaption></figure>
+    </div>
+    <dl>
+      <dt>World</dt><dd>White paper and graphite. Documents are sketched live by a pen line, and cobalt ink floods colour into whatever the AI understands. Screens stay greyscale except for the part the AI is doing.</dd>
+      <dt>Camera</dt><dd>Mostly flat and editorial, with hand-drawn arrows, circles and underlines.</dd>
+      <dt>Music</dt><dd>Minimal piano and plucks.</dd>
+      <dt>Colour</dt><dd><span class="swatches"><span class="sw"><i style="background:#FDFDFB"></i>#FDFDFB</span><span class="sw"><i style="background:#24262B"></i>#24262B</span><span class="sw"><i style="background:#9A9DA4"></i>#9A9DA4</span><span class="sw"><i style="background:#1E46F0"></i>#1E46F0</span></span></dd>
+    </dl>
+  </section>
+
+  <section class="concept" id="canvas">
+    <div class="head"><h2>C · Infinite Canvas</h2></div>
+    <div class="frames">
+      <figure><img src="CanvasHero.jpg" alt="Light slate dot-grid canvas with OTSO screens as artboards, a gradient caret after the headline"><figcaption>Hero · the caret as guide</figcaption></figure>
+      <figure><img src="CanvasProduct.jpg" alt="OTSO assistant screen as a selected artboard, the cited source boxed with a design-tool selection"><figcaption>Product · Answers, with sources</figcaption></figure>
+    </div>
+    <dl>
+      <dt>World</dt><dd>One giant design-tool canvas. Every OTSO screen is an artboard, and a blinking violet-to-blue caret leads the camera from feature to feature in one continuous glide. Selection boxes and minimap details.</dd>
+      <dt>Camera</dt><dd>One long continuous pan and zoom, with no hard cuts.</dd>
+      <dt>Music</dt><dd>Upbeat indie electronic.</dd>
+      <dt>Colour</dt><dd><span class="swatches"><span class="sw"><i style="background:#E8ECF2"></i>#E8ECF2</span><span class="sw"><i style="background:#111827"></i>#111827</span><span class="sw"><i style="background:#7C5CFF"></i>#7C5CFF</span><span class="sw"><i style="background:#2F7BFF"></i>#2F7BFF</span></span></dd>
+    </dl>
+  </section>
+
+  <p class="note">All three keep the end card with the Codech logo, contacts and WhatsApp QR. It's restyled to whichever look you pick.</p>
+</div>

@@ -25,12 +25,13 @@ How it differs from the Mode B product film (`film.md`):
 
 **Visual-first.**
 - Headlines of 5 words or fewer; no paragraphs.
-- Pure motion graphics: no real photos, no AI-generated people, live action or UI.
+- Motion graphics, not live action. AI-generated product photos and people (avatars, profile photos) are fine; the user asked for them from ShingTik v13 on. Never AI-generated UI: image models garble text and invent screens.
 - Use the real product screens (2x) and code-built UI.
 
-**Light theme.**
-- Codech cream `#FAF8F4`, ink `#0B0D12`, champagne gold `#D4B895`, gold text `#7A5F37`.
-- Dark is limited to the results beat and one ink colour flip. The user rejected dark integration and Meet scenes.
+**A new look for every film.** The user picks it from three pitched concepts (workflow step 3). Never reuse an earlier film's palette, motifs or signature moves: the user rejected an OTSO draft that looked like the ShingTik film.
+- The chosen concept sets the palette, the visual thread (ShingTik: orange orb; OTSO "Midnight Vault": cobalt scan beam), the camera language and the music style.
+- Codech gold `#D4B895` is the brand accent: keep it at least on the end-card logo, even when the concept's own accent differs.
+- Past looks, so the next pitch avoids them: ShingTik = light cream `#FAF8F4` + champagne gold, frosted orange orb, ink flip; OTSO = Midnight Vault (navy `#070B18`, cobalt `#3D7BFF`, glass document slabs).
 - The client's brand colours appear only inside their product screens.
 
 **Varied camera.** No two consecutive scenes share an angle. Options: front ¾, overhead flat lay, side profile, tilted iso window, low hero, locked-off kinetic type.
@@ -104,7 +105,15 @@ cp -r $SK/assets/marketing-film/storyboard storyboard && mkdir -p storyboard/fra
 - **WhatsApp QR:** `python -c "import segno; segno.make('https://wa.me/60139473347').save('remotion/public/qr-wa.png', scale=10, border=2)"`. It is already in the template.
 - **OneDrive:** `npm i` inside OneDrive is slow. Junction `remotion/node_modules` to an existing install if needed (PowerShell `New-Item -ItemType Junction`), then pass `--browser-executable=<real node_modules>/.remotion/chrome-headless-shell/win64/chrome-headless-shell-win64/chrome-headless-shell.exe` to render/still.
 
-### 3. Storyboard + scenes, chapter by chapter
+### 3. Pitch three visual concepts (before any storyboard)
+For every new film, pitch **three new visual concepts** and let the user choose. Don't start the storyboard until they pick (or ask for a mix).
+- **Make them genuinely different.** Vary the light (dark / white / mid-tone), the world (space, paper, canvas, studio, architecture…), what stands in for the AI (beam, ink, caret, orb…), the camera language and the music. None may resemble an earlier film's look (see the rule above).
+- **Show, don't describe.** The user asks for "the visual look" when given text options. For each concept, render **two Remotion stills**: the hero reveal ("Meet your …") and one product beat on a real 2x screen. Write them as throwaway compositions in `remotion/src/Concepts.tsx`, register them in `Root.tsx`, and render with `node concept-stills.mjs ../concepts` (from `assets/marketing-film/concepts/`, copy it into `remotion/`; it bundles once). Look at the stills and fix overlaps before showing them.
+- **Publish one comparison page** (`assets/marketing-film/concepts/index-template.html` → `concepts/index.html` + the six JPGs) as an Artifact. Each concept gets its frames plus World / Camera / Music / Colour swatches. Mark one **Recommended** with a one-line reason tied to the client (OTSO: a regulated brokerage → "secure and premium", next to its navy product).
+- Record the pick in the plan and in memory, then build the storyboard in that look.
+- Worked example: the OTSO pitch (Midnight Vault / Ink & Paper / Infinite Canvas) in `assets/marketing-film/concepts/Concepts.example.tsx`.
+
+### 4. Storyboard + scenes, chapter by chapter
 **Scenes**
 - `remotion/src/Scenes.tsx` has starter scenes (KineticProblem, PhoneHero, ExplodedUI, ColorFlip, OrbReveal). `lib.tsx` provides:
   - fonts and colour tokens `C`;
@@ -118,12 +127,11 @@ cp -r $SK/assets/marketing-film/storyboard storyboard && mkdir -p storyboard/fra
 **Stills and the storyboard**
 - To iterate on one beat, point the `Scene` composition in `Root.tsx` at it and check stills at several frames, including mid-animation:
   `(cd remotion && npx remotion still src/index.ts Scene out/s.jpg --frame=45)`
-- Storyboard frames are stills of these scenes, so the storyboard always shows the real film. Draft 1 uses rough scenes; nothing else is allowed (no AI images):
-  `(cd remotion && npx remotion still src/index.ts Film ../storyboard/frames/<id>.jpg --frame=<film frame>)`
+- Storyboard frames are stills of these scenes, so the storyboard always shows the real film. Draft 1 uses rough scenes; nothing else is allowed (no AI images). Render them all in one bundle with `stills.mjs` (in the starter): `(cd remotion && node stills.mjs ../storyboard/frames <frame-id>=<local s> <frame-id>=<scene>@<local s> …)`; a bare `id=s` takes the time inside the timeline scene of the same id.
 - Fill the storyboard DATA block in `storyboard/build.py`: every scene gets On screen / Camera / Action / Motion & FX / Transition / Sound. Then run `python storyboard/build.py` and publish `storyboard/index.html` + `frames/` as an Artifact.
 - Bump `VERSION` and tag changed scenes in `NEW` each round. Edit the data, never the generated HTML.
 
-### 4. Motion language (the bar)
+### 5. Motion language (the bar)
 The user rejected a static HTML-engine cut and a Higgsfield image-to-video test as "too plain". ClickUp level means:
 - **2–4 s beats** on the music's bar grid, with a cut, slam or reveal on every bar.
 - **Kinetic headlines** (`Headline`): lines snap up out of masks, the gold word gets an underline wipe, per-letter mode for hero words, strike-throughs on problem beats.
@@ -134,7 +142,7 @@ The user rejected a static HTML-engine cut and a Higgsfield image-to-video test 
 
 For a new reference video, run Higgsfield `video_analysis_create` then `video_analysis_status` to get a scene-by-scene breakdown for the beat list. Don't use Higgsfield video generation for UI: it garbles text and looked plain.
 
-### 5. Silent cut
+### 6. Silent cut
 ```
 (cd remotion && npx remotion render src/index.ts Film out/seq --sequence --image-format=jpeg --jpeg-quality=90)
 python $SK/scripts/mf_encode.py remotion/out/seq --out renders/cut-v1.mp4
@@ -144,7 +152,7 @@ python $SK/scripts/mf_encode.py --stills renders/cut-v1.mp4 --at 3,10,20,40,60,9
 - Render into a clean `out/seq` each time.
 - Look at the contact sheet before showing anyone.
 
-### 6. Soundtrack
+### 7. Soundtrack
 1. **Shortlist.** Run `python $SK/scripts/mf_music.py find --out audio/lib --film renders/cut-v1.mp4 --title "<Client> soundtrack shortlist"`. It:
    - scrapes Mixkit tag pages (JSON-LD `MusicRecording`);
    - downloads about 24 candidates to `audio/lib/tracks/<id>.mp3` and ranks them by energy;
@@ -160,7 +168,7 @@ python $SK/scripts/mf_encode.py --stills renders/cut-v1.mp4 --at 3,10,20,40,60,9
 
 Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixabay audio blocks scripts, and FreePD is closed.
 
-### 7. Sound effects and the final mix
+### 8. Sound effects and the final mix
 1. **Palette.** `python $SK/scripts/mf_sfx.py fetch --out audio/sfx/wav` downloads 29 sounds (pops, notifications, clicks, typing, sweeps, whooshes, impacts, shutter, error, ticks). `search <tags>` finds swaps.
 2. **Cue sheet.** Copy `$SK/assets/marketing-film/cues-template.py` to `audio/cues.py` and write `q(sound, at('<scene id>', local_t), gain_db, ln=, pre=)`.
    - Read times off the scene code: every `sp()`/`io()` start that lands something is a hit.
@@ -170,7 +178,7 @@ Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixab
 3. **Mix.** `python $SK/scripts/mf_mix.py audio/cues.py --timeline remotion/src/timeline.json --music audio/music_fit.wav --sfx audio/sfx/wav --len <film s> --out audio/final_mix.wav`
 4. **Encode the master.** `python $SK/scripts/mf_encode.py remotion/out/seq --audio audio/final_mix.wav --len <film s> --out renders/<client>-showcase-v1.mp4` (crf 20, ~25 MB for 1:43). Bump vN each round.
 
-### 8. Deliver
+### 9. Deliver
 - Make a preview with `mf_encode.py ... --preview` (1280 wide, crf 25) for SendUserFile, which has a 30 MB limit.
 - Refresh the storyboard frames from the final render and republish.
 - Offer other cuts rather than assuming them:

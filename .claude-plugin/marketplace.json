@@ -194,8 +194,8 @@
     {
       "name": "codech-case-study",
       "source": "./plugins/codech-case-study",
-      "description": "Portfolio workflow for finished Codech engagements. Gather: collect a portfolio asset pack from a shipped project (measured stats, factual brief, brand, 2x screenshots, prototype, proposal, redacted specs, sensitive-content scan). Build: turn the pack into a case study on the Codech AI landing site from one case.json — animated code-built product demos, a Results-carousel card, a case-study page embedding the proposal and prototype, a captioned product film, and a guarded Cloudflare Pages deploy. Marketing film: a ClickUp-style motion-graphic product showcase in Remotion with storyboard, fitted royalty-free music and synced SFX.",
-      "version": "1.8.1",
+      "description": "Portfolio workflow for finished Codech engagements. Gather: collect a portfolio asset pack from a shipped project (measured stats, factual brief, brand, 2x screenshots, prototype, proposal, redacted specs, sensitive-content scan). Build: turn the pack into a case study on the Codech AI landing site from one case.json — animated code-built product demos, a Results-carousel card, a case-study page embedding the proposal and prototype, a captioned product film, and a guarded Cloudflare Pages deploy. Marketing film: three pitched visual concepts to pick from, then a ClickUp-style motion-graphic product showcase in Remotion with storyboard, fitted royalty-free music and synced SFX.",
+      "version": "1.9.0",
       "category": "workflow",
       "keywords": [
         "case-study",
