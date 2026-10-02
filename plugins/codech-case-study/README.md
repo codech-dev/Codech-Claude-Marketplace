@@ -6,7 +6,7 @@ Turn finished Codech client work into portfolio case studies and marketing films
 |---|---|---|
 | **A · Gather** | the finished client project (repo, specs, prototype, running app) | a portfolio asset pack: `PROJECT_BRIEF.md`, `README.md`, `stats.json`, `brand/`, `screenshots/` (2x desktop, mobile, UI crops), `prototype/`, `proposal/`, redacted `docs/` |
 | **B · Build** | the Codech Marketing project (`site/codech-ai-landing`) | a live case study: animated product demos, Results-carousel card, `work/<slug>/` page, embedded proposal + prototype, product film, deploy |
-| **C · Marketing film** | the Codech Marketing project (`video/<slug>-marketing/`) | a ClickUp-style motion-graphic product showcase: three pitched visual concepts to choose from, storyboard artifact, Remotion film, fitted royalty-free soundtrack + synced SFX, MP4 master + preview |
+| **C · Marketing film** | the Codech Marketing project (`video/<slug>-marketing/`) | a motion-graphic case-study film (the client's challenge → our solution → delivery → results): three pitched visual concepts to choose from, storyboard artifact, Remotion film, fitted royalty-free soundtrack + synced SFX, MP4 master + preview |
 
 The typical flow: **ship a project → Gather → Build → keep the case study updated** (edit `case.json`, rebuild).
 
@@ -54,7 +54,8 @@ skills/codech-case-study/
 │   └── marketing-film/           Remotion starter (+ stills.mjs), concept pitch kit, storyboard generator, music shortlist page, cue template
 └── examples/
     ├── otso-ai-hub/              worked example: case.json, scenes.js, scenes.css
-    └── shingtik-marketing-film/  worked Mode C example: Remotion scenes, 231-cue sheet, storyboard data
+    ├── otso-marketing-film/      worked Mode C case-study example: Midnight Vault scenes, mini UIs, chapter tag, tagged timeline
+    └── shingtik-marketing-film/  earlier Mode C example (motion recipes): Remotion scenes, 231-cue sheet, storyboard data
 ```
 
 ## Requirements

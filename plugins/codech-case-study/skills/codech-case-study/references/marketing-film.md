@@ -1,32 +1,54 @@
-# Mode C: marketing film (motion-graphic product showcase)
+# Mode C: marketing film (motion-graphic case-study film)
 
-A 60–110 s SaaS-launch-style film (reference: ClickUp's product videos, youtu.be/feAJjhF4_-M) that sells **what Codech builds**, using one client deployment as the proof. It is built frame by frame in Remotion (React) and scored with a royalty-free track fitted to the cut, plus synced sound effects. Worked example: `examples/shingtik-marketing-film/` (ShingTik, 1:43, delivered 2026-10-01).
+A 60–110 s motion-graphic **case study of a project Codech built for one company**. It shows the audience what that client was facing, the solution Codech proposed and built (named, e.g. "An AI-powered file storage platform"), how it was delivered and what it achieved. The motion is SaaS-launch style (reference: ClickUp's product videos, youtu.be/feAJjhF4_-M). The film is built frame by frame in Remotion (React) and scored with a royalty-free track fitted to the cut, plus synced sound effects. Worked examples: `examples/otso-marketing-film/` (OTSO Markets, the case-study structure; storyboard v4.2, 2026-10-03) and `examples/shingtik-marketing-film/` (ShingTik, 1:43, 2026-10-01, made before the case-study framing: borrow its motion recipes, not its story or positioning).
 
 How it differs from the Mode B product film (`film.md`):
 
 | | Mode B product film | Mode C marketing film |
 |---|---|---|
-| Purpose | Tour of the case study, shown on the case page | Ad, social or website hero film that sells Codech |
+| Purpose | Tour of the case study, shown on the case page | Case-study film for social, ads and the website: the client's challenge, Codech's solution, delivery and results |
 | Source | Recorded from the vignettes | Hand-built Remotion scenes |
-| Story | Feature by feature | Problem → solution, once per solution |
+| Story | Feature by feature | The challenge → our solution → its features → how we delivered → results |
 | Motion | Vignette playback with captions | Kinetic type, exploded UI, match cuts, colour flips, varied camera |
 | Audio | make_music bed | Licensed track fitted bar-exactly, plus about 200 SFX cues |
 
 ## Rules (apply to every film)
 
-**Positioning: Codech is the builder; the client is the proof.**
-- Headlines speak to the viewer about what Codech builds: "Meet your AI agent", "Meet your AI workspace", "Search by meaning".
-- The client appears as a credit ("Built for ShingTik Vegetarian"), in the real screens, chats and flows, and in the results ("~90% of ShingTik's sales orders").
-- A product name that contains the client's name (e.g. "OTSO AI Hub") may appear on screens and in the credit, but not as a headline subject.
+**Purpose: a case study of what Codech built for a company.** (User direction, 2026-10-03.) The audience should come away knowing who the client is, what they faced, what Codech proposed and built, and what changed. It is not a generic "your AI agent" ad.
+- Name the solution once, plainly, as the film's title and in the solution reveal: "An AI-powered file storage platform", "A WhatsApp AI ordering agent".
+- Copy talks about the client, not "you": "Staff choose what AI sees", "A person confirms", "In OTSO's own cloud". Only the end card speaks to the viewer: "Let's build yours."
+- A product name that contains the client's name (e.g. "OTSO AI Hub") may appear on screens, but the headline subject is the solution.
 
-**Story: problem before every solution.**
-- Each solution chapter opens with the pain it removes and closes with a payoff line.
-- ShingTik: CS overwhelmed → WhatsApp AI agent → "AI handles the routine". Data nobody can see, and generic AI that doesn't know the business → company AI portal.
+**Story: the case-study arc.**
+1. **Opener**: the solution is the title (see the opener rule below).
+2. **The challenge**: 2–4 beats of what the client actually faced, taken from `PROJECT_BRIEF.md` ("The problem" section), worded from the brief. OTSO: documents everywhere; a regulated business where nothing can slip; filename-only search; scans nobody can search.
+3. **Our solution**: the reveal ("OUR SOLUTION" + the solution's name, "Built by Codech · for <client>"), then its pillars (OTSO: Store · Share · Manage).
+4. **The solution's features**, grouped by pillar, one feature per beat as a mini UI. A feature may open with its own short problem beat ("Chat apps send copies" → "Send the real file").
+5. **How we delivered**: one beat on the process (OTSO: requirements → clickable prototype approved by the client → production tested against the prototype).
+6. **The results**: the brief's numbers, worded exactly.
+7. **End card**.
+- No separate "Meet the client" scene: the user cut it. The opener's subtitle and the challenge beats introduce the client.
+- **The challenge → our proposal handoff must move.** The user rejected a challenge-card → solution-card flip as "too plain and boring". What worked for ShingTik (`examples/shingtik-marketing-film/src/CaseStudy.tsx`, `Proposal`, 6 s):
+  - Each challenge is a live mini-scene: chat bubbles with a photo and a playing voice note, a pile of look-alike packs, a form being typed.
+  - Each is pulled along a bezier path into a central AI mark, which pulses on arrival.
+  - Its solution card bursts out along a gold path and lands with a check.
+  - A faded, struck-through outline stays where each challenge was.
+  - Everything converges into the mark, then a match cut. OTSO's version: the scan beam sweeps the scattered slabs into order.
+- **Results as proof.** A month-by-month chart that hands off to the headline number reads more like a case study than a single counter (ShingTik: 38.6 → 53.8 → 57.6 → 90.2%). Use only the brief's numbers, and flag any the brief says to confirm with the client.
+- **Two-solution clients.** The opener title can name both ("AI WhatsApp Chatbot & Company AI Hub"). Each solution gets its own challenge → solution pair, and the chapter tag repeats THE CHALLENGE / OUR SOLUTION for the second story.
+
+**Opener: the solution is the title; the client sits below it.**
+- The Codech logo stands alone at the top, with "A CODECH CASE STUDY" above the title.
+- The title is the solution's name (OTSO: "**AI-powered** file storage platform").
+- The subtitle is "Proposed for [client logo] <Client name>". The client logo goes **below** the title, never beside the Codech logo: the user said a Codech × client lockup reads as a partnership.
+- Three pillar pills under it. Template: `Opening.tsx`, set from `brand.ts` (`CLIENT.solution`, `CLIENT.logo`, `CLIENT.pillars`).
+
+**Case-study chapter tag.** A small pill, top-right, names the part of the story on every scene: THE CHALLENGE / OUR SOLUTION · STORE / HOW WE DELIVERED / THE RESULTS. Set it per scene with `"tag"` in `timeline.json`; `Film.tsx` renders it (`ChapterTag`), fading in when the tag changes and holding across scenes that share it. The opener and end card have no tag.
 
 **Visual-first.**
 - Headlines of 5 words or fewer; no paragraphs.
 - Motion graphics, not live action. AI-generated product photos and people (avatars, profile photos) are fine; the user asked for them from ShingTik v13 on. Never AI-generated UI: image models garble text and invent screens.
-- Use the real product screens (2x) and code-built UI.
+- **Product beats are focused mini UIs, not full screenshots.** Recreate one feature per card in Remotion, after the case-study vignettes (`work/<slug>/assets/scenes.js`), in the client's own product styling, with type sized for video and the feature animating (typing, toggles, results landing). Full 2x screenshots in `Browser` windows look small and busy at 1080p: the user asked for mini UIs instead. Worked example: `examples/otso-marketing-film/src/Mini.tsx`.
 
 **A new look for every film.** The user picks it from three pitched concepts (workflow step 3). Never reuse an earlier film's palette, motifs or signature moves: the user rejected an OTSO draft that looked like the ShingTik film.
 - The chosen concept sets the palette, the visual thread (ShingTik: orange orb; OTSO "Midnight Vault": cobalt scan beam), the camera language and the music style.
@@ -38,7 +60,7 @@ How it differs from the Mode B product film (`film.md`):
 
 **Real-looking UI.**
 - Phones use the photoreal frame (`public/phone-frame.png`), with rotateY kept between −40° and −14°. The user rejected flat mockups and a steep side angle.
-- Desktop products use `Browser` / `Crop` windows.
+- Desktop products: mini-UI cards (above). Keep `Browser` / `Crop` for the rare beat where the whole product screen is the point.
 - Chats start at the top under a "Today" pill.
 - The send button shows a mic when the input is empty and a paper plane while typing.
 - Language chips must actually switch the text.
@@ -48,9 +70,10 @@ How it differs from the Mode B product film (`film.md`):
 **Accuracy.** Defaults come from `intake-and-accuracy.md`:
 - Facts and numbers come from the brief, worded exactly.
 - Unbuilt features get an "In build" or "Coming next" label, or are cut.
-- Showing an unbuilt feature as production is allowed only when the user explicitly decides so for this film. ShingTik's film did this for the Order Page and portal; record the decision in the plan.
+- Showing an unbuilt feature as production is allowed only when the user explicitly decides so for this film. ShingTik's film did this for the Order Page and portal, and OTSO's for Team Chat. Record the decision in the plan, per film; never infer it from an earlier film.
 - Check `client.consent_confirmed` before naming the client or publishing its numbers. If it is false, the film can be built but not posted.
 - Per-client restrictions carry over (ShingTik: no pricing, no client URLs).
+- No fee, price or subscription claims, and no competitor names or logos (e.g. Google Drive, OneDrive), unless the user explicitly OKs them for this film. For OTSO the user chose the softer wording "One platform, built for OTSO".
 
 **Audio.**
 - No voiceover unless asked; the user declined VO for ShingTik.
@@ -62,8 +85,8 @@ The ShingTik film is one instance; keep the principles and swap the props:
 
 | ShingTik-specific | General rule | Example for a document/workspace product |
 |---|---|---|
-| "Meet your AI agent", orange orb | One hero reveal of the AI Codech built, via a match cut | "Meet your AI workspace"; the orb or a glowing search bar |
-| WhatsApp phone, bubbles, `C.wa`, SendBtn | Show the channel the client's users actually use | Desktop `Browser` windows; a phone only if there is a mobile app |
+| "Meet your AI agent", orange orb | One solution reveal (OUR SOLUTION + its name), via a match cut | OTSO: the scan beam sweeps the archive into order → "An AI-powered file storage platform" |
+| WhatsApp phone, bubbles, `C.wa`, SendBtn | Show the channel the client's users actually use | Desktop mini-UI cards; a phone only if there is a mobile app |
 | Green colour flip | Flip into one saturated colour from the product, or ink | Ink or the client's primary colour |
 | "AI System" hub with 8 logo tiles | One expertise beat: what it plugs into | SSO, LLM, database and storage logos |
 | `lib.tsx` WhatsApp parts | Unused components are harmless; delete them or leave them | n/a |
@@ -85,14 +108,9 @@ video/<client-slug>-marketing/
 Save a plan to `docs/superpowers/specs/<date>-<slug>-marketing-film.md` first. It holds the beat list plus the open decisions: consent, status of unbuilt features, product naming and which numbers to use. Then work **one chapter at a time**: build its scenes roughly, pull stills into the storyboard, show the user, and refine. The user iterates per scene.
 
 ### 1. Brief and beat list
-Read the case pack (`PROJECT_BRIEF.md`, screenshots, `case.json` if the case study exists) and any earlier storyboard for this client. The beat list runs:
-1. Opener
-2. Problem → solution → payoff, once per solution
-3. Expertise / integration beat
-4. Results
-5. End card
+Read the case pack (`PROJECT_BRIEF.md`, screenshots, `case.json` if the case study exists) and any earlier storyboard for this client. The beat list follows the case-study arc (Rules → Story): opener (solution as title) → the challenge (2–4 beats from the brief) → our solution reveal + pillars → features as mini UIs, grouped by pillar → an expertise / integration beat → how we delivered → results → end card. Give every beat its chapter `tag`.
 
-Typical size: about 10 chapters, 25 beats, 1:40.
+Typical size: about 9 chapters, 28 beats, 1:30 (OTSO v4.2).
 
 ### 2. Set up
 ```
@@ -165,6 +183,7 @@ python $SK/scripts/mf_encode.py --stills renders/cut-v1.mp4 --at 3,10,20,40,60,9
    - Start at 0, so the track's own intro plays.
    - Lengthen by repeating main-section bars before the original ending.
    - Choose the plan so the drop lands on the hero beat (it prints where `d0` lands), then nudge `timeline.json` to the bar grid.
+   - **Retiming a scored film:** when you insert or remove scenes before the drop, keep the total shift a whole number of bars (2 s at 120 BPM) by adjusting one scene's hold. Then refit, repeating pre-drop bars (e.g. `--plan "0:d0, d0-3b:d0+26b, ..."`) so the drop still lands on the hero beat. SFX cues follow `timeline.json` automatically; cues inside a scene that changed mid-scene (e.g. after an inserted chart) need their own offset.
 
 Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixabay audio blocks scripts, and FreePD is closed.
 
@@ -203,4 +222,8 @@ Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixab
 | "Unterminated string literal" after a Python patch | A `\n` was written into a TS single-quoted string: use template literals |
 | Storyboard spec on the wrong card | The HTML was patched by hand: edit `build.py` data and rebuild |
 | Music sounds chopped | Splice points aren't whole bars from `d0`: use `b` units in `--plan` |
+| A few frames re-rendered with `--frames=0-110` won't splice back | They're named `element-000` while the full sequence uses `element-0000`: rename them to the full width, or `mf_encode.py` refuses the mixed widths |
+| A Python patch silently fails to match | A bash heredoc carried curly quotes (’) or apostrophes into the script on this PC: write patch scripts to a file with the Write tool, then run them |
+| `stills.mjs` stops partway through a long list | Flaky renderer launch: render in batches of about 4 stills and log each failure |
+| Dark boxes behind headlines | `overflow: hidden` on the line mask clips the text-shadow / glow into a rectangle: use `clipPath: inset(-0.6em -0.6em 0 -0.6em)` plus a drop-shadow filter on the block (OTSO `VHead`) |
 | Track too short for the film | Repeat main-section bars before the ending; never loop the intro |

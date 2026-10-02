@@ -12,6 +12,7 @@
 | `src/Ch34.tsx` | WhatsApp text order with language switch (`LANG`), photo scan + match ring, ¾ voice-note phone with waveform, green colour flip, ledger rows, integration hub with 8 logo tiles, CS takeover toggle |
 | `src/Ch58.tsx` | Order Page flip, ink flip, real-screenshot `Crop` + `Browser` helpers, exploded dashboard / AI chat (rows + chart lifted in place) / knowledge base, module fan → grid → converge, dark results counter |
 | `src/Problem.tsx` | inbox overflow, retyping with a wrong-item flash, strike-through summary, routine-vs-exceptions bar, dark data scroll, generic-AI fail, radial "knows your business" sources |
+| `src/CaseStudy.tsx` | v17 case-study rework: `Proposal` (6 s): live challenge mini-scenes pulled along bezier paths into the AI orb; solution cards burst out along gold paths and land with a check; struck-through outlines; converge + match cut |
 | `src/Opening.tsx`, `src/EndCard.tsx` | originals of the template's opener and end card |
 | `src/Film.tsx` | the older absolute-time body + `Remapped` insert layer. New films use `timeline.json` instead |
 | `cues.py` | 231-cue SFX sheet with body→film mapping functions (run with `mf_mix.py`, no `--timeline`) |

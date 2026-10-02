@@ -1,9 +1,9 @@
 [
-  {"id": "opener",  "dur": 3.6},
-  {"id": "problem", "dur": 2.8, "overlap": 0.25},
-  {"id": "orb",     "dur": 2.6, "overlap": 0.1},
-  {"id": "phone",   "dur": 4.6, "overlap": 0.1},
-  {"id": "flip",    "dur": 2.0, "overlap": 0.3},
-  {"id": "ui",      "dur": 4.2, "overlap": 0.3},
-  {"id": "end",     "dur": 7.5, "overlap": 0.25}
+  {"id": "opener", "dur": 4.2},
+  {"id": "problem", "dur": 2.8, "overlap": 0.25, "tag": "THE CHALLENGE"},
+  {"id": "orb", "dur": 2.6, "overlap": 0.1, "tag": "OUR SOLUTION"},
+  {"id": "phone", "dur": 4.6, "overlap": 0.1, "tag": "OUR SOLUTION"},
+  {"id": "flip", "dur": 2.0, "overlap": 0.3, "tag": "OUR SOLUTION"},
+  {"id": "ui", "dur": 4.2, "overlap": 0.3, "tag": "OUR SOLUTION"},
+  {"id": "end", "dur": 7.5, "overlap": 0.25}
 ]

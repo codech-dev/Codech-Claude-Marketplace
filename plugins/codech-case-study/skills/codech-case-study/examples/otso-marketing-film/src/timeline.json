@@ -1,0 +1,167 @@
+[
+ {
+  "id": "opener",
+  "dur": 4.2
+ },
+ {
+  "id": "scatter",
+  "dur": 3.6,
+  "overlap": 0.3,
+  "tag": "THE CHALLENGE"
+ },
+ {
+  "id": "regulated",
+  "dur": 3.0,
+  "overlap": 0.4,
+  "tag": "THE CHALLENGE"
+ },
+ {
+  "id": "searchfail",
+  "dur": 3.0,
+  "overlap": 0.3,
+  "tag": "THE CHALLENGE"
+ },
+ {
+  "id": "invisible",
+  "dur": 2.2,
+  "overlap": 0.3,
+  "tag": "THE CHALLENGE"
+ },
+ {
+  "id": "meet",
+  "dur": 3.6,
+  "overlap": 0.1,
+  "tag": "OUR SOLUTION"
+ },
+ {
+  "id": "pillars",
+  "dur": 3.45,
+  "overlap": 0.1,
+  "tag": "OUR SOLUTION"
+ },
+ {
+  "id": "drives",
+  "dur": 3.45,
+  "overlap": 0.4,
+  "tag": "OUR SOLUTION \u00b7 STORE"
+ },
+ {
+  "id": "upload",
+  "dur": 3.6,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 STORE"
+ },
+ {
+  "id": "versions",
+  "dur": 3.0,
+  "overlap": 0.3,
+  "tag": "OUR SOLUTION \u00b7 STORE"
+ },
+ {
+  "id": "search",
+  "dur": 4.0,
+  "overlap": 0.3,
+  "tag": "OUR SOLUTION \u00b7 FIND"
+ },
+ {
+  "id": "pipeline",
+  "dur": 3.2,
+  "overlap": 0.4,
+  "tag": "OUR SOLUTION \u00b7 FIND"
+ },
+ {
+  "id": "summary",
+  "dur": 3.8,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 FIND"
+ },
+ {
+  "id": "langs",
+  "dur": 3.0,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 FIND"
+ },
+ {
+  "id": "share",
+  "dur": 3.4,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 SHARE"
+ },
+ {
+  "id": "copies",
+  "dur": 2.6,
+  "overlap": 0.4,
+  "tag": "OUR SOLUTION \u00b7 SHARE"
+ },
+ {
+  "id": "send",
+  "dur": 3.4,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 SHARE"
+ },
+ {
+  "id": "chat",
+  "dur": 3.8,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 SHARE"
+ },
+ {
+  "id": "assist",
+  "dur": 4.2,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION \u00b7 AI ASSISTANT"
+ },
+ {
+  "id": "confirm",
+  "dur": 3.3,
+  "overlap": 0.4,
+  "tag": "OUR SOLUTION \u00b7 AI ASSISTANT"
+ },
+ {
+  "id": "vault",
+  "dur": 2.4,
+  "overlap": 0.2,
+  "tag": "OUR SOLUTION \u00b7 MANAGE"
+ },
+ {
+  "id": "audit",
+  "dur": 3.85,
+  "overlap": 0.15,
+  "tag": "OUR SOLUTION \u00b7 MANAGE"
+ },
+ {
+  "id": "own",
+  "dur": 3.6,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION"
+ },
+ {
+  "id": "stack",
+  "dur": 4.3,
+  "overlap": 0.35,
+  "tag": "OUR SOLUTION"
+ },
+ {
+  "id": "grows",
+  "dur": 3.0,
+  "overlap": 0.4,
+  "tag": "OUR SOLUTION"
+ },
+ {
+  "id": "process",
+  "dur": 3.45,
+  "overlap": 0.3,
+  "tag": "HOW WE DELIVERED"
+ },
+ {
+  "id": "results",
+  "dur": 5.0,
+  "overlap": 0.2,
+  "tag": "THE RESULTS"
+ },
+ {
+  "id": "end",
+  "dur": 7.5,
+  "overlap": 0.25
+ }
+]
