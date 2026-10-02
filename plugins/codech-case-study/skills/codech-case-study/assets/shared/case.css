@@ -256,7 +256,7 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 @media (hover:none){.flow .st:hover,.pipe-note div:hover{transform:none}.pipe .n:hover .ic{transform:none}}
 @media (prefers-reduced-motion:reduce){.pipe:hover::before{animation:none}}
 .pipe-note b{color:var(--ink);font-family:var(--f-display)}
-@media (max-width:860px){.pipe{grid-template-columns:1fr;gap:22px}.pipe::before{left:31px;right:auto;top:10px;bottom:10px;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--line-2) 0 8px,transparent 8px 14px)}.pipe .n{grid-template-columns:64px 1fr;justify-items:start;text-align:left;column-gap:16px;row-gap:4px;padding:0}.pipe .n .ic{grid-row:span 2}.pipe-note{grid-template-columns:1fr}}
+@media (max-width:860px){.pipe{grid-template-columns:1fr;gap:22px;width:fit-content;max-width:100%;margin-inline:auto}.pipe::before{left:31px;right:auto;top:10px;bottom:10px;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--line-2) 0 8px,transparent 8px 14px)}.pipe .n{grid-template-columns:64px 1fr;justify-items:start;text-align:left;column-gap:16px;row-gap:4px;padding:0}.pipe .n .ic{grid-row:span 2}.pipe-note{grid-template-columns:1fr}}
 
 /* process: live proposal + prototype, embedded */
 .deck{display:grid;gap:14px}
