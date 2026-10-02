@@ -56,7 +56,7 @@
       f.style.width = W + 'px'; f.style.height = (h / k) + 'px'; f.style.transform = `scale(${k})`;
     };
     const load = p => {
-      if (p.querySelector('iframe')) return;
+      if (!p.dataset.src || p.querySelector('iframe')) return;   // slider panes have no embed
       const f = document.createElement('iframe');
       f.src = p.dataset.src; f.title = p.dataset.url; f.referrerPolicy = 'no-referrer';
       f.addEventListener('load', () => { const l = p.querySelector('.ld'); if (l) l.remove(); });
@@ -93,6 +93,37 @@
     const start = () => { if (seen) return; seen = true; show(cur); };
     if ('IntersectionObserver' in window) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { start(); o.disconnect(); } }, { rootMargin:'400px 0px' }).observe(view);
     else start();
+  });
+
+  // image slider panes (delivery tabs with "slides"): arrows, dots, keys, swipe, gentle autoplay until touched
+  $$('.dsl').forEach(sl => {
+    const track = $('.dsl-track', sl), figs = $$('.dsl-s', sl), dots = $$('.dsl-dots button', sl);
+    const cap = $('.dsl-cap', sl), num = $('.dsl-n', sl), N = figs.length;
+    if (!N) return;
+    let i = 0, touched = false, hover = false, visible = false;
+    const go = k => {
+      i = (k + N) % N; track.style.transform = `translateX(${-i * 100}%)`;
+      dots.forEach((d, n) => d.setAttribute('aria-current', n === i));
+      cap.textContent = figs[i].dataset.cap || ''; num.textContent = `${i + 1} / ${N}`;
+      const nx = figs[(i + 1) % N].querySelector('img'); if (nx) nx.loading = 'eager';   // warm the next slide
+    };
+    const user = k => { touched = true; go(k); };
+    $('.dsl-prev', sl).addEventListener('click', () => user(i - 1));
+    $('.dsl-next', sl).addEventListener('click', () => user(i + 1));
+    dots.forEach((d, n) => d.addEventListener('click', () => user(n)));
+    sl.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') user(i - 1); if (e.key === 'ArrowRight') user(i + 1); });
+    // swipe: touch events on phones (reliable with touch-action:pan-y), mouse drag on desktop
+    let x0 = null, y0 = null;
+    const start = (x, y, t) => { if (!t.closest('button')) { x0 = x; y0 = y; } };
+    const end = (x, y) => { if (x0 === null) return; const dx = x - x0, dy = y - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) user(i + (dx < 0 ? 1 : -1)); };
+    sl.addEventListener('touchstart', e => start(e.touches[0].clientX, e.touches[0].clientY, e.target), { passive:true });
+    sl.addEventListener('touchend', e => end(e.changedTouches[0].clientX, e.changedTouches[0].clientY));
+    sl.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') start(e.clientX, e.clientY, e.target); });
+    sl.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') end(e.clientX, e.clientY); });
+    sl.addEventListener('pointerenter', () => hover = true); sl.addEventListener('pointerleave', () => hover = false);
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => visible = e.isIntersecting, { threshold:.4 }).observe(sl);
+    if (!RM) setInterval(() => { if (visible && !hover && !touched && !document.hidden) go(i + 1); }, 5000);
+    go(0);
   });
 
   // product film
