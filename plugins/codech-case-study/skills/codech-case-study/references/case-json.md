@@ -13,7 +13,7 @@ One file per project at `work/<slug>/case.json`. `examples/otso-ai-hub/case.json
 | `year` | optional, footer year (default 2026). |
 
 ## client
-`name`, `logo` (path relative to the case folder, e.g. `assets/acme-logo.png`), `descriptor` ("Online brokerage (FX/CFD) · Asia"), `hero_detail` ("130 staff on the hub"), `named_publicly` (bool), `anonymous_name` (used when not named), `consent_confirmed` (bool; false makes the build warn).
+`name`, `logo` (path relative to the case folder, e.g. `assets/acme-logo.png`; used on the landing card and, unless `logo_hero` is set, in the hero chip, which is 28 px tall and keeps the logo's own proportions up to 150 px wide), `logo_hero` (optional: a wide/horizontal variant for the hero chip when `logo` is a stacked or square mark), `descriptor` ("Online brokerage (FX/CFD) · Asia"), `hero_detail` ("130 staff on the hub"), `named_publicly` (bool), `anonymous_name` (used when not named), `consent_confirmed` (bool; false makes the build warn).
 
 ## theme
 Dark-stage colours for the reel, decision band and film: `deep`, `mid`, `end`, `glow`, `soft` (light accent text on dark), `accent` (buttons/progress). Take them from the client's design tokens so the product feels like theirs; the page chrome stays Codech (cream, Manrope/Inter).
