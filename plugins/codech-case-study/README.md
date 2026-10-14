@@ -6,7 +6,7 @@ Turn finished Codech client work into portfolio case studies and marketing films
 |---|---|---|
 | **A · Gather** | the finished client project (repo, specs, prototype, running app) | a portfolio asset pack: `PROJECT_BRIEF.md`, `README.md`, `stats.json`, `brand/`, `screenshots/` (2x desktop, mobile, UI crops), `prototype/`, `proposal/`, redacted `docs/` |
 | **B · Build** | the Codech Marketing project (`site/codech-ai-landing`) | a live case study: animated product demos, Results-carousel card, `work/<slug>/` page, embedded proposal + prototype, product film, deploy |
-| **C · Marketing film** | the Codech Marketing project (`video/<slug>-marketing/`) | a motion-graphic case-study film (the client's challenge → our solution → delivery → results): three pitched visual concepts to choose from, storyboard artifact, Remotion film, fitted royalty-free soundtrack + synced SFX, MP4 master + preview |
+| **C · Marketing film** | the Codech Marketing project (`video/<slug>-marketing/`) | a motion-graphic case-study film (the client's challenge → our solution → delivery → results): three pitched visual concepts to choose from, storyboard artifact, Remotion film, fitted royalty-free soundtrack + synced SFX, MP4 master + preview; on request, social cuts (9:16 Reels full + 30–45 s, 16:9 short, cover) and a Facebook / Instagram posting kit |
 
 The typical flow: **ship a project → Gather → Build → keep the case study updated** (edit `case.json`, rebuild).
 
@@ -16,6 +16,7 @@ The typical flow: **ship a project → Gather → Build → keep the case study 
 - _"Add <client> to our Results" / "make a case study for <project>" / "showcase this project"_
 - _"Team Chat is live now, update the OTSO case study"_ / _"re-film the demo video"_
 - _"Make a marketing / product showcase / motion graphic video for <client>"_ / _"change the soundtrack"_ / _"add sound effects"_
+- _"Make a 9:16 vertical cut for social"_ / _"a shorter 30–45 s version"_ / _"how should we post this on Facebook and Instagram?"_
 - Uploading an `AI Portfolio Assets/...` pack folder
 
 ## What's inside
@@ -32,7 +33,8 @@ skills/codech-case-study/
 │   ├── film.md                   captioned film + social cut, posters, OG image
 │   ├── deploy.md                 staging, multi-session protocol, verification
 │   ├── lessons.md                every bug hit so far, with fixes
-│   └── marketing-film.md         Mode C: rules, motion language, workflow, gotchas
+│   ├── marketing-film.md         Mode C: rules, motion language, workflow, gotchas
+│   └── social-reels.md           Mode C social cuts: 9:16 Reels + 30–45 s, safe zones, FB/IG posting plan
 ├── scripts/
 │   ├── gather_stats.py           measured "By the numbers" from git + code
 │   ├── capture_screens.py        plan-driven Playwright screenshots (2x, mobile, crops)
@@ -46,16 +48,17 @@ skills/codech-case-study/
 │   ├── stage_deploy.py           guarded Cloudflare Pages deploy + content-type check
 │   ├── mf_music.py               Mode C: find/rank Mixkit tracks, analyse tempo + drop, bar-exact fit
 │   ├── mf_sfx.py                 Mode C: fetch the SFX palette as trimmed .npy
-│   ├── mf_mix.py                 Mode C: cue sheet + music → final mix
+│   ├── mf_mix.py                 Mode C: cue sheet + music → final mix (--skip-missing: reuse it for a short cut)
 │   └── mf_encode.py              Mode C: JPEG sequence + mix → MP4, previews, contact sheets
 ├── assets/
 │   ├── shared/                   vignette engine (ov.js/css), page styles/script, film template
 │   ├── pack-template/            PROJECT_BRIEF.md and README.md templates
-│   └── marketing-film/           Remotion starter (+ stills.mjs), concept pitch kit, storyboard generator, music shortlist page, cue template
+│   └── marketing-film/           Remotion starter (+ stills.mjs, FilmCut + short timeline, 9:16 helpers), concept pitch kit, storyboard generator, music shortlist page, cue template, posting-guide template
 └── examples/
     ├── otso-ai-hub/              worked example: case.json, scenes.js, scenes.css
     ├── otso-marketing-film/      worked Mode C case-study example: Midnight Vault scenes, mini UIs, chapter tag, tagged timeline
-    └── shingtik-marketing-film/  earlier Mode C example (motion recipes): Remotion scenes, 231-cue sheet, storyboard data
+    ├── shingtik-marketing-film/  earlier Mode C example (motion recipes): Remotion scenes, 231-cue sheet, storyboard data
+    └── kiddy123-marketing-film/  Mode C example: prototype-faithful UI, 9:16 Reels + short cut, posting guide
 ```
 
 ## Requirements

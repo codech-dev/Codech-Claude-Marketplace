@@ -9,6 +9,8 @@ The cue sheet is a Python file run with these names available:
   W = 0.22                                              the usual whoosh pre-roll
   at(scene_id, local_t)                                 film time of a scene-local time, from --timeline timeline.json
                                                         (the template's edit list), so cues follow when scenes move
+  --skip-missing                                        cues for scenes absent from --timeline are dropped, so one cue
+                                                        sheet serves the full film AND a 30-45 s cut (timeline-short.json)
 Without a timeline, define your own time mappings at the top of the cue sheet (examples/shingtik-marketing-film/cues.py).
 
 Mix: SFX bus soft-limited with tanh, music x music_gain with a fade-out, peak-normalised to 0.95, 16-bit 44.1 kHz WAV.
@@ -27,6 +29,7 @@ def main():
     ap.add_argument('--music-gain', type=float, default=0.82); ap.add_argument('--sfx-gain', type=float, default=0.9)
     ap.add_argument('--fade-out', type=float, default=1.55)
     ap.add_argument('--timeline', help="the Remotion template's src/timeline.json: enables at(id, t) in the cue sheet")
+    ap.add_argument('--skip-missing', action='store_true', help="skip cues whose at() scene is not in --timeline (reuse a full cue sheet for a short cut)")
     a = ap.parse_args()
 
     starts = {}
@@ -36,12 +39,16 @@ def main():
             st = prev[0] + prev[1] - e.get('overlap', 0) if prev else 0.0
             starts[e['id']] = st; prev = (st, e['dur'])
     def at(sid, t=0.0):
+        if sid not in starts and a.skip_missing:
+            return float('nan')                       # q() drops NaN times: the scene is not in this cut
         if sid not in starts:
             raise SystemExit(f'at(): scene {sid!r} not in timeline ({", ".join(starts) or "pass --timeline"})')
         return starts[sid] + t
 
     C = []
     def q(s, t, g=-10, ln=None, pre=0.0):
+        if t != t:                                    # NaN from at() with --skip-missing
+            return
         C.append((s, t, g, ln, pre))
     runpy.run_path(a.cues, init_globals={'q': q, 'W': 0.22, 'at': at})
 
