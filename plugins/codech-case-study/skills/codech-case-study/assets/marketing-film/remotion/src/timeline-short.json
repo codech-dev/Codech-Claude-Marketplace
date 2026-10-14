@@ -1,0 +1,7 @@
+[
+  {"id": "opener", "dur": 4.2},
+  {"id": "problem", "dur": 2.8, "overlap": 0.25, "tag": "THE CHALLENGE"},
+  {"id": "orb", "dur": 2.6, "overlap": 0.1, "tag": "OUR SOLUTION"},
+  {"id": "phone", "dur": 4.6, "overlap": 0.1, "tag": "OUR SOLUTION"},
+  {"id": "end", "dur": 6.5, "overlap": 0.25}
+]

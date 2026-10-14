@@ -1,0 +1,20 @@
+[
+  {"id": "opener", "dur": 4.4},
+  {"id": "sprawl", "dur": 3.2, "overlap": 0.4, "tag": "THE CHALLENGE"},
+  {"id": "form", "dur": 3.2, "overlap": 0.4, "tag": "THE CHALLENGE"},
+  {"id": "demand", "dur": 3.666, "overlap": 0.4, "tag": "THE CHALLENGE"},
+  {"id": "reveal", "dur": 5.0, "overlap": 0.4, "tag": "OUR SOLUTION"},
+  {"id": "find", "dur": 5.6, "overlap": 0.4, "tag": "OUR SOLUTION · MATCH"},
+  {"id": "enquire", "dur": 4.4, "overlap": 0.4, "tag": "OUR SOLUTION · MATCH"},
+  {"id": "compare", "dur": 4.6, "overlap": 0.4, "tag": "OUR SOLUTION · MATCH"},
+  {"id": "context", "dur": 4.6, "overlap": 0.4, "tag": "OUR SOLUTION · ANSWER"},
+  {"id": "chinese", "dur": 4.0, "overlap": 0.4, "tag": "OUR SOLUTION · ANSWER"},
+  {"id": "guess", "dur": 3.8, "overlap": 0.4, "tag": "OUR SOLUTION · ANSWER"},
+  {"id": "intent", "dur": 4.8, "overlap": 0.4, "tag": "OUR SOLUTION · INSIGHT"},
+  {"id": "lost", "dur": 4.4, "overlap": 0.4, "tag": "OUR SOLUTION · INSIGHT"},
+  {"id": "sponsor", "dur": 4.4, "overlap": 0.4, "tag": "OUR SOLUTION · INSIGHT"},
+  {"id": "how", "dur": 5.0, "overlap": 0.4, "tag": "HOW IT WORKS"},
+  {"id": "delivered", "dur": 5.2, "overlap": 0.4, "tag": "HOW WE DELIVERED"},
+  {"id": "results", "dur": 4.8, "overlap": 0.4, "tag": "THE RESULTS"},
+  {"id": "end", "dur": 7.5, "overlap": 0.3}
+]

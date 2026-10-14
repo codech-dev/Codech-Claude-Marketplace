@@ -49,11 +49,18 @@ How it differs from the Mode B product film (`film.md`):
 - Headlines of 5 words or fewer; no paragraphs.
 - Motion graphics, not live action. AI-generated product photos and people (avatars, profile photos) are fine; the user asked for them from ShingTik v13 on. Never AI-generated UI: image models garble text and invent screens.
 - **Product beats are focused mini UIs, not full screenshots.** Recreate one feature per card in Remotion, after the case-study vignettes (`work/<slug>/assets/scenes.js`), in the client's own product styling, with type sized for video and the feature animating (typing, toggles, results landing). Full 2x screenshots in `Browser` windows look small and busy at 1080p: the user asked for mini UIs instead. Worked example: `examples/otso-marketing-film/src/Mini.tsx`.
+- **When the client approved a clickable prototype, rebuild its components faithfully.** Same fonts, colour tokens, radii, sizes and copy, laid out at the prototype's own CSS px and scaled for video (`Scale`). The user rejected simplified look-alikes ("please use more of the prototype design"). Read the prototype's `<style>` and JSX for the exact values. Worked example: `examples/kiddy123-marketing-film/src/Proto.tsx` (KiddyMatch widget, school cards, enquiry dialog, compare page, admin dashboard).
+- **Focus on what the user names.** When they say the film is about one product (Kiddy123: "focus on the AI chatbot"), cut every beat about the rest (redesign, speed work), even when the case study covers it.
 
 **A new look for every film.** The user picks it from three pitched concepts (workflow step 3). Never reuse an earlier film's palette, motifs or signature moves: the user rejected an OTSO draft that looked like the ShingTik film.
 - The chosen concept sets the palette, the visual thread (ShingTik: orange orb; OTSO "Midnight Vault": cobalt scan beam), the camera language and the music style.
 - Codech gold `#D4B895` is the brand accent: keep it at least on the end-card logo, even when the concept's own accent differs.
-- Past looks, so the next pitch avoids them: ShingTik = light cream `#FAF8F4` + champagne gold, frosted orange orb, ink flip; OTSO = Midnight Vault (navy `#070B18`, cobalt `#3D7BFF`, glass document slabs).
+- Past looks, so the next pitch avoids them:
+  - ShingTik = light cream `#FAF8F4` + champagne gold, frosted orange orb, ink flip;
+  - OTSO = Midnight Vault (navy `#070B18`, cobalt `#3D7BFF`, glass document slabs);
+  - JY Global = Countersigned (plain mint studio, teal, gold-foil seal);
+  - Kiddy123 = Tiny Town (photoreal tilt-shift Klang Valley aerials, ink `#0B2530` + sun marker `#FFC93C`).
+  - Pitched but not picked (don't re-pitch as new): Stars, Neighbourhood Map, Sorting Studio, Bedtime Search, Bold Poster, World Clock, Deadline Metro, Aurora Command, Launch Day, Private Office.
 - The client's brand colours appear only inside their product screens.
 
 **Varied camera.** No two consecutive scenes share an angle. Options: front ¾, overhead flat lay, side profile, tilted iso window, low hero, locked-off kinetic type.
@@ -77,7 +84,9 @@ How it differs from the Mode B product film (`film.md`):
 
 **Audio.**
 - No voiceover unless asked; the user declined VO for ShingTik.
-- Use a Mixkit track starting from its own intro.
+- Use a licensed Mixkit or Pixabay track, starting from its own intro, never one an earlier Codech film or case-study tour used. Used so far: Mixkit #173 (ShingTik); Pixabay px568146 (OTSO), px577311 (JY Global), px617076 (TGN), px590383 (Kiddy123 film), px610155 and px568180 (Kiddy123 case-page tour).
+- The user may call a Pixabay pick "Mixkit": confirm by the track id (`px…`), not the library name.
+- **Which video?** "Showcase demo video" / the case-study page film = the Mode B product tour (`work/<slug>/assets/film.mp4`, `record_film.py --music <file>`); "marketing video" = this Mode C film. If a soundtrack or edit request could mean either, ask before changing anything (a Kiddy123 soundtrack swap went to the wrong video and had to be reverted).
 - The user rejected synthesized beds, generic "corporate" beds and club EDM.
 
 ### Adapting to a different product
@@ -128,6 +137,8 @@ For every new film, pitch **three new visual concepts** and let the user choose.
 - **Make them genuinely different.** Vary the light (dark / white / mid-tone), the world (space, paper, canvas, studio, architecture…), what stands in for the AI (beam, ink, caret, orb…), the camera language and the music. None may resemble an earlier film's look (see the rule above).
 - **Show, don't describe.** The user asks for "the visual look" when given text options. For each concept, render **two Remotion stills**: the hero reveal ("Meet your …") and one product beat on a real 2x screen. Write them as throwaway compositions in `remotion/src/Concepts.tsx`, register them in `Root.tsx`, and render with `node concept-stills.mjs ../concepts` (from `assets/marketing-film/concepts/`, copy it into `remotion/`; it bundles once). Look at the stills and fix overlaps before showing them.
 - **Publish one comparison page** (`assets/marketing-film/concepts/index-template.html` → `concepts/index.html` + the six JPGs) as an Artifact. Each concept gets its frames plus World / Camera / Music / Colour swatches. Mark one **Recommended** with a one-line reason tied to the client (OTSO: a regulated brokerage → "secure and premium", next to its navy product).
+- **Give every concept real production value.** Kiddy123 round 1 (three flat, code-drawn worlds) got "All are not satisfied". Round 2 built each concept on a ChatGPT Image plate (photoreal, 3D or tilt-shift; via Codex `$imagegen`), with the real mini UI and kinetic type composited on top, and the user picked one. Plates never contain UI or text.
+- **Local realism.** For a Malaysian client, the plates must look like the client's real place (Kiddy123: "make it more realistic in a Malaysia Klang Valley": terrace link houses, shoplots, tadika in corner houses, monsoon drains, the KL skyline). Spell these out in the prompt.
 - Record the pick in the plan and in memory, then build the storyboard in that look.
 - Worked example: the OTSO pitch (Midnight Vault / Ink & Paper / Infinite Canvas) in `assets/marketing-film/concepts/Concepts.example.tsx`.
 
@@ -185,7 +196,7 @@ python $SK/scripts/mf_encode.py --stills renders/cut-v1.mp4 --at 3,10,20,40,60,9
    - Choose the plan so the drop lands on the hero beat (it prints where `d0` lands), then nudge `timeline.json` to the bar grid.
    - **Retiming a scored film:** when you insert or remove scenes before the drop, keep the total shift a whole number of bars (2 s at 120 BPM) by adjusting one scene's hold. Then refit, repeating pre-drop bars (e.g. `--plan "0:d0, d0-3b:d0+26b, ..."`) so the drop still lands on the hero beat. SFX cues follow `timeline.json` automatically; cues inside a scene that changed mid-scene (e.g. after an inserted chart) need their own offset.
 
-Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixabay audio blocks scripts, and FreePD is closed.
+Licences: Mixkit Stock Music Free License and the Pixabay Content License (both commercial use, no attribution). Pixabay blocks plain scripts but works through firecrawl: `examples/kiddy123-marketing-film/audio/pixabay/` (`px_find.py` search + download, `px_rank.py`, `px_shortlist.py`; a failed scrape usually succeeds on a rerun). Most Pixabay tracks are YouTube Content ID registered: tell the user, since a YouTube upload may get a claim to clear with the licence. FreePD is closed.
 
 ### 8. Sound effects and the final mix
 1. **Palette.** `python $SK/scripts/mf_sfx.py fetch --out audio/sfx/wav` downloads 29 sounds (pops, notifications, clicks, typing, sweeps, whooshes, impacts, shutter, error, ticks). `search <tags>` finds swaps.
@@ -200,12 +211,19 @@ Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixab
 ### 9. Deliver
 - Make a preview with `mf_encode.py ... --preview` (1280 wide, crf 25) for SendUserFile, which has a 30 MB limit.
 - Refresh the storyboard frames from the final render and republish.
-- Offer other cuts rather than assuming them:
-  - **9:16 / 1:1:** add a `Composition` at 1080×1920 or 1080×1080 and re-lay each scene for the narrow frame.
-  - **30–60 s:** a shorter `timeline.json`.
-  - Captions aren't needed, because the headlines are the text and the film is music-led, so it reads on muted autoplay.
-  - Not built yet; budget a pass per format.
+- Offer the social cuts and the posting kit rather than assuming them (step 10).
+- Website: a new web encode (crf ~23–25, under 25 MB per file for Cloudflare Pages) as `work/<slug>/assets/marketing-film-vN.mp4` + `-poster.jpg`, wired through `CASE_VIDEOS` in the landing `index.html`. Use a new filename per version so phones don't play a cached copy.
 - Record the music pick, the positioning and status decisions, and open items in memory.
+
+### 10. Social cuts and posting (9:16 Reels, 30–45 s)
+When the user wants the film on Facebook / Instagram, follow `references/social-reels.md`:
+- `timeline-short.json` (30–45 s, the full arc, whole scenes);
+- `V.tsx` vertical twins of every scene with the SAME local timing, on generated 9:16 plates, inside the safe zones;
+- audio reused (`mf_mix.py --skip-missing` for the short cut);
+- 9:16 short + full, 16:9 short, cover;
+- `social/posting-guide.md` from `assets/marketing-film/social/posting-guide-template.md`: posting order, ready-to-paste captions, specs and pre-post checks.
+
+Worked example: `examples/kiddy123-marketing-film/`.
 
 ## Gotchas already hit
 
@@ -227,3 +245,4 @@ Licence: Mixkit Stock Music Free License (commercial use, no attribution). Pixab
 | `stills.mjs` stops partway through a long list | Flaky renderer launch: render in batches of about 4 stills and log each failure |
 | Dark boxes behind headlines | `overflow: hidden` on the line mask clips the text-shadow / glow into a rectangle: use `clipPath: inset(-0.6em -0.6em 0 -0.6em)` plus a drop-shadow filter on the block (OTSO `VHead`) |
 | Track too short for the film | Repeat main-section bars before the ending; never loop the intro |
+| Text in a floating card renders in a serif | The card sits outside any parent that sets `fontFamily`: set the font on every floating card |
