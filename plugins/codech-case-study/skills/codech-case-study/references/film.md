@@ -5,7 +5,7 @@ A captioned tour recorded from the vignettes, so it always matches the page. Cap
 ## Structure (film-template.html, generated into work/<slug>/_film/film.html)
 1. Intro, ~3.6 s: client logo chip, product name (first word plain, rest highlighted), tagline, "Designed & built by Codech".
 2. One chapter per feature with a `film` entry: left column = product-area pill with Live/In build, `01 / 06`, big caption, sub caption; right = the vignette at 1140px; bottom = labelled progress bar per chapter.
-3. Outro, ~5 s: three stats, a line, a CTA ("Book a free AI audit with Codech"). No URL unless the user gives a confirmed public domain.
+3. Outro, ~5 s: three stats, a line, a CTA ("Get a free AI prototype from Codech"). No URL unless the user gives a confirmed public domain.
 Social cut (1080×1350): only `film.social_scenes`, stacked layout, speed 1.3.
 
 ## Record

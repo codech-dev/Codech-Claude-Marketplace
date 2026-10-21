@@ -13,6 +13,11 @@ Rules (they exist because several Claude sessions deploy this same site):
   * After deploying, every file under work/ is fetched from the new deployment URL and its
     Content-Type checked (Pages serves index.html with 200 for missing files, so status alone lies).
 """
+import sys
+if "--legacy" in sys.argv: sys.argv.remove("--legacy")
+else: sys.exit("RETIRED in 1.12.0: Cloudflare Pages (codech-ai-landing.pages.dev) is no longer the website: codech.co is the codech-site build on the VPS. "
+               "Use scripts/publish_case.py (staging.codech.co + Directus card); see references/deploy.md. "
+               "Pass --legacy only if the owner explicitly asks for the old site.")
 import argparse, pathlib, re, shutil, subprocess, sys, urllib.request
 
 TYPES = {".js": "javascript", ".css": "text/css", ".html": "text/html", ".mp4": "video/mp4", ".jpg": "image/jpeg",

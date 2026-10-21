@@ -27,3 +27,27 @@
   });
   const yr = $('#yr'); if (yr) yr.textContent = new Date().getFullYear();
 })();
+/* Nav dropdowns + active section (the landing's behaviour). Here, not in chrome-chat.js: prod drops that file when the chat is hidden. */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const dds = $$('.nav .dd');
+  const set = (dd, o) => { dd.classList.toggle('open', o); $('.dd-t', dd).setAttribute('aria-expanded', o); };
+  const hover = matchMedia('(hover: hover)').matches;
+  dds.forEach(dd => {
+    let tm, opened = 0;
+    $('.dd-t', dd).addEventListener('click', () => { if (Date.now() - opened < 400) return; set(dd, !dd.classList.contains('open')); });
+    if (hover) {
+      dd.addEventListener('mouseenter', () => { clearTimeout(tm); if (!dd.classList.contains('open')) opened = Date.now(); dds.forEach(x => set(x, x === dd)); });
+      dd.addEventListener('mouseleave', () => { tm = setTimeout(() => set(dd, false), 180); });
+    }
+    dd.addEventListener('focusout', e => { if (!dd.contains(e.relatedTarget)) set(dd, false); });
+  });
+  document.addEventListener('click', e => dds.forEach(dd => { if (!dd.contains(e.target)) set(dd, false); }));
+  document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; dds.forEach(dd => { if (dd.classList.contains('open')) { set(dd, false); $('.dd-t', dd).focus(); } }); });
+  // Mark where we are: gold underline on the section, aria-current on the exact link.
+  const p = location.pathname.replace(/index\.html$/, '');
+  const key = /^\/(solutions|industries|services)\//.test(p) ? 'solutions' : /^\/(work|case-studies|projects)\//.test(p) ? 'work' : /^\/how-we-work\//.test(p) ? 'how'
+    : /^\/(roi-calculator|integrations|faq)\//.test(p) ? 'resources' : /^\/about\//.test(p) ? 'about' : /^\/contact\//.test(p) ? 'contact' : '';
+  if (key) $$('[data-nav="' + key + '"]').forEach(el => el.classList.add('cur'));
+  $$('.hdr a[href^="/"]').forEach(a => { if (a.getAttribute('href') === p) a.setAttribute('aria-current', 'page'); });
+})();

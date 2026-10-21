@@ -212,7 +212,7 @@ Licences: Mixkit Stock Music Free License and the Pixabay Content License (both 
 - Make a preview with `mf_encode.py ... --preview` (1280 wide, crf 25) for SendUserFile, which has a 30 MB limit.
 - Refresh the storyboard frames from the final render and republish.
 - Offer the social cuts and the posting kit rather than assuming them (step 10).
-- Website: a new web encode (crf ~23–25, under 25 MB per file for Cloudflare Pages) as `work/<slug>/assets/marketing-film-vN.mp4` + `-poster.jpg`, wired through `CASE_VIDEOS` in the landing `index.html`. Use a new filename per version so phones don't play a cached copy.
+- Website: a new web encode (crf ~23–25, keep it under ~25 MB) as `work/<slug>/assets/marketing-film-vN.mp4` + `-poster.jpg`. Put it on the site with `publish_case.py <site> <slug> --codech-site <clone> --video assets/marketing-film-vN.mp4 --video-title "Codech × <Client>: <what we built>" --update-card` (uploads the video, points the Directus card at it), check on staging, then publish only on the owner's go (`references/deploy.md`). Use a new filename per version so phones don't play a cached copy.
 - Record the music pick, the positioning and status decisions, and open items in memory.
 
 ### 10. Social cuts and posting (9:16 Reels, 30–45 s)
