@@ -10,6 +10,11 @@ Edits <site>/index.html in three marked places (creates the markers on first run
 Everything else in index.html is left untouched, so it is safe to run repeatedly.
 The landing page is shared with other sessions: tell them before running this (see references/deploy.md).
 """
+import sys
+if "--legacy" in sys.argv: sys.argv.remove("--legacy")
+else: sys.exit("RETIRED in 1.12.0: The landing page (site/codech-ai-landing/index.html) is frozen; case cards come from the Directus case_studies collection. "
+               "Use scripts/publish_case.py (staging.codech.co + Directus card); see references/deploy.md. "
+               "Pass --legacy only if the owner explicitly asks for the old site.")
 import json, pathlib, re, sys
 
 def js(v):

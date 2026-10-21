@@ -1,43 +1,48 @@
 ---
 name: codech-case-study
 description: >-
-  Codech portfolio workflow in three modes. (A) Gather a finished client project's resources into a portfolio asset pack (measured stats, factual brief, brand, screenshots, prototype, proposal). (B) Build a case study on the Codech AI landing site from case.json: animated product demos, Results card, case page, product film, Cloudflare deploy. (C) Make a motion-graphic marketing film: a ClickUp-style animated product showcase in Remotion with storyboard, fitted royalty-free music and sound effects. Use when a project is done and its assets should be gathered or packaged; when adding a project or client to the landing page, Results, portfolio or case studies ("case study", "showcase this project", "portfolio pack"); when updating, re-filming or redeploying a case study; or when the user wants a marketing video, product showcase video, motion graphic, launch or promo video, or its storyboard, soundtrack or SFX for a client project.
+  Codech portfolio workflow in three modes. (A) Gather a finished client project's resources into a portfolio asset pack (measured stats, factual brief, brand, screenshots, prototype, proposal). (B) Build a case study from case.json: animated product demos, case page, product film, Directus card, published to staging.codech.co and to codech.co only on the owner's go. (C) Make a motion-graphic marketing film: a ClickUp-style animated product showcase in Remotion with storyboard, fitted royalty-free music and sound effects. Use when a project is done and its assets should be gathered or packaged; when adding a project or client to the landing page, Results, portfolio or case studies ("case study", "showcase this project", "portfolio pack"); when updating, re-filming or redeploying a case study; or when the user wants a marketing video, product showcase video, motion graphic, launch or promo video, or its storyboard, soundtrack or SFX for a client project.
 ---
 
 # Codech case study
 
 Three modes; pick by where you are and what the user asked:
 - **Mode A: Gather** (run inside a finished client project): collect everything a case study needs into a portfolio asset pack. Read `references/gather.md` and follow it; templates are in `assets/pack-template/`, helpers are `scripts/gather_stats.py`, `scripts/capture_screens.py`, `scripts/scan_pack.py`. Stop after the pack is saved and reported, unless the user also wants the case study built.
-- **Mode B: Build** (run in the Codech Marketing project): turn a pack into a live case study. Everything from "Mode B: Build the case study" down.
+- **Mode B: Build** (run in the Codech Marketing project): turn a pack into a case study on staging.codech.co, then codech.co once the owner approves. Everything from "Mode B: Build the case study" down.
 - **Mode C: Marketing film** (run in the Codech Marketing project): a motion-graphic, ClickUp-style **case-study film** of a project Codech built for a company: the client's challenge, the solution we proposed and built, how we delivered it, and the results. Pitch three new visual concepts first (rendered stills on one comparison page) and let the user pick, then storyboard, built in Remotion, scored with a fitted royalty-free track and synced SFX. Read `references/marketing-film.md` and follow it. The Remotion starter, storyboard generator, music shortlist page and cue-sheet template are in `assets/marketing-film/`; the helpers are `scripts/mf_music.py`, `scripts/mf_sfx.py`, `scripts/mf_mix.py` and `scripts/mf_encode.py`; the worked examples are `examples/otso-marketing-film/` (case-study structure), `examples/shingtik-marketing-film/` (motion recipes) and `examples/kiddy123-marketing-film/` (prototype-faithful product UI, 9:16 Reels). When the user wants the film on Facebook / Instagram, make the **social cuts and posting kit** (9:16 Reels, a 30–45 s version, cover, captions, posting plan): read `references/social-reels.md`. This is separate from the Mode B product film (step 6), which is recorded from the vignettes; if a request could mean either video, ask which one.
 
 ## Mode B: Build the case study
 
-Turn a Codech project's asset pack into a case study on `site/codech-ai-landing`, the same way the OTSO AI Hub case study was made (see `examples/otso-ai-hub/`). One `case.json` per project is the source of truth; scripts render the page, the landing card and the film from it, so updating a case study means editing `case.json` and re-running a script.
+Turn a Codech project's asset pack into a case study on codech.co, the same way the OTSO AI Hub case study was made (see `examples/otso-ai-hub/`). One `case.json` per project is the source of truth; scripts render the page, the film and the Directus card from it, so updating a case study means editing `case.json` and re-running a script.
+
+**Since 2026-10-21 the website is codech.co** (Astro site `codech-site` + Directus; branch `staging` = staging.codech.co, `main` = codech.co). Cases are still *built* in the frozen `site/codech-ai-landing` workspace, then *published* with `scripts/publish_case.py` (read `references/deploy.md`). Cloudflare Pages and the old landing page are retired. **Never publish to codech.co without the owner's explicit go.**
 
 What a finished case study has:
 - **Vignettes**: small animated recreations of the real product screens (cursor, typing, reveal), built in HTML/CSS on the shared engine. Not AI-generated images: image models garble UI text and invent screens, which misrepresents real client work.
-- **Landing card** in the Results carousel: headline, 3 KPIs, client logo, two live demos labelled Live / In build, link to the page.
+- **Card** (Directus `case_studies` item): headline, 3 KPIs, client logo, two live demos labelled Live / In build, video, solution tags; shown on /case-studies/, the home page results, the footer and the AI audit showcase.
 - **Case-study page** `work/<slug>/`: hero + showreel of every demo, stats, problem, one section per product area with Arcade-style feature cards, optional design-decision band, pipeline, integrations (brand-logo cards for the tools it plugs into), "How we delivered" viewer embedding the proposal and prototype, engineering notes, CTA.
 - **Film**: 60–90 s widescreen tour (captions only) embedded on the page, a 20–35 s portrait social cut, poster and OG image, all recorded from the vignettes.
 
 ## Site layout
 
 ```
-site/codech-ai-landing/
-  index.html                     landing page (shared with other sessions; touch only via upsert_story.py)
-  work/_shared/                  ov.js ov.css case.css case.js chrome.js (from this skill) + chrome.css (generated)
-                                 Header/footer are the LANDING page's, copied in by build_case.py from its
-                                 <!-- @chrome:header/footer --> + /* @chrome:css */ markers: edit them on the landing page, rebuild cases.
-  work/<slug>/case.json          source of truth (not deployed)
+site/codech-ai-landing/          BUILD WORKSPACE ONLY (frozen 2026-10-20: never edit index.html, never deploy it)
+  index.html                     old landing page; build_case.py still reads its header/footer markers for local previews
+  work/_shared/                  local copies of ov.js ov.css case.css case.js chrome.js (from this skill) + generated chrome.css
+  work/<slug>/case.json          source of truth
   work/<slug>/index.html         built page (don't hand-edit)
   work/<slug>/assets/            logo, scenes.js, scenes.css, film.mp4, film-poster.jpg, og-cover.jpg
   work/<slug>/proposal/ prototype/   hosted, sanitised copies (host_embed.py)
-  work/<slug>/_film/ _qa/        film stage, social cut, QA shots (underscore = never deployed)
-  _deploy/                       what goes to Cloudflare Pages (stage_deploy.py manages work/)
+  work/<slug>/_film/ _qa/        film stage, social cut, QA shots (never published)
+
+codech-site (git devcodech/codech-site; clone: .worktrees/website-foundation/site/codech-site, branch staging)
+  public/work/<slug>/            the published copy of work/<slug>/ (publish_case.py; no videos)
+  public/work/_shared/           owned by codech-site (incl. chrome-chat.js and vendor/): port skill changes by hand
+VPS /srv/site/media/work/<slug>/ the case videos
+Directus case_studies            the card; site_settings.hide_cases keeps unapproved cases off codech.co
 ```
 
-Scripts live in this skill's `scripts/` folder; run them with the site root as the first argument, e.g. `python <skill>/scripts/build_case.py site/codech-ai-landing acme-portal`. They need Python 3 with `playwright`, `pillow`, `imageio-ffmpeg` (film/QA only) and `npx wrangler` (deploy only).
+Scripts live in this skill's `scripts/` folder; run them with the site root as the first argument, e.g. `python <skill>/scripts/build_case.py site/codech-ai-landing acme-portal`. They need Python 3 with `playwright`, `pillow`, `imageio-ffmpeg` (film/QA only; on the Codech Windows machine run them with `py -3`, the plain `python` there lacks playwright); `publish_case.py` also needs `npm` (codech-site) and SSH access to the VPS.
 
 ## Workflow
 
@@ -60,28 +65,31 @@ Write `work/<slug>/assets/scenes.js` + `scenes.css`: typically 2–4 scenes per 
 ### 4. Embeds (read `references/embeds.md`)
 Host sanitised copies of the proposal and prototype with `scripts/host_embed.py` (keeps the client-facing proposal URL out of our page, adds noindex, reports sensitive strings). Give the prototype a phone layout if it lacks one. Point `delivery.tabs[].src` at `proposal/` and `prototype/`. If the user wants to keep embedding the live proposal URL for now, that's their call; record it.
 
-### 5. Build the page and landing card
-Before any build: run the scripts from the **newest installed** version (`~/.claude/plugins/cache/codech-marketplace/codech-case-study/<latest>`), and check that no open PR touches `assets/shared`. `build_case.py` re-syncs `work/_shared/` for **every** case, so building from an older copy or a branch silently strips newer CSS/JS from the other case pages.
+### 5. Build the page
+Before any build: run the scripts from the **newest installed** version (`~/.claude/plugins/cache/codech-marketplace/codech-case-study/<latest>`), and check that no open PR touches `assets/shared`. `build_case.py` re-syncs the workspace's `work/_shared/` for **every** case, so building from an older copy or a branch strips newer CSS/JS from the local previews.
 ```
 python scripts/build_case.py   <site> <slug>     # page + film stage; syncs work/_shared
-python scripts/upsert_story.py <site> <slug>     # landing card + engine/scene includes
 ```
-Before `upsert_story.py`, message any other session working on the site (see deploy reference): it edits the shared `index.html`.
+The card is no longer written into the landing page (`upsert_story.py` is retired): `publish_case.py` creates it in Directus in step 8. Add `"solutions": [...]` (agents, docs, automation, insights) to case.json so the card lands in the right /case-studies/ filter.
 
 ### 6. Film (read `references/film.md`)
 `python scripts/record_film.py <site> <slug>` records the widescreen film (→ `assets/film.mp4`, poster, OG cover) and the social cut (→ `_film/social.mp4`). Pull stills from the MP4 and check them: the poster must not be caught mid-fade. Re-run `build_case.py` afterwards so the page picks up the "Watch the film" button.
 
 ### 7. QA
-`python scripts/qa_shots.py <site> <slug>` then actually look at the PNGs: desktop and phone case page, landing card. Check `references/lessons.md` for the failure modes we've already hit (blank hero, no gutters on mobile, frames that won't scroll, class clashes, cached old deploys).
+`python scripts/qa_shots.py <site> <slug>` then actually look at the PNGs: desktop and phone case page, card, film stage. Check `references/lessons.md` for the failure modes we've already hit (blank hero, no gutters on mobile, frames that won't scroll, class clashes, cached old deploys).
 
-### 8. Deploy (read `references/deploy.md`)
-Tell other sessions, then `python scripts/stage_deploy.py <site> [--with-index]` (`--with-index` only when `upsert_story.py` changed the landing page). It refuses to overwrite a live site someone else changed, deploys, and checks every file's content type on the new deployment.
+### 8. Publish to staging (read `references/deploy.md`)
+```
+python scripts/publish_case.py <site> <slug> --codech-site <codech-site clone> --dry-run     # read it
+python scripts/publish_case.py <site> <slug> --codech-site <codech-site clone> --push [--solutions ...] [--video ...]
+```
+It copies the case into codech-site, applies codech-site's fixes (self-hosted prototype libraries, codech.co URLs, contact@codech.co), uploads the videos, creates the Directus card as a draft **hidden on codech.co**, and pushes `staging`. Then check on https://staging.codech.co/work/<slug>/ and /case-studies/: case page (desktop and phone), card, film plays and seeks, prototype and proposal load (no blank frames), header menus open, no console errors.
 
-### 9. Report
-Tell the user what's live (links), what you checked, and every open decision: client consent, confidential material, In-build labels to flip later. Remind them phones may show a cached older version until refreshed.
+### 9. Report and wait for the owner
+Tell the user the staging links, what you checked, and every open decision: client consent, confidential material, In-build labels to flip later. **Stop here.** Only when the owner says publish: `publish_case.py ... --approve`, then the production build (deploy.md, "After the owner says publish"), then verify on codech.co. Remind them phones may show a cached older version until refreshed.
 
 ## Updating an existing case study
-Edit `work/<slug>/case.json` (e.g. flip a group's `"status"` to `"live"`, change stats), then `build_case.py` → `upsert_story.py` (if the card changed) → `record_film.py` (if scenes or captions changed) → QA → deploy. Edit scenes in `assets/scenes.js`; never hand-edit the built `index.html`.
+Edit `work/<slug>/case.json` (e.g. flip a group's `"status"` to `"live"`, change stats), then `build_case.py` → `record_film.py` (if scenes or captions changed) → QA → `publish_case.py` (it lists card fields that differ from case.json; `--update-card` writes them) → staging check → owner's go → publish. Edit scenes in `assets/scenes.js`; never hand-edit the built `index.html`. If `publish_case.py` stops because codech-site changed the case's folder since the last sync, read the listed commits before using `--overwrite`.
 
 ## Reference files
 - `references/gather.md`: Mode A, building the portfolio asset pack from a finished project
@@ -90,7 +98,7 @@ Edit `work/<slug>/case.json` (e.g. flip a group's `"status"` to `"live"`, change
 - `references/vignettes.md`: engine API, scene recipe, design and CSS-scoping rules, preview/testing
 - `references/embeds.md`: proposal/prototype hosting, sanitising, phone layout shell
 - `references/film.md`: film structure, recording, posters, social cut
-- `references/deploy.md`: staging, multi-session protocol, verification, caching
+- `references/deploy.md`: codech-site + Directus + staging/production, the approval rule, publish_case.py, multi-session etiquette, caching
 - `references/lessons.md`: bugs already hit and their fixes; read before QA
 - `references/marketing-film.md`: Mode C, the motion-graphic marketing film (rules, motion language, workflow, gotchas)
 - `references/social-reels.md`: Mode C social cuts: 9:16 Reels + 30–45 s version, safe zones, audio reuse, cover, the Facebook / Instagram posting plan and captions

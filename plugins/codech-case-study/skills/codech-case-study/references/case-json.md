@@ -6,7 +6,7 @@ One file per project at `work/<slug>/case.json`. `examples/otso-ai-hub/case.json
 | field | notes |
 |---|---|
 | `slug` | folder name, lowercase-hyphen, e.g. `otso-ai-hub`. Also the scene namespace and CSS scope (`.ovp-<slug>`). |
-| `site_url` | `https://codech-ai-landing.pages.dev` (used for the absolute OG image URL). Change when the production domain changes. |
+| `site_url` | `https://codech.co` (used for the absolute OG image URL). Older cases say `https://codech-ai-landing.pages.dev`; `publish_case.py` rewrites that to codech.co in the published copy. |
 | `product` | product name as shown ("OTSO AI Hub"). Film title splits it: first word plain, rest highlighted. |
 | `industry` | short sector label for pills ("Financial services"). |
 | `status` | `live` or `build` for the project overall (hero pill). |
@@ -84,7 +84,7 @@ List only tools the project really uses (the marks are trademarks). Keep `engine
 `h2`, `cards`: `[title, text]` or `[title, text, icon]` ×3 (dark spotlight cards; default icons shield/bolt/database), `stack`: list of tech names.
 
 ## cta
-`h2`, `body`. Buttons are fixed: "Book a free AI audit" (opens the landing form via `#audit`) and "More results".
+`h2`, `body`. Buttons are fixed: "Get a free AI prototype" (opens the home page's form via `#audit`) and "More results" (home page `#stories`).
 
 ## footer_note
 Demo-data and In build disclaimers.

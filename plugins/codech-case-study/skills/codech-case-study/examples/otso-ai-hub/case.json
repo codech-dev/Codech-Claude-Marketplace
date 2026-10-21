@@ -1,6 +1,6 @@
 {
   "slug": "otso-ai-hub",
-  "site_url": "https://codech-ai-landing.pages.dev",
+  "site_url": "https://codech.co",
   "product": "OTSO AI Hub",
   "industry": "Financial services",
   "status": "live",
@@ -432,7 +432,7 @@
       ]
     ],
     "outro_line": "Want an AI workspace like this for your team?",
-    "outro_cta": "Book a free AI audit with Codech"
+    "outro_cta": "Get a free AI prototype from Codech"
   },
   "card": {
     "headline": "A private AI workspace for every file and every conversation",

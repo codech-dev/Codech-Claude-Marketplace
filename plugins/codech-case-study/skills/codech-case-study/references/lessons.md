@@ -23,8 +23,13 @@
 | Embedded proposal wouldn't scroll | "Loading…" placeholder overlaid the iframe until `load` | placeholder behind, `pointer-events:none` |
 | Full screen reloaded the embed | moving the iframe in the DOM reloads it | toggle a class on the same element (`position:fixed`) |
 | Prototype squeezed on phones | desktop-only prototype | mobile shell in our hosted copy (embeds.md) |
-| Live site showed an empty demo panel | another session deployed index.html without our work/ files | stage_deploy.py mirrors work/ every time; verify content types |
+| Live site showed an empty demo panel (Cloudflare era) | another session deployed index.html without our work/ files | historical: stage_deploy.py is retired; codech-site builds everything from git |
 | `.js` "200 OK" but broken | Pages serves index.html for missing paths | check Content-Type, not status |
 | User's screenshot showed old version | phone cache | tell them to refresh; verify with `?v=` |
 | Claims drifted ("under 6 weeks" vs 37 days) | rounded numbers | compute from dates, state exactly |
+| Prototypes blank on codech.co (2026-10-21) | esm.sh answered 408 for framer-motion | self-hosted libraries in codech-site `_shared/vendor`; `publish_case.py` rewrites import maps (embeds.md) |
+| Header menus dead on every live case page (2026-10-21) | the dropdown code sat in chrome-chat.js, which codech.co drops while the chat is hidden | dropdowns live in chrome.js; build_case.py keeps them out of the generated chat file |
+| A re-sync would have undone a codech-site fix | `npm run sync -- --bundle` replaces the whole folder | `publish_case.py` stops when codech-site changed the folder since the last sync and re-applies the known fixes |
+| Case CTA said "Book a free AI audit" after the offer changed | label hard-coded in build_case.py | now "Get a free AI prototype" (1.12.0) |
+| Link previews pointed at pages.dev | case.json `site_url` | `https://codech.co`; publish_case.py rewrites old values |
 | Presenting in-build feature as shipped | brief said "designed, not built" | In build pills + section note, everywhere |

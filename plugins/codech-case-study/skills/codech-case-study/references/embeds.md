@@ -11,6 +11,9 @@ Why copies, not the live proposal URL: the URL stays out of our page source (the
 
 The script adds `noindex`, copies referenced local assets, applies replacements, and prints a REVIEW list (confidential labels, prices, emails, phones, public IPs, hostnames, missing phone layout). Take each item to the user; see intake-and-accuracy.md.
 
+## Prototype libraries (esm.sh)
+Prototypes often load React and friends from esm.sh through an import map. esm.sh timed out on 2026-10-21 and blanked the ShingTik prototypes, so the published copies load self-hosted builds from codech-site `public/work/_shared/vendor/` (react, react-dom, react-dom/client, react/jsx-runtime, framer-motion, lucide-react, recharts). `publish_case.py` rewrites the import maps automatically and stops on any esm.sh package without a vendored copy: add it to codech-site `tools/vendor/build-vendor.mjs`, rebuild the vendor files, commit on `staging`, rerun. Tailwind CDN and unpkg Babel are still external (allowed by the site's CSP for `/work/*/*/` pages).
+
 ## Phone layout
 On phones the viewer renders embeds at native width, so each embed must have its own phone layout:
 - Proposals built with `codech-client-proposal` are responsive already (they show a "best on desktop" tip).

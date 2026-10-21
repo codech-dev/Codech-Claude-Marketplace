@@ -5,7 +5,7 @@ Turn finished Codech client work into portfolio case studies and marketing films
 | Mode | Run it in | Produces |
 |---|---|---|
 | **A · Gather** | the finished client project (repo, specs, prototype, running app) | a portfolio asset pack: `PROJECT_BRIEF.md`, `README.md`, `stats.json`, `brand/`, `screenshots/` (2x desktop, mobile, UI crops), `prototype/`, `proposal/`, redacted `docs/` |
-| **B · Build** | the Codech Marketing project (`site/codech-ai-landing`) | a live case study: animated product demos, Results-carousel card, `work/<slug>/` page, embedded proposal + prototype, product film, deploy |
+| **B · Build** | the Codech Marketing project (built in `site/codech-ai-landing`, published through `codech-site`) | a case study on codech.co: animated product demos, `work/<slug>/` page, embedded proposal + prototype, product film, Directus card; staging.codech.co first, codech.co only on the owner's go |
 | **C · Marketing film** | the Codech Marketing project (`video/<slug>-marketing/`) | a motion-graphic case-study film (the client's challenge → our solution → delivery → results): three pitched visual concepts to choose from, storyboard artifact, Remotion film, fitted royalty-free soundtrack + synced SFX, MP4 master + preview; on request, social cuts (9:16 Reels full + 30–45 s, 16:9 short, cover) and a Facebook / Instagram posting kit |
 
 The typical flow: **ship a project → Gather → Build → keep the case study updated** (edit `case.json`, rebuild).
@@ -40,12 +40,13 @@ skills/codech-case-study/
 │   ├── capture_screens.py        plan-driven Playwright screenshots (2x, mobile, crops)
 │   ├── scan_pack.py              secrets / IPs / hostnames / confidential-label scan
 │   ├── build_case.py             case.json → case-study page + film stage
-│   ├── upsert_story.py           case.json → landing Results card (marked blocks only)
+│   ├── publish_case.py           work/<slug>/ → codech-site staging + videos to the VPS + Directus card (hidden on codech.co until approved)
+│   ├── upsert_story.py           RETIRED (the landing page is frozen; cards live in Directus)
 │   ├── host_embed.py             sanitised hosted copies of proposal/prototype
 │   ├── preview_scenes.py         timed screenshots of each product demo
 │   ├── record_film.py            CDP screencast → H.264 MP4, poster, OG cover
-│   ├── qa_shots.py               desktop + phone QA screenshots, overflow/errors
-│   ├── stage_deploy.py           guarded Cloudflare Pages deploy + content-type check
+│   ├── qa_shots.py               desktop + phone QA screenshots, overflow/errors (--base https://staging.codech.co: the published copy + its card)
+│   ├── stage_deploy.py           RETIRED (Cloudflare Pages is no longer the website)
 │   ├── mf_music.py               Mode C: find/rank Mixkit tracks, analyse tempo + drop, bar-exact fit
 │   ├── mf_sfx.py                 Mode C: fetch the SFX palette as trimmed .npy
 │   ├── mf_mix.py                 Mode C: cue sheet + music → final mix (--skip-missing: reuse it for a short cut)
@@ -63,8 +64,8 @@ skills/codech-case-study/
 
 ## Requirements
 
-- Python 3.10+ with `playwright` (+ `python -m playwright install chromium`), `pillow`, `imageio-ffmpeg`
-- `git` (Gather stats), `npx wrangler` authenticated to the Codech Cloudflare account (deploy)
+- Python 3.10+ with `playwright` (+ `python -m playwright install chromium`), `pillow`, `imageio-ffmpeg` (on the Codech Windows machine: `py -3`)
+- `git` (Gather stats); for publishing: a `codech-site` clone on branch `staging` with `npm ci` done, and SSH access to the Codech VPS (videos + Directus card)
 - Mode C: Node 18+ (`npm i` in the copied Remotion starter), `numpy`, optional `segno` (WhatsApp QR)
 
 ## Principles baked in
@@ -72,7 +73,8 @@ skills/codech-case-study/
 - Product visuals are **code-built demos of the real screens**, not AI-generated images (image models garble UI text and invent screens).
 - Anything not shipped is labelled **In build** everywhere; numbers are measured and dated; no invented quotes or metrics.
 - Client naming needs confirmed consent; confidential material is flagged for a human decision, never silently published.
-- The landing page is shared: message other sessions before editing `index.html` or deploying; the deploy script refuses to overwrite a live site someone else changed.
+- Staging first, always: nothing reaches codech.co without the owner's explicit go; a new case stays hidden on codech.co (Directus `hide_cases`) until then.
+- codech-site is shared with other sessions: tell them before pushing `staging`, and never move `main` over someone else's unapproved commit.
 
 ## Composes with
 
