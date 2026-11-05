@@ -6,6 +6,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## codech-wp-security-maintenance
+
+### [1.0.0] — 2026-11-05
+
+Initial release. Productizes the Oct 2026 security maintenance of a live high-traffic WordPress site (done entirely through the Novamira MCP as www-data, no root) into a reusable round-by-round workflow.
+
+**Added:**
+- `SKILL.md`: rounds 0–8 (audit → report → backup → fixes → updates → e-mail → monitor → Wordfence + 2FA → handover) and the rules a generic plan misses (custom-code audit, HTTP-tested public files, editor + sitemap checks after updates, builder add-on pinning, rollback of generated assets, e-mail before 2FA)
+- `scripts/audit.php` (read-only, credentials masked), `scripts/backup.php` (canary-proven not downloadable, dump-complete check, SHA256SUMS), `scripts/check_pages.sh` + `compare_pages.sh` (cache-busted before/after)
+- `templates/monitor.php` (file/admin/uploads-PHP/disk/site-down alerts via wp_mail, queue when mail is down), `public-data-hardening.php`, `robots-ai-search.txt`, `CHANGELOG.md`, `pages.txt`
+- References: audit, fixes, plugin-updates, backup-and-undo, monitor, login-and-email (M365 OAuth SMTP, Wordfence, 2FA grace order, reset spam), reporting, gotchas (every incident hit, incl. Code Snippets 3.10 × Elementor 3.16 editor fatal and the Essential Addons rollback asset trap)
+
+---
+
 ## codech-case-study
 
 ### [1.0.1] — 2026-09-30
