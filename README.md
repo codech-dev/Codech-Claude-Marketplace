@@ -16,6 +16,7 @@ A Claude Code [marketplace](https://docs.claude.com/en/docs/claude-code/plugin-m
 | [`codech-web-builder`](./plugins/codech-web-builder) | `0.1.0` | Turn reference website(s) + a brand logo into a deployed site: vision-extracted palette, taste-skill design system + HTML prototype, then convert to WordPress or static and deploy |
 | [`fintech-compliance-copy`](./plugins/fintech-compliance-copy) | `1.0.0` | Design, build, and keep regulator-safe a crypto / digital-asset / payment / fintech marketing website. Compliance baked in — disclaimers, unlaunched-service tagging, lawyer-approved wording |
 | [`codech-case-study`](./plugins/codech-case-study) | `1.0.1` | Portfolio workflow for shipped engagements: gather a portfolio asset pack (stats, brief, screenshots, prototype) from the finished project, then build a case study on the Codech landing site from one `case.json` — animated product demos, Results card, case-study page with embedded proposal + prototype, captioned film, guarded Cloudflare deploy |
+| [`codech-wp-security-maintenance`](./plugins/codech-wp-security-maintenance) | `1.0.0` | Security maintenance for live client WordPress sites via a WordPress MCP / wp-admin (no root): read-only audit, approval report, verified backups, custom-code + public-file fixes, one-at-a-time plugin updates with editor + sitemap checks, file-change monitor, e-mail + Wordfence + 2FA, changelog with undo |
 
 More plugins will be added over time.
 

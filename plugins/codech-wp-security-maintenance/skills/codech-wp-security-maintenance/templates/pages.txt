@@ -1,0 +1,14 @@
+# Pages to check before/after every change (one path per line). Cover every TEMPLATE, not every page.
+/
+# each language homepage (TranslatePress / WPML / Polylang)
+/zh/
+# a page per custom template / post type
+/about/
+/contact/
+/blog/
+/__a-single-post__/
+/__a-listing-or-product__/
+/__an-archive-or-search-results-page__/
+# pages with builder widgets that need JS (tabs, sliders, charts)
+/__page-with-tabs-or-slider__/
+/wp-login.php

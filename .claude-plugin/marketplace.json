@@ -8,7 +8,7 @@
   },
   "metadata": {
     "description": "Codech internal Claude Code plugins — workflows, skills, and tools used across client engagements.",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
@@ -218,6 +218,36 @@
       ],
       "license": "MIT",
       "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-case-study",
+      "strict": false
+    },
+    {
+      "name": "codech-wp-security-maintenance",
+      "source": "./plugins/codech-wp-security-maintenance",
+      "description": "Security maintenance for live client WordPress sites from the application layer (WordPress MCP / wp-admin as the web user, no root): read-only audit, approval report, verified backups, custom-code and public-file fixes, one-at-a-time plugin updates with editor + sitemap checks, file-change monitor, site e-mail, Wordfence + 2FA rollout, changelog with undo for every change.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "keywords": [
+        "wordpress",
+        "security",
+        "maintenance",
+        "audit",
+        "plugin-updates",
+        "elementor",
+        "wordfence",
+        "2fa",
+        "monitoring",
+        "backup",
+        "rollback",
+        "novamira"
+      ],
+      "tags": [
+        "codech",
+        "skill",
+        "security",
+        "wordpress"
+      ],
+      "license": "MIT",
+      "homepage": "https://github.com/codech-dev/Codech-Claude-Marketplace/tree/main/plugins/codech-wp-security-maintenance",
       "strict": false
     }
   ]
