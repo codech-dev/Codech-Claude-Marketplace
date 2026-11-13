@@ -54,6 +54,8 @@ while you wait. Plugin updates and Wordfence's first scan go in the site's low-t
 - **Move, don't delete** inactive plugins and old files (no uninstall hooks run; instant undo).
 - **Fix site e-mail before anything that sends e-mail** (monitor alerts, 2FA, password resets) —
   then expect the bot noise that starts arriving.
+- **Behind a CDN, fix the client IP before any IP-based blocking.** Otherwise lockouts hit the
+  CDN edge addresses and take the site down for everyone.
 - **Security plugins can cut off your own access** (Wordfence disables application passwords by
   default → the MCP gets 401). Know the wp-admin recovery path before activating.
 - **Never test on real accounts or as the client** — a test user with your own e-mail, deleted

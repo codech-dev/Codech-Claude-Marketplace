@@ -113,6 +113,14 @@ foreach (['fsmpt_email_logs' => 'status', 'wpml_mails' => null, 'wpmailsmtp_emai
     echo $tbl, ': ', $col ? json_encode($wpdb->get_results("SELECT $col, COUNT(*) n FROM $t WHERE created_at > NOW() - INTERVAL 14 DAY GROUP BY $col")) : $wpdb->get_var("SELECT COUNT(*) FROM $t"), "\n";
 }
 
+$h('CDN / client IP (if REMOTE_ADDR is a CDN edge, fix the real-IP source before ANY IP blocking)');
+foreach (['REMOTE_ADDR', 'HTTP_CF_CONNECTING_IP', 'HTTP_CF_IPCOUNTRY', 'HTTP_CLOUDFRONT_VIEWER_ADDRESS', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP'] as $k) {
+    if (!empty($_SERVER[$k])) { echo "$k = {$_SERVER[$k]}\n"; }
+}
+if (class_exists('wfUtils')) { echo 'Wordfence sees IP: ', wfUtils::getIP(), ' (howGetIPs=', wfConfig::get('howGetIPs') ?: 'default', ")\n"; }
+$hdr = wp_remote_retrieve_headers(wp_remote_head(home_url('/'), ['sslverify' => false, 'timeout' => 15]));
+foreach (['server', 'cf-ray', 'x-amz-cf-id', 'via', 'x-cache'] as $k) { if (!empty($hdr[$k])) { echo "response $k: ", is_array($hdr[$k]) ? implode(',', $hdr[$k]) : $hdr[$k], "\n"; } }
+
 $h('Security plugins present');
 foreach (['wordfence', 'wordfence-login-security', 'better-wp-security', 'all-in-one-wp-security-and-firewall', 'sucuri-scanner', 'two-factor', 'limit-login-attempts-reloaded'] as $s) {
     if (is_dir(WP_PLUGIN_DIR . "/$s")) { echo $s, is_plugin_active("$s/$s.php") ? ' (active)' : ' (present)', "\n"; }

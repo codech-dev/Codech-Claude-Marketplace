@@ -36,6 +36,43 @@ Install + activate, then immediately:
 - First scan lists known-vulnerable plugins: put the ones you can't update into the report with
   their scores — licence decision for the boss.
 
+### Behind a CDN (Cloudflare / CloudFront / any proxy) — fix the client IP FIRST
+
+If the site is behind a CDN, `REMOTE_ADDR` is the **CDN edge**, not the visitor. Any IP-based
+defence (lockouts, rate limits, blocklists, the security plugin's own brute-force rules) then blocks
+whole edge servers = **every real visitor behind them, staff included — a site-wide outage you
+caused**. Check before enabling or tightening anything that blocks by IP:
+
+```php
+// execute-php: what does the site think the visitor IP is?
+foreach (['REMOTE_ADDR','HTTP_CF_CONNECTING_IP','HTTP_CLOUDFRONT_VIEWER_ADDRESS','HTTP_X_FORWARDED_FOR','HTTP_X_REAL_IP'] as $k) echo $k, ' = ', $_SERVER[$k] ?? '-', "\n";
+if (class_exists('wfUtils')) echo 'Wordfence sees: ', wfUtils::getIP(), ' (howGetIPs=', wfConfig::get('howGetIPs'), ")\n";
+```
+- Cloudflare: Wordfence → All Options → "How does Wordfence get IPs" → **Cloudflare**
+  (`howGetIPs = HTTP_CF_CONNECTING_IP`). CloudFront: use `CloudFront-Viewer-Address` (CloudFront sets
+  it, clients can't forge it); `X-Forwarded-For` is forgeable unless only the CDN can reach the origin.
+- Verify the security plugin now reports **your own** public IP, not a CDN address.
+- Custom login guards (snippets) must **fail open** when no real IP can be identified.
+
+### Brute force (after the IP is right)
+
+Wordfence → Login Security / Brute Force: lock out after ~5–20 failures, `maxForgotPasswd` ~3
+(throttles reset spam), lock out invalid usernames immediately, mask login errors, block author
+scans. Log-only "brute force detection" is not protection — check the setting actually **blocks**
+(a monitor that only logs let an attack fill a database to 100 % and take a site down).
+
+Disable **XML-RPC** too (public-data snippet): `system.multicall` tries hundreds of passwords per
+request and bypasses `login_init`-based guards entirely.
+
+### Hiding the login URL (optional, ask first)
+
+WPS Hide Login (or similar) moves `wp-login.php` to a secret slug. With **TranslatePress** the new
+slug 404s (TP prefixes `/en/`): also add the slug to TranslatePress → Advanced → exclude paths from
+translation (`trp_advanced_settings['translateable_content']`). Record the slug in the project notes
+(not this repo); staff bookmarks and the client's password managers need the new URL.
+Login geo-restriction via the CDN country header (`HTTP_CF_IPCOUNTRY`) works, but must fail open when
+the header is missing.
+
 ## 3. 2FA (Wordfence Login Security)
 
 Only after e-mail works and the boss says go. Lockout risk is real.

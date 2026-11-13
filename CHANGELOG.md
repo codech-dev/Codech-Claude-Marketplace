@@ -16,6 +16,7 @@ Initial release. Productizes the Oct 2026 security maintenance of a live high-tr
 - `SKILL.md`: rounds 0–8 (audit → report → backup → fixes → updates → e-mail → monitor → Wordfence + 2FA → handover) and the rules a generic plan misses (custom-code audit, HTTP-tested public files, editor + sitemap checks after updates, builder add-on pinning, rollback of generated assets, e-mail before 2FA)
 - `scripts/audit.php` (read-only, credentials masked), `scripts/backup.php` (canary-proven not downloadable, dump-complete check, SHA256SUMS), `scripts/check_pages.sh` + `compare_pages.sh` (cache-busted before/after)
 - `templates/monitor.php` (file/admin/uploads-PHP/disk/site-down alerts via wp_mail, queue when mail is down), `public-data-hardening.php`, `robots-ai-search.txt`, `CHANGELOG.md`, `pages.txt`
+- CDN safety: audit shows the client-IP headers + what Wordfence sees; login-and-email covers the real-IP fix before any IP blocking, brute-force settings that actually block, XML-RPC multicall, optional hidden login URL (TranslatePress exclude-path trap)
 - References: audit, fixes, plugin-updates, backup-and-undo, monitor, login-and-email (M365 OAuth SMTP, Wordfence, 2FA grace order, reset spam), reporting, gotchas (every incident hit, incl. Code Snippets 3.10 × Elementor 3.16 editor fatal and the Essential Addons rollback asset trap)
 
 ---

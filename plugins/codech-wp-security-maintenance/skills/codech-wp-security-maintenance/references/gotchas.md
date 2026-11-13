@@ -44,6 +44,31 @@ Harmless (browser blocks it) but it's a sign to schedule the http→https option
 
 ## Access and security plugins
 
+### Turning on IP blocking takes the whole site down for everyone
+**Cause:** the site is behind Cloudflare/CloudFront and the security plugin (or custom code) reads
+`REMOTE_ADDR` = the CDN edge. Seen on a live site: every "failed login" was attributed to CloudFront
+edge IPs; blocking on that would have cut off all visitors behind those edges.
+**Fix:** set the real-IP source first (login-and-email.md "Behind a CDN"), verify it reports your own
+IP, and make custom blocks fail open when no real IP is known.
+
+### Database at 100 %, WordPress down, other apps on the same stack fine
+**Cause:** an unthrottled brute-force attack — every attempt boots WordPress, checks a password and
+writes a log row. The installed "security" monitor only logged and never blocked.
+**Fix:** real lockouts (after the IP fix), XML-RPC off (multicall bypasses login guards).
+
+### PHP file edited through the MCP, but the site still runs the old code
+**Cause:** OPcache. **Fix:** `opcache_invalidate( $file, true );` after writing the file, then re-test.
+
+### Code Snippets / WPCode change made in the database doesn't take effect
+**Cause:** WPCode caches snippets. **Fix:** after `wp_update_post()` on a WPCode snippet call its
+cache rebuild (or save it once in wp-admin). Code Snippets: edit through its API/UI, not raw SQL.
+
+### Hosting panel "fixed" the site by turning plugins off / updating them
+**Cause:** Hostinger's AI troubleshooter clears fatals by deactivating plugins; Hostinger "Smart
+auto-updates" bumps free plugins past their paid add-ons. Both look like "up but broken".
+**Fix:** compare active plugins with the backup's `state.json`; read the real PHP fatal; switch those
+host features off for pinned plugins.
+
 ### MCP suddenly returns 401 right after installing Wordfence
 **Cause:** Wordfence → All Options → "Disable WordPress application passwords" is ON by default.
 **Fix:** untick it in wp-admin. Keep a wp-admin session open when activating security plugins.

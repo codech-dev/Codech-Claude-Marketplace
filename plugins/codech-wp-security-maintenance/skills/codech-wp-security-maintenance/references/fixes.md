@@ -15,6 +15,9 @@ logged-in `wp_ajax_` one keeps the admin button working:
 
 Leave read-only public handlers (search, load-more, contact forms) alone — the site needs them.
 
+After editing any PHP file through the MCP, run `opcache_invalidate( $file, true );` — otherwise
+PHP may keep serving the old version and your verification tests the wrong code.
+
 **Theme PHP files that run when requested directly** (they `require wp-load.php` and act on
 `$_POST`) — add a capability check right after WordPress loads:
 
