@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "codech-mockup-design",
-  "version": "1.4.2",
-  "description": "Codech Mockup Design — structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step. Supports multiple design directions with mandatory 7-axis differentiation, optional interactive Framer Motion + shadcn/ui prototypes, and AI-generated brand imagery via Hugging Face Inference API.",
+  "version": "1.5.0",
+  "description": "Codech Mockup Design — structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step. Supports multiple design directions with mandatory 7-axis differentiation, optional interactive Framer Motion + shadcn/ui prototypes, AI-generated brand imagery (Codex image_gen or Hugging Face FLUX), and protected client share links on Cloudflare Pages with expiry, per-person visit tracking and copy protection.",
   "author": {
     "name": "Codech",
     "email": "team@codech.dev",

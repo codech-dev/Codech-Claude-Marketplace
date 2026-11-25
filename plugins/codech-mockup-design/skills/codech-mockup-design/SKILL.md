@@ -1,7 +1,7 @@
 ---
 name: codech-mockup-design
 description: |
-  Codech Mockup Design Skill — structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step needed. Use this skill PROACTIVELY when the user asks to design UI, create a design system, prototype screens, explore visual directions, build a landing page mockup, design a dashboard, or compare design alternatives. Also trigger when the user says things like "show me what it would look like", "design the UI", "create a mockup", "explore different styles", "what should the homepage look like", or "build a visual prototype". Works for any project: landing pages, dashboards, mobile apps, SaaS products, marketplaces, portfolios.
+  Codech Mockup Design Skill — structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step needed. Use this skill PROACTIVELY when the user asks to design UI, create a design system, prototype screens, explore visual directions, build a landing page mockup, design a dashboard, or compare design alternatives. Also trigger when the user says things like "show me what it would look like", "design the UI", "create a mockup", "explore different styles", "what should the homepage look like", or "build a visual prototype". Also use when generating mockup images with Codex imagegen, or when sharing a mockup or prototype with a client as a link that needs an expiry date, visit tracking ("who viewed it") or copy protection.
 ---
 
 # Codech Mockup Design Skill
@@ -607,9 +607,18 @@ function reinitClone(clone) {
 
 ### Phase 3.6 — AI image generation (optional, recommended)
 
-After building the showcase HTML, generate matching AI images using the Hugging Face Inference API to replace placeholder/stock images with brand-aligned visuals.
+After building the showcase HTML, replace placeholder/stock images with brand-aligned generated visuals.
 
 **When to use:** When the showcase uses placeholder images (Unsplash URLs, gray boxes, `onerror` fallbacks) and the user wants polished, brand-specific mockup imagery. Skip if the user already has real product photos.
+
+**Pick the generator by one check, `codex --version`:**
+
+| Result | Use |
+|---|---|
+| Codex CLI present (or the user says "our Codex imagegen") | **Option A: Codex built-in `image_gen`.** Photoreal local people, transparent hero cutouts, no API key. Read `references/codex-imagegen.md` before writing the prompt: it covers the required `-m` model flag, copying images out of `~/.codex/generated_images`, prompt shape and WebP optimisation, with helper scripts in `scripts/imagegen/`. |
+| No Codex CLI | **Option B: Hugging Face FLUX script** (below) |
+
+#### Option B — Hugging Face Inference API
 
 **Prerequisites:**
 - `HF_TOKEN` environment variable set (free token from https://huggingface.co/settings/tokens)
@@ -955,6 +964,17 @@ pnpm dev
 **When to suggest this to the user:**
 After the static showcase is approved AND the user wants to feel the interactions before committing to the full production build. Frame it as: "The static showcase shows the design. The interactive prototype lets you *feel* it — real animations, real component interactions, working navigation. It takes ~1 session to build and can serve as a reference implementation for the production app."
 
+### Phase 8 — Share with the client (protected link)
+
+When the showcase, a client-facing design-direction page or the prototype goes to a client as a hosted link (usually Cloudflare Pages `*.pages.dev`), ship it through the protected build, not as raw files. Read `references/protected-share.md` and copy `scripts/protected-share/` into the project's `tools/`. Every deploy then has:
+
+- **Expiry.** Default 1 week. After it, a bilingual 410 page with a WhatsApp "申請延期 · Request extension" button.
+- **Per-person tracked links** (`?r=<token>`), created from a private `/_stats` dashboard. It shows visits, reading time, max scroll, sections seen, device, city and network, and flags WhatsApp previews and forwarding.
+- **Copy protection.** Compiled Tailwind, minified HTML, obfuscated JS, a fingerprint `ref` per build, a confidential watermark on prototype pages, and prototype pages blocked from opening outside the showcase frames.
+- **noindex** headers and `robots.txt`.
+
+Deploy from `dist/<project>` only. State the expiry date on the page itself, and send each person their own tracked link. Untracked visits in the first hours are Certificate-Transparency scanners, not leaks; see "Reading the dashboard" in the reference.
+
 ## Interactive patterns reference
 
 ### Carousel / testimonial slider pattern
@@ -1240,7 +1260,8 @@ These rules are derived from real production issues encountered during mockup de
 - [ ] All component labels match the project language (Chinese/bilingual for HK projects, not English placeholders)
 - [ ] Interactive hover demos included (card lift, image zoom, button transitions, nav underlines)
 - [ ] reinitClone() override written if cloned elements contain interactive JS
-- [ ] AI-generated images considered (Phase 3.6) — run generate_mockup_images.py if showcase uses placeholder images
+- [ ] AI-generated images considered (Phase 3.6) — Codex `image_gen` if `codex` is installed, else generate_mockup_images.py; images converted to WebP, contact sheet checked
+- [ ] People in images match the client's market (local faces, uniforms, streets), not generic stock
 - [ ] Desktop mockup wrapped in browser frame (traffic lights + URL bar)
 - [ ] Desktop mockup renders at 1440px with CSS zoom/scale to fit container
 - [ ] Tailwind md: responsive classes overridden to force desktop layout inside mockup frame
@@ -1251,6 +1272,13 @@ These rules are derived from real production issues encountered during mockup de
 - [ ] Fullscreen desktop uses CSS zoom to fit mobile viewport
 - [ ] Border-radius consistent across desktop and mobile (check for 0-4px values)
 - [ ] All section titles bilingual if project content is bilingual
+
+**Before sending a hosted link to a client (Phase 8):**
+- [ ] Deployed from `dist/<project>` (protected build), never from `deploy/` or the source folders
+- [ ] Expiry date set (`-Expires`) and stated on the page; expired page tested on a preview branch
+- [ ] `STATS_KEY` secret set on every Pages project; `/_stats` opened once on each of your own devices
+- [ ] One tracked `?r=` link created per recipient
+- [ ] Live check with `curl.exe -b "cdx_me=1"`: page 200 + `x-robots-tag: noindex`, `/prototype/` opened directly → 302
 
 ## File naming convention
 
@@ -1268,7 +1296,14 @@ docs/design/
 │   ├── hero.png
 │   ├── product.png
 │   ├── lifestyle.png
-│   └── generated-images.json  # manifest with prompts used
+│   ├── PROMPT.md              # Codex image_gen prompt used (Option A)
+│   └── generated-images.json  # manifest with prompts used (Option B)
+
+tools/                         # Phase 8 protected share (from scripts/protected-share/)
+├── build.ps1, protect-build.mjs, middleware.template.js, tracking-schema.sql, sites.json
+└── stats-key.txt              # dashboard key — never commit
+deploy/<project>/              # readable assembled site (build input)
+dist/<project>/                # protected output — the only thing you deploy
 ```
 
 ## Common pitfalls to avoid
