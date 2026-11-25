@@ -4,7 +4,7 @@ A Claude Code plugin for structured design ideation and visual prototyping. Crea
 
 ## What it does
 
-This plugin provides a 7-phase design workflow that produces two artifacts per design direction:
+This plugin provides a phased design workflow that produces two artifacts per design direction:
 
 1. **Design System Document** (`design-system.md`) — tokens, principles, component patterns, accessibility rules
 2. **Visual Showcase** (`design-showcase.html`) — a single self-contained HTML file that renders every token, screen, and component live
@@ -19,11 +19,12 @@ The showcase is the primary deliverable. Open it in any browser and scroll throu
 | **2. Write design system** | Create a markdown doc with 8 required sections: philosophy, colors, typography, spacing, radius/shadows, motion, component patterns, accessibility. |
 | **3. Build showcase HTML** | Generate a self-contained HTML file with Tailwind CDN, Google Fonts, CSS custom properties, scroll-reveal animations, full-page screen mockups, and a fullscreen overlay viewer on every mockup. |
 | **3.5. Mobile mockup** | Build a 390px phone frame section showing the same content adapted to mobile layout — single column, hamburger menu, touch-friendly buttons, stacked sections. |
-| **3.6. AI image generation** | Generate brand-aligned images via HF Inference API (FLUX.1) — hero banners, product shots, lifestyle photos, textures. Replaces placeholder images with polished AI visuals. |
+| **3.6. AI image generation** | Generate brand-aligned images. Preferred: the Codex CLI's built-in `image_gen` (photoreal local people, transparent hero cutouts, no API key). Fallback: HF Inference API (FLUX.1). Outputs are converted to web-ready WebP. |
 | **4. Present & iterate** | Show the user which file to open, call out specific things to evaluate, collect feedback. |
 | **5. Multiple directions** | Create genuinely different alternatives — not just color swaps. Each version must differ on 5+ of 7 differentiation axes. |
 | **6. Lock & reference** | Finalize the approved direction, link it from implementation plans, commit to git. |
 | **7. Interactive prototype** *(optional)* | Spin up a Vite + React + shadcn + Framer Motion app with real animations, working components, and page routing. |
+| **8. Share with the client** | Deploy to Cloudflare Pages through a protected build: link expiry with a "request extension" page, per-person tracked links with a private visit dashboard, compiled/minified/obfuscated code and a confidential watermark. |
 
 ## When it triggers
 
@@ -64,7 +65,8 @@ When creating multiple design versions, every version must be **identically diff
 - **Motion system with real components** — motion demos use actual project UI (product cards, testimonial cards, nav links, buttons) with auto-looping animations and interactive hover effects — no abstract shapes
 - **Component language consistency** — all UI primitive labels match the project language (bilingual for non-English projects)
 - **Interactive re-initialization** — `reinitClone()` pattern ensures carousels and menus work correctly inside fullscreen clones
-- **AI image generation (Phase 3.6)** — generate hero banners, product shots, lifestyle photos, and textures via HF Inference API (FLUX.1-schnell/dev) with brand-aware prompt engineering; outputs a JSON manifest for reproducibility
+- **AI image generation (Phase 3.6)** — Codex `image_gen` recipe (model flag, copy-out, contact sheet, WebP optimisation) with HF FLUX.1 as fallback; prompts localised to the client's market
+- **Protected client share (Phase 8)** — link expiry, `?r=` tracked links, `/_stats` dashboard (reading time, scroll, sections, device, city), copy protection, noindex
 - **Multi-version navigation** — cross-links between v1/v2/v3 showcases in the top nav bar
 - **Zero build step** — opens in any browser with no npm, no bundler, no server
 
@@ -114,7 +116,9 @@ git clone https://github.com/codech-dev/codech-mockup-design.git
 - **Python 3** — Required by ui-ux-pro-max's search scripts.
 - **Internet connection** — For Tailwind CDN and Google Fonts in the showcase HTML.
 - **HF_TOKEN** *(optional, for Phase 3.6)* — Free Hugging Face API token for AI image generation. Get one at https://huggingface.co/settings/tokens
-- **uv** *(optional, for Phase 3.6)* — Python package runner for the image generation script. Install via `pip install uv`.
+- **uv** *(optional, for Phase 3.6)* — Python package runner for the image scripts. Install via `pip install uv`.
+- **Codex CLI** *(optional, preferred for Phase 3.6)* — signed in with a ChatGPT account; no API key needed.
+- **Node.js + wrangler + a Cloudflare account** *(optional, for Phase 8)* — protected build and Cloudflare Pages/D1 deploy.
 
 ### Target implementation stack
 
@@ -141,9 +145,14 @@ codech-mockup-design/
 │           └── references/
 │               ├── showcase-template.md
 │               ├── differentiation-axes.md
-│               └── interactive-prototype-scaffold.md
+│               ├── interactive-prototype-scaffold.md
+│               ├── codex-imagegen.md          # Phase 3.6 Option A
+│               └── protected-share.md         # Phase 8
 ├── scripts/
-│   └── generate_mockup_images.py   # AI image generation script
+│   ├── generate_mockup_images.py   # HF image generation (Phase 3.6 Option B)
+│   ├── imagegen/                   # collect_codex_images.py, contact_sheet.py, optimize_images.py
+│   └── protected-share/            # protect-build.mjs, middleware.template.js, tracking-schema.sql,
+│                                   # package.json, build.example.ps1, sites.example.json
 ├── CLAUDE.md
 ├── README.md
 ├── LICENSE

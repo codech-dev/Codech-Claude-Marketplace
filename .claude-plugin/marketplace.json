@@ -133,8 +133,8 @@
     {
       "name": "codech-mockup-design",
       "source": "./plugins/codech-mockup-design",
-      "description": "Structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step. Supports multiple design directions with mandatory 7-axis differentiation, optional interactive Framer Motion + shadcn/ui prototypes, and AI-generated brand imagery via Hugging Face Inference API.",
-      "version": "1.4.2",
+      "description": "Structured design ideation and visual prototyping workflow. Creates design system documents (tokens, principles, accessibility rules) and self-contained HTML showcases that render live in any browser — no build step. Supports multiple design directions with mandatory 7-axis differentiation, optional interactive Framer Motion + shadcn/ui prototypes, AI-generated brand imagery (Codex image_gen or Hugging Face FLUX), and protected client share links on Cloudflare Pages with expiry, per-person visit tracking and copy protection.",
+      "version": "1.5.0",
       "category": "design",
       "keywords": [
         "design",

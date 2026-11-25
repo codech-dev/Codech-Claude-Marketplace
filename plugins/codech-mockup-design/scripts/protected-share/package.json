@@ -1,0 +1,12 @@
+{
+  "name": "codech-protected-share",
+  "private": true,
+  "description": "Protected Cloudflare Pages build: compiled Tailwind, minified HTML, obfuscated JS, expiry + visit tracking middleware",
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "html-minifier-terser": "^7.2.0",
+    "javascript-obfuscator": "^4.1.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
+  }
+}
